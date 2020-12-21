@@ -24,5 +24,12 @@ namespace ALFE.FEModel
             this.Nodes = nodes;
             this.Elements = elements;
         }
+
+        public double[,] ComputeUniformK()
+        {
+            var ele = this.Elements[0];
+            ele.ComputeK();
+            return ele.K;
+        }
     }
 }

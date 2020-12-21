@@ -11,13 +11,6 @@ namespace ALFE.FEModel.Elements
     {
         public Node3D[] Nodes = new Node3D[4];
 
-        /// <summary>
-        /// Stiffness matrix of the element of size 12x12
-        /// </summary>
-        public double[,] K;
-
-        public static double[,] D;
-
         public Tetrahedron(int[] nodeID, Node3D[] nodes, Material material, bool exist = true)
         {
             if (nodes.Length != 4 || nodes.Length != 4)
@@ -31,16 +24,23 @@ namespace ALFE.FEModel.Elements
             this.Type = ElementType.TetrahedronElement;
         }
 
-        public void ComputeD()
+        public override void ComputeD()
         {
+            D = new double[6, 6];
+
             double coeff1 = Material.E / ((1.0 + Material.u) * (1.0 - 2.0 * Material.u));
             D[0, 0] = D[1, 1] = D[2, 2] = (1.0 - Material.u) * coeff1;
             D[0, 1] = D[0, 2] = D[1, 2] = D[1, 0] = D[2, 0] = D[2, 1] = Material.u * coeff1;
             D[3, 3] = D[4, 4] = D[5, 5] = (0.5 - Material.u) * coeff1;
         }
 
-        public void ComputeK()
+        /// <summary>
+        /// Compute the stiffness matrix
+        /// </summary>
+        public override void ComputeK()
         {
+            ComputeD();
+
             Node3D n1 = Nodes[0];
             Node3D n2 = Nodes[1];
             Node3D n3 = Nodes[2];
@@ -71,7 +71,7 @@ namespace ALFE.FEModel.Elements
 
 
             // K = (BT x D x B) * V
-            K = B.TransposeAndDot(D).Multiply(B).Multiply(J.Determinant() / 6.0);
+            K = B.TransposeAndDot(D).Multiply(B).Multiply((double)J.Determinant() / 6.0f);
         }
     }
 }

@@ -18,5 +18,16 @@ namespace ALFE.FEModel
         public bool Exist { get; set; }
 
         public ElementType Type;
+
+        /// <summary>
+        /// Stiffness matrix of the element of size 8x8
+        /// </summary>
+        public double[,] K;
+
+        // 3x3 matrix
+        public double[,] D;
+
+        public abstract void ComputeD();
+        public abstract void ComputeK();
     }
 }

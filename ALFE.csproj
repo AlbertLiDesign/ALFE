@@ -77,11 +77,12 @@
     <Compile Include="FEModel\Elements\Element.cs" />
     <Compile Include="FEModel\Elements\Quad.cs" />
     <Compile Include="FEModel\Elements\Tetrahedron.cs" />
+    <Compile Include="FEModel\Elements\UnitQuad.cs" />
     <Compile Include="FEModel\Loads\Load2D.cs" />
     <Compile Include="FEModel\Loads\Load3D.cs" />
     <Compile Include="FEModel\Material\Material.cs" />
-    <Compile Include="FEModel\Model2D.cs" />
-    <Compile Include="FEModel\Model3D.cs" />
+    <Compile Include="FEModel\Model\Model2D.cs" />
+    <Compile Include="FEModel\Model\Model3D.cs" />
     <Compile Include="FEModel\Nodes\Node3D.cs" />
     <Compile Include="Geometry\Vector2D.cs" />
     <Compile Include="Geometry\Vector3D.cs" />
@@ -89,9 +90,10 @@
     <Compile Include="FEModel\Supports\Support2D.cs" />
     <Compile Include="FEModel\Supports\SupportType.cs" />
     <Compile Include="FESystem\System2D.cs" />
-    <Compile Include="FEModel\FEIO.cs" />
+    <Compile Include="Utils\FEIO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestData\Cantilever2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

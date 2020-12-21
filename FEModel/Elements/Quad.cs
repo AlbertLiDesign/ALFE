@@ -11,14 +11,6 @@ namespace ALFE.FEModel
     {
         public Node2D[] Nodes = new Node2D[4];
 
-        /// <summary>
-        /// Stiffness matrix of the element of size 8x8
-        /// </summary>
-        public double[,] K;
-
-        // 3x3 matrix
-        public double[,] D;
-
         public Quad(int[] nodeID, Node2D[] nodes, Material material, bool exist = true)
         {
             if (nodes.Length != 4 || nodes.Length != 4)
@@ -32,20 +24,31 @@ namespace ALFE.FEModel
             this.Type = ElementType.QuadElement;
         }
 
-        public void ComputeD()
+        public override void ComputeD()
         {
+            D = new double[3, 3];
+
             double coeff1 = Material.E / ((1.0 - Material.u) * (1.0 - Material.u));
 
             D[0, 0] = D[1, 1] = coeff1;
             D[0, 1] = D[1, 0] = Material.u * coeff1;
             D[3, 3] = (1.0 - Material.u) * 0.5 * coeff1;
         }
-        public void ComputeK()
+
+        /// <summary>
+        /// Compute the stiffness matrix
+        /// </summary>
+        public override void ComputeK()
         {
-            Node2D n1 = Nodes[0];
-            Node2D n2 = Nodes[1];
-            Node2D n3 = Nodes[2];
-            Node2D n4 = Nodes[3];
+            var x0 = Nodes[0].Position.X;
+            var y0 = Nodes[0].Position.Y;
+            var x1 = Nodes[1].Position.X;
+            var y1 = Nodes[1].Position.Y;
+            var x2 = Nodes[2].Position.X;
+            var y2 = Nodes[2].Position.Y;
+            var x3 = Nodes[3].Position.X;
+            var y3 = Nodes[3].Position.Y;
+
 
             //// Jacobian of the tetrahedral element
             //double[,] J = new double[4, 4]
