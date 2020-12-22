@@ -47,7 +47,7 @@ namespace ALFE.FEModel
                 -0.25 + Material.u/12 * coeff, -0.125 - Material.u *0.125 * coeff, Material.u / 6 * coeff, 0.125- Material.u*0.375 * coeff
              };
 
-            K = new double[8, 8]
+            Ke = new double[8, 8]
             {
                 { array[0], array[1], array[2],array[3],array[4],array[5], array[6], array[7]},
                 { array[1], array[0], array[7],array[6],array[5],array[4], array[3], array[2]},

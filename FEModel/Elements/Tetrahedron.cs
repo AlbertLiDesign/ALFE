@@ -70,8 +70,8 @@ namespace ALFE.FEModel.Elements
             };
 
 
-            // K = (BT x D x B) * V
-            K = B.TransposeAndDot(D).Multiply(B).Multiply((double)J.Determinant() / 6.0f);
+            // Ke = (BT x D x B) * V
+            Ke = B.TransposeAndDot(D).Multiply(B).Multiply((double)J.Determinant() / 6.0f);
         }
     }
 }

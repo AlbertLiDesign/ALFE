@@ -15,7 +15,9 @@ namespace ALFE
 
             var Ke = model2d.ComputeUniformK();
 
-            Console.WriteLine(Ke);
+            FEPrint.PrintMatrix(Ke);
+
+            
             Console.ReadKey();
         }
     }

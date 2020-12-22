@@ -22,7 +22,7 @@ namespace ALFE.FEModel
         /// <summary>
         /// Stiffness matrix of the element of size 8x8
         /// </summary>
-        public double[,] K;
+        public double[,] Ke;
 
         // 3x3 matrix
         public double[,] D;

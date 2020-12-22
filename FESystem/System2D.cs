@@ -3,21 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ALFE.FEModel;
 
 namespace ALFE.FESystem
 {
     public class System2D
     {
-        //public FEModel model { get; set; }
-        //public List<Load> loads { get; set; }
-        //public List<Support> supports { get; set; }
-        //public int dim { get; set; }
-        //public System2D(FEModel model, List<Load> loads, List<Support> supports)
-        //{
-        //    this.model = model;
-        //    this.loads = loads;
-        //    this.supports = supports;
-        //    this.dim = model.dim;
-        //}
+        /// <summary>
+        ///  Finite element model
+        /// </summary>
+        public Model2D Model { get; set; }
+
+        /// <summary>
+        /// Force Vector
+        /// </summary>
+        public double[] ForceVector { get; set; }
+
+        /// <summary>
+        /// Global stiffness matrix
+        /// </summary>
+        public double[,] KG { get; set; }
+
+        public System2D(Model2D model)
+        {
+            this.Model = model;
+            int dim = model.Nodes.Count - model.Loads.Count;
+            ForceVector = new double[dim];
+            KG = new double[dim, dim];
+
+        }
+
     }
 }
