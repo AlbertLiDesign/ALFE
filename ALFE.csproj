@@ -73,6 +73,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algebra\CooMatrix.cs" />
+    <Compile Include="Algebra\Triplet.cs" />
     <Compile Include="FEModel\Elements\ElementType.cs" />
     <Compile Include="FEModel\Elements\Element.cs" />
     <Compile Include="FEModel\Elements\Quad.cs" />
@@ -83,10 +85,12 @@
     <Compile Include="FEModel\Material\Material.cs" />
     <Compile Include="FEModel\Model\Model2D.cs" />
     <Compile Include="FEModel\Model\Model3D.cs" />
+    <Compile Include="FEModel\Nodes\Node.cs" />
     <Compile Include="FEModel\Nodes\Node3D.cs" />
     <Compile Include="FEModel\Supports\Support3D.cs" />
-    <Compile Include="Geometry\Vector2D.cs" />
-    <Compile Include="Geometry\Vector3D.cs" />
+    <Compile Include="FESystem\System3D.cs" />
+    <Compile Include="Algebra\Vector2D.cs" />
+    <Compile Include="Algebra\Vector3D.cs" />
     <Compile Include="FEModel\Nodes\Node2D.cs" />
     <Compile Include="FEModel\Supports\Support2D.cs" />
     <Compile Include="FEModel\Supports\SupportType.cs" />
@@ -96,6 +100,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestData\Cantilever2D.cs" />
     <Compile Include="Utils\FEPrint.cs" />
+    <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

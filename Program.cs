@@ -11,13 +11,14 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
+            string path = @"C:\Users\alber\Desktop\mat.txt";
             Model2D model2d = new Cantilever2D().Model;
 
             var Ke = model2d.ComputeUniformK();
 
-            FEPrint.PrintMatrix(Ke);
-
-            
+            FESystem.System2D sys = new FESystem.System2D(model2d, Ke);
+            FEIO.writeCooMatrix(sys.KG, path);
+            Console.WriteLine("Successful output!");
             Console.ReadKey();
         }
     }

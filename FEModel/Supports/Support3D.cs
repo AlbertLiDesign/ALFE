@@ -8,11 +8,11 @@ namespace ALFE.FEModel
 {
     public class Support3D
     {
-        public int Nodes { get; set; }
+        public int NodeID { get; set; }
         public SupportType Type;
         public Support3D(int node, SupportType type)
         {
-            this.Nodes = node;
+            this.NodeID = node;
             this.Type = type;
         }
     }

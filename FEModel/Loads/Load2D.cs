@@ -11,12 +11,13 @@ namespace ALFE.FEModel
         /// <summary>
         /// The index of the node, which has been applied a load.
         /// </summary>
-        public int Nodes { get; set; }
+        public int NodeID { get; set; }
 
         public Vector2D Load { get; set; }
+        public Load2D() { }
         public Load2D(int node, Vector2D load)
         {
-            this.Nodes = node;
+            this.NodeID = node;
             this.Load = load;
         }
     }

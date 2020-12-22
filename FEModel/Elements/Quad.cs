@@ -9,19 +9,17 @@ namespace ALFE.FEModel
 {
     public class Quad : Element
     {
-        public Node2D[] Nodes = new Node2D[4];
-
-        public Quad(int[] nodeID, Node2D[] nodes, Material material, bool exist = true)
+        public Quad(List<int> nodesID, Material material, bool exist = true)
         {
-            if (nodes.Length != 4 || nodes.Length != 4)
+            if (nodesID.Count != 4 || nodesID.Count != 4)
             {
                 throw new Exception("The number of nodes must be 4.");
             }
-            this.NodeID = nodeID;
-            this.Nodes = nodes;
-            this.Material = material;
-            this.Exist = exist;
-            this.Type = ElementType.QuadElement;
+            
+            NodeID = nodesID;
+            Material = material;
+            Exist = exist;
+            Type = ElementType.QuadElement;
         }
 
         public override void ComputeD()
@@ -40,14 +38,6 @@ namespace ALFE.FEModel
         /// </summary>
         public override void ComputeK()
         {
-            var x0 = Nodes[0].Position.X;
-            var y0 = Nodes[0].Position.Y;
-            var x1 = Nodes[1].Position.X;
-            var y1 = Nodes[1].Position.Y;
-            var x2 = Nodes[2].Position.X;
-            var y2 = Nodes[2].Position.Y;
-            var x3 = Nodes[3].Position.X;
-            var y3 = Nodes[3].Position.Y;
 
 
             //// Jacobian of the tetrahedral element

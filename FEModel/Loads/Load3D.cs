@@ -8,12 +8,13 @@ namespace ALFE.FEModel
 {
     public class Load3D
     {
-        public int Nodes { get; set; }
+        public int NodeID { get; set; }
         public Vector3D Load { get; set; }
 
+        public Load3D() { }
         public Load3D(int node, Vector3D load)
         {
-            this.Nodes = node;
+            this.NodeID = node;
             this.Load = load;
         }
     }

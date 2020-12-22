@@ -8,10 +8,7 @@ namespace ALFE.FEModel
 {
     public abstract class Element
     {
-        /// <summary>
-        /// The index of each node.
-        /// </summary>
-        public int[] NodeID;
+        public List<int> NodeID = new List<int>();
 
         public Material Material { get; set; }
 

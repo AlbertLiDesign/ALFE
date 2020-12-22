@@ -8,19 +8,17 @@ namespace ALFE.FEModel
 {
     public class UnitQuad : Element
     {
-        public Node2D[] Nodes = new Node2D[4];
-
-        public UnitQuad(int[] nodeID, Node2D[] nodes, Material material, bool exist = true)
+        public UnitQuad(List<int> nodesID, Material material, bool exist = true)
         {
-            if (nodes.Length != 4 || nodes.Length != 4)
+            if (nodesID.Count != 4 || nodesID.Count != 4)
             {
                 throw new Exception("The number of nodes must be 4.");
             }
-            this.NodeID = nodeID;
-            this.Nodes = nodes;
-            this.Material = material;
-            this.Exist = exist;
-            this.Type = ElementType.UnitQuadElement;
+
+            NodeID = nodesID;
+            Material = material;
+            Exist = exist;
+            Type = ElementType.UnitQuadElement;
         }
 
         public override void ComputeD()

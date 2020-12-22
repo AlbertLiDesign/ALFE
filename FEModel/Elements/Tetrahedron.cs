@@ -9,19 +9,17 @@ namespace ALFE.FEModel.Elements
 {
     public class Tetrahedron : Element
     {
-        public Node3D[] Nodes = new Node3D[4];
-
-        public Tetrahedron(int[] nodeID, Node3D[] nodes, Material material, bool exist = true)
+        public Tetrahedron(List<int> nodesID, Material material, bool exist = true)
         {
-            if (nodes.Length != 4 || nodes.Length != 4)
+            if (nodesID.Count != 4 || nodesID.Count != 4)
             {
                 throw new Exception("The number of nodes must be 4.");
             }
-            this.NodeID = nodeID;
-            this.Nodes = nodes;
-            this.Material = material;
-            this.Exist = exist;
-            this.Type = ElementType.TetrahedronElement;
+
+            NodeID = nodesID;
+            Material = material;
+            Exist = exist;
+            Type = ElementType.TetrahedronElement;
         }
 
         public override void ComputeD()
@@ -39,39 +37,39 @@ namespace ALFE.FEModel.Elements
         /// </summary>
         public override void ComputeK()
         {
-            ComputeD();
+            //ComputeD();
 
-            Node3D n1 = Nodes[0];
-            Node3D n2 = Nodes[1];
-            Node3D n3 = Nodes[2];
-            Node3D n4 = Nodes[3];
+            //Node3D n1 = (Node3D)Nodes[0];
+            //Node3D n2 = (Node3D)Nodes[1];
+            //Node3D n3 = (Node3D)Nodes[2];
+            //Node3D n4 = (Node3D)Nodes[3];
 
-            // Jacobian of the tetrahedral element
-            double[,] J = new double[4, 4]
-            {{ 1, 1, 1, 1},
-            { n1.Position.X, n2.Position.X, n3.Position.X, n4.Position.X},
-            { n1.Position.Y, n2.Position.Y, n3.Position.Y, n4.Position.Y},
-            { n1.Position.Z, n2.Position.Z, n3.Position.Z, n4.Position.Z }};
+            //// Jacobian of the tetrahedral element
+            //double[,] J = new double[4, 4]
+            //{{ 1, 1, 1, 1},
+            //{ n1.Position.X, n2.Position.X, n3.Position.X, n4.Position.X},
+            //{ n1.Position.Y, n2.Position.Y, n3.Position.Y, n4.Position.Y},
+            //{ n1.Position.Z, n2.Position.Z, n3.Position.Z, n4.Position.Z }};
 
-            double[,] Ji = J.Inverse();
-            double a1 = Ji[0, 1], a2 = Ji[1, 1], a3 = Ji[2, 1], a4 = Ji[3, 1];
-            double b1 = Ji[0, 2], b2 = Ji[1, 2], b3 = Ji[2, 2], b4 = Ji[3, 2];
-            double c1 = Ji[0, 3], c2 = Ji[1, 3], c3 = Ji[2, 3], c4 = Ji[3, 3];
+            //double[,] Ji = J.Inverse();
+            //double a1 = Ji[0, 1], a2 = Ji[1, 1], a3 = Ji[2, 1], a4 = Ji[3, 1];
+            //double b1 = Ji[0, 2], b2 = Ji[1, 2], b3 = Ji[2, 2], b4 = Ji[3, 2];
+            //double c1 = Ji[0, 3], c2 = Ji[1, 3], c3 = Ji[2, 3], c4 = Ji[3, 3];
 
-            // Strain-displacement matrix B
-            double[,] B = new double[6, 12]
-            {
-                { a1, 0, 0, a2, 0, 0, a3, 0, 0, a4, 0, 0 },
-                { 0, b1, 0, 0, b2, 0, 0, b3, 0, 0, b4, 0 },
-                { 0, 0, c1, 0, 0, c2, 0, 0, c3, 0, 0, c4 },
-                { b1, a1, 0, b2, a2, 0, b3, a3, 0, b4, a4, 0 },
-                { 0, c1, b1, 0, c2, b2, 0, c3, b3, 0, c4, b4 },
-                { c1, 0, a1, c2, 0, a2, c3, 0, a3, c4, 0, a4 } 
-            };
+            //// Strain-displacement matrix B
+            //double[,] B = new double[6, 12]
+            //{
+            //    { a1, 0, 0, a2, 0, 0, a3, 0, 0, a4, 0, 0 },
+            //    { 0, b1, 0, 0, b2, 0, 0, b3, 0, 0, b4, 0 },
+            //    { 0, 0, c1, 0, 0, c2, 0, 0, c3, 0, 0, c4 },
+            //    { b1, a1, 0, b2, a2, 0, b3, a3, 0, b4, a4, 0 },
+            //    { 0, c1, b1, 0, c2, b2, 0, c3, b3, 0, c4, b4 },
+            //    { c1, 0, a1, c2, 0, a2, c3, 0, a3, c4, 0, a4 } 
+            //};
 
 
-            // Ke = (BT x D x B) * V
-            Ke = B.TransposeAndDot(D).Multiply(B).Multiply((double)J.Determinant() / 6.0f);
+            //// Ke = (BT x D x B) * V
+            //Ke = B.TransposeAndDot(D).Multiply(B).Multiply((double)J.Determinant() / 6.0f);
         }
     }
 }

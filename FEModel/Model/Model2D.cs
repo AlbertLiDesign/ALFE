@@ -35,6 +35,7 @@ namespace ALFE.FEModel
             this.Elements = elements;
             this.Loads = loads;
             this.Supports = supports;
+            
         }
         public Model2D(List<Node2D> nodes, List<Element> elements, List<Load2D> loads, List<Support2D> supports)
         {

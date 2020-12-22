@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,19 @@ namespace ALFE
 {
     public class FEIO
     {
+        public static void writeCooMatrix(CooMatrix mat, string path)
+        {
+            StreamWriter sw = new StreamWriter(path);
+            sw.WriteLine("# ALFE COO Matrix");
+            sw.WriteLine(mat.Rows.ToString() + '\t' + mat.Cols.ToString() + '\t' + mat.NNZ.ToString());
+            for (int i = 0; i < mat.Triplets.Count; i++)
+            {
+                sw.WriteLine(mat.Triplets[i].Row.ToString() + '\t' + mat.Triplets[i].Col.ToString() + '\t' + mat.Triplets[i].Value.ToString());
+            }
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
         //public static void writeVTK(FESystem fes, BESO_TopOpt beso, Material material, string path)
         //{
         //    List<PlanktonXYZ> nodes = fes.model.nodes;
