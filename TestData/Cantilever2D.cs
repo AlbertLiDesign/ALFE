@@ -53,7 +53,7 @@ namespace ALFE
                 {
                     List<int> nodesID = new List<int>(4)
                     {
-                        i, i+1, i + j * (xnum-1), (i+1) + j*(xnum -1)
+                        i + j * (xnum-1), (i + 1) + j * (xnum-1), (i+1) + (j+1)*(xnum -1), i + (j+1) * (xnum-1)
                     };
                     elems.Add(new UnitQuad(nodesID, new Material()));
                 }

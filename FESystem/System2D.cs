@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ALFE.FEModel;
 
+using CSparse;
+using CSparse.Double;
+
 namespace ALFE.FESystem
 {
     public class System2D
@@ -17,7 +20,7 @@ namespace ALFE.FESystem
         public CooMatrix KG;
         public double[] Rhs;
         public double[] X;
-        public int dof = 2;
+        public int Dof = 2;
         public System2D(Model2D model, double[,] Ke)
         {
             Model = model;
@@ -27,7 +30,10 @@ namespace ALFE.FESystem
 
             var scan = Utils.Scan(Model.Nodes.Count, ids);
 
-            List<Triplet> triplets = new List<Triplet>();
+
+            int shape = (Model.Nodes.Count - ids.Count) * Dof;
+
+            HashSet<Triplet> triplets = new HashSet<Triplet>(shape);
             for (int i = 0; i < Model.Elements.Count; i++)
             {
                 var nodeID = Model.Elements[i].NodeID;
@@ -35,23 +41,24 @@ namespace ALFE.FESystem
                 {
                     for (int J = 0; J < nodeID.Count; J++)
                     {
+                        if (!ids.Contains(nodeID[I]) && !ids.Contains(nodeID[J]))
+                        {
+                            var row0 = nodeID[I] * Dof + 0 - scan[nodeID[I]] * Dof;
+                            var row1 = nodeID[I] * Dof + 1 - scan[nodeID[I]] * Dof;
 
-                        var row0 = nodeID[I] * dof + 0 - scan[I] * dof;
-                        var row1 = nodeID[I] * dof + 1 - scan[I] * dof;
+                            var col0 = nodeID[J] * Dof + 0 - scan[nodeID[J]] * Dof;
+                            var col1 = nodeID[J] * Dof + 1 - scan[nodeID[J]] * Dof;
 
-                        var col0 = nodeID[J] * dof + 0 - scan[J] * dof;
-                        var col1 = nodeID[J] * dof + 1 - scan[J] * dof;
-
-                        triplets.Add(new Triplet(row0, col0, Ke[dof * I + 0, dof * J + 0]));
-                        triplets.Add(new Triplet(row1, col0, Ke[dof * I + 1, dof * J + 0]));
-                        triplets.Add(new Triplet(row0, col1, Ke[dof * I + 0, dof * J + 1]));
-                        triplets.Add(new Triplet(row1, col1, Ke[dof * I + 1, dof * J + 1]));
+                            triplets.Add(new Triplet(row0, col0, Ke[Dof * I + 0, Dof * J + 0]));
+                            triplets.Add(new Triplet(row1, col0, Ke[Dof * I + 1, Dof * J + 0]));
+                            triplets.Add(new Triplet(row0, col1, Ke[Dof * I + 0, Dof * J + 1]));
+                            triplets.Add(new Triplet(row1, col1, Ke[Dof * I + 1, Dof * J + 1]));
+                        }
                     }
                 }
             }
 
-            int shape = (Model.Nodes.Count - ids.Count) * dof;
-            KG = new CooMatrix(triplets, shape, shape);
+            KG = new CooMatrix(triplets.ToList(), shape, shape);
         }
         public static List<int> ApplySupports2D(List<Node2D> nodes, List<Support2D> supports)
         {

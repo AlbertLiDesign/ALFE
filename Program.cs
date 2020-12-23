@@ -17,6 +17,8 @@ namespace ALFE
             var Ke = model2d.ComputeUniformK();
 
             FESystem.System2D sys = new FESystem.System2D(model2d, Ke);
+
+            FEPrint.PrintMatrix(Ke);
             FEIO.writeCooMatrix(sys.KG, path);
             Console.WriteLine("Successful output!");
             Console.ReadKey();

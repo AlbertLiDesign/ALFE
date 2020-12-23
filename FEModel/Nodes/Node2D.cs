@@ -9,6 +9,7 @@ namespace ALFE.FEModel
     public class Node2D : Node
     {
         public Vector2D Position { get; set; }
+
         public Vector2D Displacement = new Vector2D();
 
         public Node2D(Vector2D position)

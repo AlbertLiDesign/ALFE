@@ -17,5 +17,25 @@ namespace ALFE
             Col = col;
             Value = value;
         }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj is Triplet)
+            {
+                if (Row == (obj as Triplet).Row && Col == (obj as Triplet).Col)
+                {
+                    Value += (obj as Triplet).Value;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
+
     }
 }
