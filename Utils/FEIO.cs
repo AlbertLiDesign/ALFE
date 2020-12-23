@@ -14,9 +14,9 @@ namespace ALFE
             StreamWriter sw = new StreamWriter(path);
             sw.WriteLine("# ALFE COO Matrix");
             sw.WriteLine(mat.Rows.ToString() + ',' + mat.Cols.ToString() + ',' + mat.NNZ.ToString());
-            for (int i = 0; i < mat.Triplets.Count; i++)
+            for (int i = 0; i < mat.NNZ; i++)
             {
-                sw.WriteLine(mat.Triplets.ToList()[i].Row.ToString() + ',' + mat.Triplets.ToList()[i].Col.ToString() + ',' + mat.Triplets.ToList()[i].Value.ToString());
+                sw.WriteLine(mat.RowArray[i].ToString() + ',' + mat.ColArray[i].ToString() + ',' + mat.ValueArray[i].ToString());
             }
             sw.Flush();
             sw.Close();

@@ -1,4 +1,5 @@
 ﻿using ALFE.FEModel;
+using ALFE.FESystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,12 @@ namespace ALFE
 
             var Ke = model2d.ComputeUniformK();
 
-            FESystem.System2D sys = new FESystem.System2D(model2d, Ke);
+            System2D sys = new System2D(model2d);
+            sys.AssembleKG(Ke);
+            sys.Solve();
 
-            FEPrint.PrintMatrix(Ke);
-            FEIO.writeCooMatrix(sys.KG, path);
+            //FEPrint.PrintMatrix(Ke);
+            //FEIO.writeCooMatrix(sys.KG, path);
             Console.WriteLine("Successful output!");
             Console.ReadKey();
         }

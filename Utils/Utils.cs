@@ -30,11 +30,11 @@ namespace ALFE
         /// <param name="nodesNum"></param>
         /// <param name="fixedNodesID"></param>
         /// <returns></returns>
-        public static Dictionary<int, int> Scan(int nodesNum, List<int> fixedNodesID)
+        public static Dictionary<int, int[]> Scan(int nodesNum, List<int> fixedNodesID)
         {
             fixedNodesID.Sort();
 
-            var scan = new Dictionary<int, int>();
+            var scan = new Dictionary<int, int[]>();
             int t = 0, v = 0;
 
             for (int i = 0; i < nodesNum; i++)
@@ -48,7 +48,10 @@ namespace ALFE
                         break;
                     }
                 }
-                scan.Add(i, v);
+                if (i == fixedNodesID[t])
+                    scan.Add(i, new int[2] { v, 0 });
+                else
+                    scan.Add(i, new int[2] { v, 1 });
             }
             return scan;
         }

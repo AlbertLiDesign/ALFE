@@ -8,54 +8,57 @@ namespace ALFE
 {
     public class CooMatrix
     {
-        public List<Triplet> Triplets = new List<Triplet>();
-        public int[] RowArray;
-        public int[] ColArray;
-        public double[] ValueArray;
         public int Rows, Cols, NNZ; // Row number, column number and non-zero number
+        public int[] RowArray, ColArray;
+        public double[] ValueArray;
 
         public CooMatrix(List<Triplet> triplets, int rows, int cols)
         {
-            foreach (var item in triplets)
+            List<int> rowArray = new List<int>();
+            List<int> colArray = new List<int>();
+            List<double> valArray = new List<double>();
+
+            for (int i = 0; i < triplets.Count; i++)
             {
-                if (item.Value != 0)
+                if (triplets[i].Value != 0)
                 {
-                    Triplets.Add(item);
+                    rowArray.Add(triplets[i].Row);
+                    colArray.Add(triplets[i].Col);
+                    valArray.Add(triplets[i].Value);
                 }
             }
+
+            RowArray = rowArray.ToArray();
+            ColArray = colArray.ToArray();
+            ValueArray = valArray.ToArray();
             Rows = rows;
             Cols = cols;
-            NNZ = Triplets.Count;
+            NNZ = ValueArray.Length;
         }
-        public CooMatrix(int[] m, int[] n, double[] vals, int rows, int cols)
+        public CooMatrix(int[] rowArray, int[] colArray, double[] valArray, int rows, int cols)
         {
-            if (m.Length == n.Length && n.Length == vals.Length)
+            if (rowArray.Length == colArray.Length && colArray.Length == valArray.Length)
             {
-                Rows = rows;
-                Cols = cols;
-                NNZ = vals.Length;
-                for (int i = 0; i < NNZ; i++)
+                for (int i = 0; i < valArray.Length; i++)
                 {
-                    if (vals[i] !=0)
+                    if (valArray[i] == 0)
                     {
-                        Triplets.Add(new Triplet(m[i], n[i], vals[i]));
+                        rowArray.ToList().RemoveAt(i);
+                        colArray.ToList().RemoveAt(i);
+                        valArray.ToList().RemoveAt(i);
                     }
                 }
+
+                RowArray = rowArray;
+                ColArray = colArray;
+                ValueArray = valArray;
+
+                NNZ = ValueArray.Length;
             }
             else
             {
                 throw new Exception("Fail to create a coo matrix.");
             }
-        }
-
-        public void CompressMatrix()
-        {
-            double[,] mat = new double[Rows,Cols];
-            for (int i = 0; i < Triplets.Count; i++)
-            {
-                mat[Triplets[i].Row, Triplets[i].Col] += Triplets[i].Value;
-            }
-
         }
     }
 }
