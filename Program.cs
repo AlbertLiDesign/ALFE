@@ -21,9 +21,9 @@ namespace ALFE
             sys.AssembleKG(Ke);
             sys.Solve();
 
-            //FEPrint.PrintMatrix(Ke);
+            FEPrint.PrintMatrix(sys.X,sys.Dim,sys.Dof);
             //FEIO.writeCooMatrix(sys.KG, path);
-            Console.WriteLine("Successful output!");
+            Console.WriteLine("Done");
             Console.ReadKey();
         }
     }

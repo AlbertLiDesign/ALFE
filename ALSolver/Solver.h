@@ -10,5 +10,5 @@
 #include <Eigen/PardisoSupport>
 
 Eigen::MatrixXd SetMatrix(double* matrix, int dim, int dof);
-Eigen::SparseMatrix<double> SetSparseMatrix(int* row, int* col, double* val, int rows, int cols, int nnz, bool isSymmetry);
-extern "C" __declspec(dllexport) void SolveFE(int* rowA, int* colA, double* valA, double*F, int dim, int dof, int nnzA);
+Eigen::SparseMatrix<double> SetSparseMatrix(int* row, int* col, double* val, int rows, int cols, int nnz);
+extern "C" __declspec(dllexport) void SolveFE(int* rowA, int* colA, double* valA, double*F, int dim, int dof, int nnzA, double* X);

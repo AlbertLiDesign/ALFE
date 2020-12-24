@@ -24,9 +24,6 @@ namespace ALFE.FESystem
         /// </summary>
         public double[,] KG { get; set; }
 
-        public List<Node3D> activeNodes;          // nodes that are not anchored
-        public List<Node3D> anchoredNodes2;       // nodes to which displacement boundary conditions are applied
-
         public System3D(Model3D model)
         {
             this.Model = model;

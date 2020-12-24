@@ -12,7 +12,7 @@ namespace ALFE.FESystem
         public CooMatrix KG;
         public double[] F;
         public double[] X;
-        private int Dof = 2;
+        public int Dof = 2;
         private List<int> FixedID;
         public System2D(Model2D model)
         {
@@ -60,7 +60,7 @@ namespace ALFE.FESystem
         public void Solve()
         {
             AssembleF();
-            SolveFE(KG.RowArray, KG.ColArray, KG.ValueArray, F, Dim, Dof, KG.NNZ);
+            SolveFE(KG.RowArray, KG.ColArray, KG.ValueArray, F, Dim, Dof, KG.NNZ, X);
         }
         private static List<int> ApplySupports2D(List<Node2D> nodes, List<Support2D> supports)
         {
@@ -79,8 +79,9 @@ namespace ALFE.FESystem
             return ids;
         }
 
-        [DllImport("ALSolver.dll")]
-        private static extern void SolveFE(int[] rowA, int[] colA, double[] valA, double[] F, int dim, int dof, int nnzA);
-        //  [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] double[] R
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void SolveFE(int[] rowA, int[] colA, double[] valA, double[] F, int dim, int dof, int nnzA,
+            [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] double[] X);
+        
     }
 }

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Solver.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Solver.h" />
@@ -50,8 +51,13 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <UseIntelMKL>Parallel</UseIntelMKL>
+    <UseIntelMKL>Sequential</UseIntelMKL>
     <UseIntelDAAL>Parallel_Dynamic</UseIntelDAAL>
+    <UseILP64Interfaces>false</UseILP64Interfaces>
+    <UseIntelIPP>false</UseIntelIPP>
+    <UseInteloneTBB>false</UseInteloneTBB>
+    <UseInteloneMKL>No</UseInteloneMKL>
+    <UseIntelTBB>false</UseIntelTBB>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -142,6 +148,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
