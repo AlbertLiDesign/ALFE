@@ -10,6 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALFE", "ALFE.csproj", "{137
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALSolver", "ALSolver\ALSolver.vcxproj", "{50A007CD-64F2-4D2E-B05B-9B5B10A67FDA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consoler", "Consoler\Consoler.csproj", "{B07B1755-1373-46F1-B4FB-6A71442C9686}"
+	ProjectSection(ProjectDependencies) = postProject
+		{50A007CD-64F2-4D2E-B05B-9B5B10A67FDA} = {50A007CD-64F2-4D2E-B05B-9B5B10A67FDA}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +47,18 @@ Global
 		{50A007CD-64F2-4D2E-B05B-9B5B10A67FDA}.Release|x64.Build.0 = Release|x64
 		{50A007CD-64F2-4D2E-B05B-9B5B10A67FDA}.Release|x86.ActiveCfg = Release|Win32
 		{50A007CD-64F2-4D2E-B05B-9B5B10A67FDA}.Release|x86.Build.0 = Release|Win32
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Debug|x64.Build.0 = Debug|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Debug|x86.Build.0 = Debug|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Release|x64.ActiveCfg = Release|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Release|x64.Build.0 = Release|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Release|x86.ActiveCfg = Release|Any CPU
+		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

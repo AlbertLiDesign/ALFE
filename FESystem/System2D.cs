@@ -9,11 +9,11 @@ namespace ALFE.FESystem
     {
         public Model2D Model;
         public int Dim;
-        public CooMatrix KG;
-        public double[] F;
-        public double[] X;
         public int Dof = 2;
         private List<int> FixedID;
+        private CooMatrix KG;
+        private float[] F;
+        private float[] X;
         public System2D(Model2D model)
         {
             Model = model;
@@ -22,8 +22,8 @@ namespace ALFE.FESystem
             FixedID = ApplySupports2D(Model.Nodes, Model.Supports);
             Dim = (Model.Nodes.Count - FixedID.Count) * Dof;
 
-            F = new double[Dim * Dof];
-            X = new double[Dim * Dof];
+            F = new float[Dim * Dof];
+            X = new float[Dim * Dof];
         }
 
         public void AssembleF()
@@ -34,7 +34,7 @@ namespace ALFE.FESystem
                 F[Model.Loads[i].NodeID * Dof + 1] = Model.Loads[i].Load.Y;
             }
         }
-        public void AssembleKG(double[,] Ke)
+        public void AssembleKG(float[,] Ke)
         {
             var scan = Utils.Scan(Model.Nodes.Count, FixedID);
             HashSet<Triplet> triplets = new HashSet<Triplet>(Dim);
@@ -61,6 +61,32 @@ namespace ALFE.FESystem
         {
             AssembleF();
             SolveFE(KG.RowArray, KG.ColArray, KG.ValueArray, F, Dim, Dof, KG.NNZ, X);
+
+            int id = 0;
+
+            foreach (var item in Model.Nodes)
+            {
+                if (item.Anchored != true)
+                {
+                    item.Displacement = new Vector2D(X[id * Dof + 0], X[id * Dof + 1]);
+                    id++;
+                }
+            }
+        }
+
+        public CooMatrix getKG()
+        {
+            return KG;
+        }
+        public double[,] getDisplacement()
+        {
+            double[,] displacement = new double[Dim, Dof];
+            for (int i = 0; i < Model.Nodes.Count; i++)
+            {
+                displacement[i, 0] = Model.Nodes[i].Displacement.X;
+                displacement[i, 1] = Model.Nodes[i].Displacement.Y;
+            }
+            return displacement;
         }
         private static List<int> ApplySupports2D(List<Node2D> nodes, List<Support2D> supports)
         {
@@ -72,16 +98,15 @@ namespace ALFE.FESystem
                 nodes[id].Anchored = true;
                 if (supports[i].Type == SupportType.Fixed)
                 {
-                    nodes[id].Displacement.X = 0.0;
-                    nodes[id].Displacement.Y = 0.0;
+                    nodes[id].Displacement.X = 0.0f;
+                    nodes[id].Displacement.Y = 0.0f;
                 }
             }
             return ids;
         }
 
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void SolveFE(int[] rowA, int[] colA, double[] valA, double[] F, int dim, int dof, int nnzA,
-            [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] double[] X);
-        
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern void SolveFE(int[] rowA, int[] colA, float[] valA, float[] F, int dim, int dof, int nnzA, float[] X);
+
     }
 }

@@ -16,13 +16,13 @@ namespace ALFE
             Model2D model2d = new Cantilever2D().Model;
 
             var Ke = model2d.ComputeUniformK();
+            //FEPrint.PrintMatrix(Ke);
 
             System2D sys = new System2D(model2d);
             sys.AssembleKG(Ke);
             sys.Solve();
+            FEPrint.PrintDisplacement(sys);
 
-            FEPrint.PrintMatrix(sys.X,sys.Dim,sys.Dof);
-            //FEIO.writeCooMatrix(sys.KG, path);
             Console.WriteLine("Done");
             Console.ReadKey();
         }

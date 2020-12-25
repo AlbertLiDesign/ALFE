@@ -11,8 +11,8 @@ namespace ALFE
     {
         public int Row { get; set; }
         public int Col { get; set; }
-        public double Value { get; set; }
-        public Triplet(int row, int col, double value)
+        public float Value { get; set; }
+        public Triplet(int row, int col, float value)
         {
             Row = row;
             Col = col;

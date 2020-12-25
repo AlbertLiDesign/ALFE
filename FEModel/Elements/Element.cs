@@ -19,10 +19,10 @@ namespace ALFE.FEModel
         /// <summary>
         /// Stiffness matrix of the element of size 8x8
         /// </summary>
-        public double[,] Ke;
+        public float[,] Ke;
 
         // 3x3 matrix
-        public double[,] D;
+        public float[,] D;
 
         public abstract void ComputeD();
         public abstract void ComputeK();

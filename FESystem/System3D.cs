@@ -17,12 +17,12 @@ namespace ALFE.FESystem
         /// <summary>
         /// Force Vector
         /// </summary>
-        public double[] ForceVector { get; set; }
+        public float[] ForceVector { get; set; }
 
         /// <summary>
         /// Global stiffness matrix
         /// </summary>
-        public double[,] KG { get; set; }
+        public float[,] KG { get; set; }
 
         public System3D(Model3D model)
         {
@@ -31,8 +31,8 @@ namespace ALFE.FESystem
             ApplySupports3D(this.Model.Nodes, this.Model.Supports);
 
             int dim = model.Nodes.Count - model.Loads.Count;
-            ForceVector = new double[dim];
-            KG = new double[dim, dim];
+            ForceVector = new float[dim];
+            KG = new float[dim, dim];
 
         }
         public static void ApplySupports3D(List<Node3D> nodes, List<Support3D> supports)
@@ -42,9 +42,9 @@ namespace ALFE.FESystem
                 nodes[item.NodeID].Anchored = true;
                 if (item.Type == SupportType.Fixed)
                 {
-                    nodes[item.NodeID].Displacement.X = 0.0;
-                    nodes[item.NodeID].Displacement.Y = 0.0;
-                    nodes[item.NodeID].Displacement.Z = 0.0;
+                    nodes[item.NodeID].Displacement.X = 0.0f;
+                    nodes[item.NodeID].Displacement.Y = 0.0f;
+                    nodes[item.NodeID].Displacement.Z = 0.0f;
                 }
             }
         }

@@ -11,18 +11,18 @@ namespace ALFE.FEModel
         /// <summary>
         /// // Young's modulus
         /// </summary>
-        public double E { get; set; }
+        public float E { get; set; }
 
         /// <summary>
         /// Poisson ratio
         /// </summary>
-        public double u { get; set; }
+        public float u { get; set; }
         public Material() 
         {
-            this.E = 1;
-            this.u = 0.35;
+            this.E = 1.0f;
+            this.u = 0.3f;
         }
-        public Material(double E, double u)
+        public Material(float E, float u)
         {
             this.E = E;
             this.u = u;

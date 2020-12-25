@@ -7,9 +7,9 @@ namespace ALFE
         /// <summary>
         /// Represents a vector in Euclidean space.
         /// </summary>
-        internal double _x;
-        internal double _y;
-        internal double _z;
+        internal float _x;
+        internal float _y;
+        internal float _z;
 
         public Vector3D() { }
 
@@ -19,7 +19,7 @@ namespace ALFE
         /// <param name="x">X component of vector.</param>
         /// <param name="y">Y component of vector.</param>
         /// <param name="z">Z component of vector.</param>
-        public Vector3D(double x, double y, double z)
+        public Vector3D(float x, float y, float z)
         {
             _x = x;
             _y = y;
@@ -29,17 +29,17 @@ namespace ALFE
         /// <summary>
         /// Gets or sets the X (first) component of this vector.
         /// </summary>
-        public double X { get { return _x; } set { _x = value; } }
+        public float X { get { return _x; } set { _x = value; } }
 
         /// <summary>
         /// Gets or sets the Y (second) component of this vector.
         /// </summary>
-        public double Y { get { return _y; } set { _y = value; } }
+        public float Y { get { return _y; } set { _y = value; } }
 
         /// <summary>
         /// Gets or sets the Z (third) component of this vector.
         /// </summary>
-        public double Z { get { return _z; } set { _z = value; } }
+        public float Z { get { return _z; } set { _z = value; } }
 
         /// <summary>
         /// Computes a hash number that represents the current vector.
@@ -79,7 +79,7 @@ namespace ALFE
         /// <param name="vector">A vector.</param>
         /// <param name="t">A number.</param>
         /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
-        public static Vector3D operator *(Vector3D vector, double t)
+        public static Vector3D operator *(Vector3D vector, float t)
         {
             return new Vector3D(vector._x * t, vector._y * t, vector._z * t);
         }
@@ -90,7 +90,7 @@ namespace ALFE
         /// <param name="vector">A vector.</param>
         /// <param name="other">Another vector.</param>
         /// <returns>The result number of dot product.</returns>
-        public static double operator *(Vector3D vector, Vector3D other)
+        public static float operator *(Vector3D vector, Vector3D other)
         {
             return vector._x * other._x + vector._y * other._y + vector._z * other._z;
         }
@@ -113,16 +113,16 @@ namespace ALFE
         /// Get the length of a vector
         /// </summary>        
         /// <returns>The length</returns>
-        public double Length
+        public float Length
         {
-            get { return (double)Math.Sqrt(this._x * this._x + this._y * this._y + this._z * this._z); }
+            get { return (float)Math.Sqrt(this._x * this._x + this._y * this._y + this._z * this._z); }
         }
 
         /// <summary>
         /// Get the square length of a vector
         /// </summary>        
         /// <returns>The length</returns>
-        public double SqrLength
+        public float SqrLength
         {
             get { return this._x * this._x + this._y * this._y + this._z * this._z; }
         }
@@ -180,7 +180,7 @@ namespace ALFE
         /// </summary>
         /// <param name="vector"> Another vector. </param>
         /// <returns>Return the distance between two vectors.</returns>
-        public double DistanceTo(Vector3D vector)
+        public float DistanceTo(Vector3D vector)
         {
             return (this - vector).Length;
         }

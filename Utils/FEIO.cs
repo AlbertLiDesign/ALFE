@@ -42,7 +42,7 @@ namespace ALFE
         //    // 2D case
         //    if (dim == 2)
         //    {
-        //        sw.WriteLine("POINTS" + ' ' + nodes.Count.ToString() + "double");
+        //        sw.WriteLine("POINTS" + ' ' + nodes.Count.ToString() + "float");
         //        for (int i = 0; i < nodes.Count; i++)
         //        {
         //            var v = nodes[i];
@@ -68,7 +68,7 @@ namespace ALFE
         //    // 3D case
         //    if (dim == 3)
         //    {
-        //        sw.WriteLine("POINTS" + ' ' + nodes.Count.ToString() + ' ' + "double");
+        //        sw.WriteLine("POINTS" + ' ' + nodes.Count.ToString() + ' ' + "float");
         //        for (int i = 0; i < nodes.Count; i++)
         //        {
         //            var v = nodes[i];
@@ -211,7 +211,7 @@ namespace ALFE
         //public static void writeBESO_AMR(FESystem_AMR fes, BESO_TopOpt beso, Material material, string path)
         //{
         //    List<PlanktonXYZ> centers = fes.model.centers;
-        //    double[] size = fes.model.size;
+        //    float[] size = fes.model.size;
         //    List<Load> loads = fes.loads;
         //    List<Support> supports = fes.supports;
         //    int dim = fes.model.dim;
@@ -295,7 +295,7 @@ namespace ALFE
 
         //                if (tokens.Length == 4)
         //                {
-        //                    pts.Add(new Point3f(double.Parse(tokens[1]), double.Parse(tokens[2]), double.Parse(tokens[3])));
+        //                    pts.Add(new Point3f(float.Parse(tokens[1]), float.Parse(tokens[2]), float.Parse(tokens[3])));
         //                }
         //                else if (tokens.Length == 9)
         //                {

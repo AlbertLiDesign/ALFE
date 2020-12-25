@@ -44,7 +44,7 @@ namespace ALFE.FEModel
             this.Loads = loads;
             this.Supports = supports;
         }
-        public double[,] ComputeUniformK()
+        public float[,] ComputeUniformK()
         {
             var ele = this.Elements[0];
             ele.ComputeK();

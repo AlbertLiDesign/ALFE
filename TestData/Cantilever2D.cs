@@ -60,7 +60,7 @@ namespace ALFE
             }
 
             // Apply the load
-            loads.Add(new Load2D(20, new Vector2D(0.0, -1.0)));
+            loads.Add(new Load2D(20, new Vector2D(0.0f, -1.0f)));
 
             Model = new Model2D(nodes, elems, loads, supports);
         }

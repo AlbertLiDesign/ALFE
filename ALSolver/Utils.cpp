@@ -1,24 +1,24 @@
 #include "Solver.h"
 
 
-Eigen::SparseMatrix<double> SetSparseMatrix(int* row, int* col, double* val, int rows, int cols, int nnz)
+Eigen::SparseMatrix<float> SetSparseMatrix(int* row, int* col, float* val, int rows, int cols, int nnz)
 {
-    std::vector< Eigen::Triplet<double>> tripletsA;
+    std::vector< Eigen::Triplet<float>> tripletsA;
     tripletsA.reserve(nnz);
 
     for (int i = 0; i < nnz; i++)
     {
-            tripletsA.push_back(Eigen::Triplet<double>(row[i], col[i], val[i]));
+            tripletsA.push_back(Eigen::Triplet<float>(row[i], col[i], val[i]));
     }
-    Eigen::SparseMatrix<double> sparseA(rows, cols);
+    Eigen::SparseMatrix<float> sparseA(rows, cols);
     sparseA.setFromTriplets(tripletsA.begin(), tripletsA.end());
     return sparseA;
 }
 
 
-Eigen::MatrixXd SetMatrix(double* matrix, int dim, int dof)
+Eigen::MatrixXf SetMatrix(float* matrix, int dim, int dof)
 {
-    Eigen::MatrixXd mat(dim, dof);
+    Eigen::MatrixXf mat(dim, dof);
     for (int i = 0; i < dim; i++)
     {
         for (int j = 0; j < dof; j++)
@@ -27,4 +27,13 @@ Eigen::MatrixXd SetMatrix(double* matrix, int dim, int dof)
         }
     }
     return mat;
+}
+Eigen::VectorXf SetVector(float* matrix, int dim, int dof)
+{
+    Eigen::VectorXf vec(dim);
+    for (int i = 0; i < dim; i++)
+    {
+        vec(i) = matrix[i * dof + 1];
+    }
+    return vec;
 }
