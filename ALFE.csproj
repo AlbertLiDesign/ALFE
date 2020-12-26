@@ -92,7 +92,6 @@
     <Compile Include="FEModel\Nodes\Node.cs" />
     <Compile Include="FEModel\Nodes\Node3D.cs" />
     <Compile Include="FEModel\Supports\Support3D.cs" />
-    <Compile Include="FESystem\System2D%28test%29.cs" />
     <Compile Include="FESystem\System3D.cs" />
     <Compile Include="Algebra\Vector2D.cs" />
     <Compile Include="Algebra\Vector3D.cs" />

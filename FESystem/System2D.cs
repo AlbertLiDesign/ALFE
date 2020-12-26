@@ -51,7 +51,7 @@ namespace ALFE.FESystem
                                     var row = (nodeID[I] - scan[nodeID[I]][0]) * Dof + p;
                                     var col = (nodeID[J] - scan[nodeID[J]][0]) * Dof + q;
                                     if (row >= col)
-                                        triplets.Add(new Triplet(row, col, Ke[Dof * I + p, Dof * J + q]));
+                                        triplets.Add(new Triplet(col, row, Ke[Dof * I + p, Dof * J + q]));
                                 }
             }
 

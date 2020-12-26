@@ -12,7 +12,6 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            string path = @"C:\Users\alber\Desktop\mat.txt";
             Model2D model2d = new Cantilever2D().Model;
 
             var Ke = model2d.ComputeUniformK();
