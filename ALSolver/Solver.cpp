@@ -7,8 +7,24 @@ void SolveFE(int* rowA, int* colA, float* valA, float* F, int dim, int dof, int 
     auto A = SetSparseMatrix(rowA, colA, valA, dim, dim, nnzA);
     auto B = SetMatrix(F, dim, dof);
 
-    Eigen::PardisoLDLT<Eigen::SparseMatrix<float>> pardiso(A);
-    auto result = pardiso.solve(B);
+    Eigen::MatrixXf result;
+
+    Eigen::SimplicialLDLT<Eigen::SparseMatrix<float>> ldlt(A);
+    result = ldlt.solve(B);
+
+    //if (dim <= 1000)
+    //{
+    //    Eigen::SimplicialLDLT<Eigen::SparseMatrix<float>> ldlt(A);
+    //    result = ldlt.solve(B);
+    //}
+    //else
+    //{
+    //    Eigen::PardisoLDLT<Eigen::SparseMatrix<float>> pardiso(A);
+    //    result = pardiso.solve(B);
+    //}
+
+
+
 
     for (int i = 0; i < dim; i++)
     {

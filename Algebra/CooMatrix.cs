@@ -56,9 +56,7 @@ namespace ALFE
                 NNZ = ValueArray.Length;
             }
             else
-            {
                 throw new Exception("Fail to create a coo matrix.");
-            }
         }
     }
 }

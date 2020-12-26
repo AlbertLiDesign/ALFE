@@ -9,6 +9,13 @@ namespace ALFE
 {
     public class FEPrint
     {
+        public static void PrintTimeCost(List<double> timeCost)
+        {
+            Console.WriteLine("---------------------------------- Time Cost ----------------------------------");
+            Console.WriteLine("Computing Ke: " + timeCost[0].ToString() + " ms");
+            Console.WriteLine("Assembling KG: " + timeCost[1].ToString() + " ms");
+            Console.WriteLine("Solving: " + timeCost[2].ToString() + " ms");
+        }
         public static void PrintDisplacement(System2D sys)
         {
             foreach (var item in sys.Model.Nodes)
