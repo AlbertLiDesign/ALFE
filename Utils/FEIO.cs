@@ -9,7 +9,7 @@ namespace ALFE
 {
     public class FEIO
     {
-        public static void writeCooMatrix(CooMatrix mat, string path)
+        public static void writeCooMatrix(COOMatrix mat, string path)
         {
             StreamWriter sw = new StreamWriter(path);
             sw.WriteLine("# ALFE COO Matrix");

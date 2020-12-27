@@ -41,7 +41,7 @@ namespace ALFE
                     nodes.Add(new Vector2D(i, j));
                     if (i == 0)
                     {
-                        supports.Add(new Support2D(j*xnum, SupportType.Fixed));
+                        supports.Add(new Support2D(j, SupportType.Fixed));
                     }
                 }
             }
@@ -53,14 +53,14 @@ namespace ALFE
                 {
                     List<int> nodesID = new List<int>(4)
                     {
-                        i + j * xnum, (i + 1) + j * xnum, (i+1) + (j+1)* xnum , i + (j+1) * xnum
+                        i * ynum + j, (i + 1) * ynum + j, (i+1) * ynum+ (j+1) , i * ynum + (j+1) 
                     };
                     elems.Add(new UnitQuad(nodesID, new Material()));
                 }
             }
 
             // Apply the load
-            loads.Add(new Load2D((int)Math.Ceiling(ynum / 2.0) + 1, new Vector2D(0.0f, -1.0f)));
+            loads.Add(new Load2D(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
 
             Model = new Model2D(nodes, elems, loads, supports);
         }

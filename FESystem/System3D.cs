@@ -39,7 +39,7 @@ namespace ALFE.FESystem
         {
             foreach (var item in supports)
             {
-                nodes[item.NodeID].Anchored = true;
+                nodes[item.NodeID].Active = false;
                 if (item.Type == SupportType.Fixed)
                 {
                     nodes[item.NodeID].Displacement.X = 0.0f;

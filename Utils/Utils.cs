@@ -20,7 +20,7 @@ namespace ALFE
             {
                 foreach (var item in nodes[i].ElementID)
                     foreach (var neighbour in elements[item].NodeID)
-                        if (!nodes[neighbour].Anchored) nodes[i].Neighbours.Add(neighbour);
+                        if (!nodes[neighbour].Active) nodes[i].Neighbours.Add(neighbour);
             });
         }
 

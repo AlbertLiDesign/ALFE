@@ -16,10 +16,10 @@ namespace ALFE.FEModel
         {
             this.Position = position;
         }
-        public Node2D(Vector2D position, bool anchored)
+        public Node2D(Vector2D position, bool active)
         {
             this.Position = position;
-            this.Anchored = anchored;
+            this.Active = active;
         }
     }
 }

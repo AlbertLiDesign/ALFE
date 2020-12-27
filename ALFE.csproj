@@ -77,7 +77,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algebra\CooMatrix.cs" />
+    <Compile Include="Algebra\COOMatrix.cs" />
+    <Compile Include="Algebra\CSRMatrix.cs" />
     <Compile Include="Algebra\Triplet.cs" />
     <Compile Include="FEModel\Elements\ElementType.cs" />
     <Compile Include="FEModel\Elements\Element.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="FEModel\Nodes\Node.cs" />
     <Compile Include="FEModel\Nodes\Node3D.cs" />
     <Compile Include="FEModel\Supports\Support3D.cs" />
+    <Compile Include="FESystem\System%28test%29.cs" />
     <Compile Include="FESystem\System3D.cs" />
     <Compile Include="Algebra\Vector2D.cs" />
     <Compile Include="Algebra\Vector3D.cs" />

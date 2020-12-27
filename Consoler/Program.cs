@@ -12,9 +12,12 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            Model2D model2d = new Cantilever2D(60,40).Model;
+            Model2D model2d = new Cantilever2D().Model;
             System2D sys = new System2D(model2d, true);
+
             sys.Solve();
+            FEPrint.PrintCSR(sys.getKG());
+            
 
             sys.PrintTime();
             //FEPrint.PrintDisplacement(sys);

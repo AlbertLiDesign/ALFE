@@ -9,6 +9,19 @@ namespace ALFE
 {
     public class FEPrint
     {
+        public static void PrintCOO(COOMatrix coo)
+        {
+            for (int i = 0; i < coo.NNZ; i++)
+            {
+                Console.WriteLine(coo.RowArray[i].ToString() + '\t'
+                        + coo.ColArray[i].ToString() + '\t'
+                        + coo.ValueArray[i].ToString());
+            }
+        }
+        public static void PrintCSR(CSRMatrix csr)
+        {
+            PrintCOO(csr.ToCOO());
+        }
         public static void PrintTimeCost(List<double> timeCost)
         {
             Console.WriteLine("---------------------------------- Time Cost ----------------------------------");

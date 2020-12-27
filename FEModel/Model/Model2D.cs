@@ -12,6 +12,8 @@ namespace ALFE.FEModel
         public List<Element> Elements = new List<Element>();
         public List<Load2D> Loads = new List<Load2D>();
         public List<Support2D> Supports = new List<Support2D>();
+
+        #region Construction
         public Model2D() { }
         public Model2D(List<Vector2D> nodes, List<Element> elements)
         {
@@ -44,11 +46,14 @@ namespace ALFE.FEModel
             this.Loads = loads;
             this.Supports = supports;
         }
+        #endregion
+
         public float[,] ComputeUniformK()
         {
             var ele = this.Elements[0];
             ele.ComputeK();
             return ele.Ke;
         }
+       
     }
 }
