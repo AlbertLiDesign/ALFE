@@ -9,14 +9,14 @@ namespace ALFE
 {
     public class FEIO
     {
-        public static void writeCooMatrix(COOMatrix mat, string path)
+        public static void WriteCOOMatrix(COOMatrix mat, string path)
         {
             StreamWriter sw = new StreamWriter(path);
             sw.WriteLine("# ALFE COO Matrix");
-            sw.WriteLine(mat.Rows.ToString() + ',' + mat.Cols.ToString() + ',' + mat.NNZ.ToString());
+            sw.WriteLine(mat.Rows.ToString() + ' ' + mat.Cols.ToString() + ' ' + mat.NNZ.ToString());
             for (int i = 0; i < mat.NNZ; i++)
             {
-                sw.WriteLine(mat.RowArray[i].ToString() + ',' + mat.ColArray[i].ToString() + ',' + mat.ValueArray[i].ToString());
+                sw.WriteLine((mat.RowArray[i] + 1).ToString() + ' ' + (mat.ColArray[i] + 1).ToString() + ' ' + mat.ValueArray[i].ToString());
             }
             sw.Flush();
             sw.Close();

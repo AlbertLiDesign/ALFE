@@ -16,8 +16,9 @@ namespace ALFE
             System2D sys = new System2D(model2d, true);
 
             sys.Solve();
-            FEPrint.PrintCSR(sys.getKG());
-            
+            var KG = sys.getKG();
+            //FEPrint.PrintCSR(KG);
+            //FEIO.WriteCOOMatrix(KG.ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
 
             sys.PrintTime();
             //FEPrint.PrintDisplacement(sys);

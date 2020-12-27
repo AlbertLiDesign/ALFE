@@ -33,13 +33,14 @@ namespace ALFE
         /// </summary>
         public int NNZ;
 
-        public CSRMatrix(int N, int nnz)
+        public CSRMatrix(int n, int nnz)
         {
-            this.N = N; 
-            this.NNZ = nnz;
-            Rows = new int[N + 1];
+            N = n; 
+            NNZ = nnz;
+            Rows = new int[n + 1];
+            Rows[n] = nnz;
             Cols = new int[NNZ];
-            Cols[N] = nnz;
+            Cols[n] = nnz;
             Vals = new float[NNZ];
         }
 
@@ -57,6 +58,7 @@ namespace ALFE
                     id++;
                 }
             }
+
             return new COOMatrix(triplets, N, N);
         }
         public void Clear()

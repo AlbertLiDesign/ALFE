@@ -125,8 +125,9 @@ namespace ALFE.FESystem
             InitialzeKG();
             KG.Clear();
 
-            foreach (Element elem in Model.Elements)
+            Parallel.For(0, Model.Elements.Count, e =>
             {
+                var elem = Model.Elements[e];
                 for (int i = 0; i < 4; i++)
                 {
                     Node2D ni = Model.Nodes[elem.NodeID[i]];
@@ -146,7 +147,7 @@ namespace ALFE.FESystem
                         }
                     }
                 }
-            }
+            });
         }
 
         /// <summary>
@@ -246,6 +247,10 @@ namespace ALFE.FESystem
                                 Model.Nodes[i].Neighbours.Add(Model.Nodes[neighbour].ActiveID);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void InitialzeKG()
         {
             // list non-anchored nodes and give them sequential ids

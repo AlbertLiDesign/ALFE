@@ -17,8 +17,8 @@ namespace ALFE.FEModel
         public Load2D() { }
         public Load2D(int node, Vector2D load)
         {
-            this.NodeID = node;
-            this.Load = load;
+            NodeID = node;
+            Load = load;
         }
     }
 }
