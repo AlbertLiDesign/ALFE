@@ -185,20 +185,25 @@ namespace ALFE.FESystem
             AssembleF();
 
             sw.Restart();
-            ////SolveFE(KG.RowArray, KG.ColArray, KG.ValueArray, F, Dim, DOF, KG.NNZ, X);
+            var KG_COO = KG.ToCOO();
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-            //int id = 0;
+            sw.Restart();
+            SolveFE(KG_COO.RowArray, KG_COO.ColArray, KG_COO.ValueArray, F, Dim, DOF, KG_COO.NNZ, X);
+            sw.Stop();
+            TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-            //foreach (var item in Model.Nodes)
-            //{
-            //    if (item.Active == true)
-            //    {
-            //        item.Displacement = new Vector2D(X[id * DOF + 0], X[id * DOF + 1]);
-            //        id++;
-            //    }
-            //}
+            int id = 0;
+
+            foreach (var item in Model.Nodes)
+            {
+                if (item.Active == true)
+                {
+                    item.Displacement = new Vector2D(X[id * DOF + 0], X[id * DOF + 1]);
+                    id++;
+                }
+            }
         }
 
         /// <summary>

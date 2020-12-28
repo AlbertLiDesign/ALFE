@@ -22,12 +22,20 @@ namespace ALFE
         {
             PrintCOO(csr.ToCOO());
         }
+        public static void PrintMatrixInfo(COOMatrix coo)
+        {
+            Console.WriteLine("---------------------------------- Matrix Info ----------------------------------");
+            Console.WriteLine("Rows: " + coo.Rows.ToString());
+            Console.WriteLine("Cols: " + coo.Cols.ToString());
+            Console.WriteLine("NNZ: " + coo.NNZ.ToString());
+        }
         public static void PrintTimeCost(List<double> timeCost)
         {
             Console.WriteLine("---------------------------------- Time Cost ----------------------------------");
             Console.WriteLine("Computing Ke: " + timeCost[0].ToString() + " ms");
             Console.WriteLine("Assembling KG: " + timeCost[1].ToString() + " ms");
-            Console.WriteLine("Solving: " + timeCost[2].ToString() + " ms");
+            Console.WriteLine("Covnert to COO: " + timeCost[2].ToString() + " ms");
+            Console.WriteLine("Solving: " + timeCost[3].ToString() + " ms");
         }
         public static void PrintDisplacement(System2D sys)
         {

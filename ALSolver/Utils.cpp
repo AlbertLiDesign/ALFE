@@ -1,7 +1,6 @@
 #include "Solver.h"
 
-
-Eigen::SparseMatrix<float> SetSparseMatrix(int* row, int* col, float* val, int rows, int cols, int nnz)
+Eigen::SparseMatrix<float> SetCOOMatrix(int* row, int* col, float* val, int rows, int cols, int nnz)
 {
     std::vector< Eigen::Triplet<float>> tripletsA;
     tripletsA.reserve(nnz);

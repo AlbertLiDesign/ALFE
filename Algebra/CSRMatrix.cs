@@ -54,7 +54,10 @@ namespace ALFE
                 int dif = Rows[i + 1] - Rows[i];
                 for (int j = 0; j < dif; j++)
                 {
-                    triplets.Add(new Triplet(i, Cols[id], Vals[id]));
+                    if (Cols[id] >= i)
+                    {
+                        triplets.Add(new Triplet(i, Cols[id], Vals[id]));
+                    }
                     id++;
                 }
             }
