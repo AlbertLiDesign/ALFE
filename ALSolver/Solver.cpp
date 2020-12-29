@@ -2,17 +2,20 @@
 
 #include <unsupported/Eigen/SparseExtra>
 
-void SolveFE(int* rowA, int* colA, float* valA, float* F, int dim, int dof, int nnzA, float* X)
+bool SolveFE(int* rowA, int* colA, float* valA, float* F, int dim, int dof, int nnzA, float* X)
 {
     auto A = SetCOOMatrix(rowA, colA, valA, dim, dim, nnzA);
-    auto B = SetMatrix(F, dim, dof);
+    auto B = SetVector(F, dim);
 
     //Eigen::saveMarket(A, "C:/Users/alber/Desktop/mat.mtx", Eigen::UpLoType::Symmetric);
     //Eigen::saveMarket(B, "C:/Users/alber/Desktop/B.mtx");
 
-    Eigen::MatrixXf result;
+    Eigen::VectorXf result;
 
-    Eigen::PardisoLLT<Eigen::SparseMatrix<float>, 1> pardiso(A);
+    //Eigen::SimplicialLDLT<Eigen::SparseMatrix<float>> ldlt(A);
+    //result = ldlt.solve(B);
+
+    Eigen::PardisoLLT<Eigen::SparseMatrix<float>, 2> pardiso(A);
     //pardiso.pardisoParameterArray()[59] = 1;
     result = pardiso.solve(B);
 
@@ -29,10 +32,9 @@ void SolveFE(int* rowA, int* colA, float* valA, float* F, int dim, int dof, int 
 
     for (int i = 0; i < dim; i++)
     {
-        for (int j = 0; j < dof; j++)
-        {
-            X[i * dof + j] = result(i, j);
-        }
+        X[i] = result(i);
     }
+
+    return true;
 }
 

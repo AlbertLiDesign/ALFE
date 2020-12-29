@@ -55,9 +55,7 @@ namespace ALFE
                 for (int j = 0; j < dif; j++)
                 {
                     if (Cols[id] >= i)
-                    {
                         triplets.Add(new Triplet(i, Cols[id], Vals[id]));
-                    }
                     id++;
                 }
             }

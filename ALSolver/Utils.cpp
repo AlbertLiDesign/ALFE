@@ -15,24 +15,12 @@ Eigen::SparseMatrix<float> SetCOOMatrix(int* row, int* col, float* val, int rows
 }
 
 
-Eigen::MatrixXf SetMatrix(float* matrix, int dim, int dof)
-{
-    Eigen::MatrixXf mat(dim, dof);
-    for (int i = 0; i < dim; i++)
-    {
-        for (int j = 0; j < dof; j++)
-        {
-            mat(i, j) = matrix[i * dof + j];
-        }
-    }
-    return mat;
-}
-Eigen::VectorXf SetVector(float* matrix, int dim, int dof)
+Eigen::VectorXf SetVector(float* matrix, int dim)
 {
     Eigen::VectorXf vec(dim);
     for (int i = 0; i < dim; i++)
     {
-        vec(i) = matrix[i * dof + 1];
+        vec(i) = matrix[i];
     }
     return vec;
 }

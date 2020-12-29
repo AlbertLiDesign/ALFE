@@ -93,14 +93,14 @@
     <Compile Include="FEModel\Nodes\Node.cs" />
     <Compile Include="FEModel\Nodes\Node3D.cs" />
     <Compile Include="FEModel\Supports\Support3D.cs" />
-    <Compile Include="FESystem\System%28test%29.cs" />
+    <Compile Include="FESystem\System2D.cs" />
     <Compile Include="FESystem\System3D.cs" />
     <Compile Include="Algebra\Vector2D.cs" />
     <Compile Include="Algebra\Vector3D.cs" />
     <Compile Include="FEModel\Nodes\Node2D.cs" />
     <Compile Include="FEModel\Supports\Support2D.cs" />
     <Compile Include="FEModel\Supports\SupportType.cs" />
-    <Compile Include="FESystem\System2D.cs" />
+    <Compile Include="FESystem\System%28old%29.cs" />
     <Compile Include="Utils\FEIO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestData\Cantilever2D.cs" />

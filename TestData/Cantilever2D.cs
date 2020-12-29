@@ -20,7 +20,7 @@ namespace ALFE
                 ^ |           |           |          |           |          |          |
                 > #-----#-----#-----#-----#-----#-----#
                 ^ |           |           |          |           |          |          |
-                > #-----#-----#-----#-----#-----#-----# | F (node 20)
+                > #-----#-----#-----#-----#-----#-----# | F (node 32)
                 ^ |           |           |          |           |          |          |  V
                 > #-----#-----#-----#-----#-----#-----#
                 ^ |           |           |          |           |          |          |
@@ -55,7 +55,7 @@ namespace ALFE
                     {
                         i * ynum + j, (i + 1) * ynum + j, (i+1) * ynum+ (j+1) , i * ynum + (j+1) 
                     };
-                    elems.Add(new UnitQuad(nodesID, new Material()));
+                    elems.Add(new UnitQuad(nodesID, new Material(1.0f, 0.3f)));
                 }
             }
 
