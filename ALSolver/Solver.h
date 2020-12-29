@@ -9,4 +9,4 @@
 
 Eigen::VectorXf SetVector(float* matrix, int dim);
 Eigen::SparseMatrix<float> SetCOOMatrix(int* row, int* col, float* val, int rows, int cols, int nnz);
-extern "C" __declspec(dllexport) bool SolveFE(int* rowA, int* colA, float* valA, float*F, int dim, int dof, int nnzA, float* X);
+extern "C" __declspec(dllexport) bool SolveFE(int* rows_offset, int* cols, float* vals, float* F, int dim, int dof, int nnz, float* X);

@@ -197,12 +197,7 @@ namespace ALFE.FESystem
             AssembleF();
 
             sw.Restart();
-            var KG_COO = KG.ToCOO();
-            sw.Stop();
-            TimeCost.Add(sw.Elapsed.TotalMilliseconds);
-
-            sw.Restart();
-            Solved = SolveFE(KG_COO.RowArray, KG_COO.ColArray, KG_COO.ValueArray, F, Dim, DOF, KG_COO.NNZ, X);
+            Solved = SolveFE(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X);
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -240,14 +235,6 @@ namespace ALFE.FESystem
                 displacement[i, 1] = Model.Nodes[i].Displacement.Y;
             }
             return displacement;
-        }
-
-        /// <summary>
-        /// Print the time cost in each part.
-        /// </summary>
-        public void PrintTime()
-        {
-            FEPrint.PrintTimeCost(TimeCost);
         }
 
         /// <summary>
@@ -345,8 +332,8 @@ namespace ALFE.FESystem
             });
         }
 
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern bool SolveFE(int[] rowA, int[] colA, float[] valA, float[] F, int dim, int dof, int nnzA, float[] X);
 
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern bool SolveFE(int[] rows_offset, int[] cols, float[] vals, float[] F, int dim, int dof, int nnz, float[] X);
     }
 }

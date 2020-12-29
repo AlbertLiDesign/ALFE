@@ -2,9 +2,9 @@
 
 #include <unsupported/Eigen/SparseExtra>
 
-bool SolveFE(int* rowA, int* colA, float* valA, float* F, int dim, int dof, int nnzA, float* X)
+bool SolveFE(int* rows_offset, int* cols, float* vals, float* F, int dim, int dof, int nnz, float* X)
 {
-    auto A = SetCOOMatrix(rowA, colA, valA, dim, dim, nnzA);
+    Eigen::Map<Eigen::SparseMatrix<float, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
 
     //Eigen::saveMarket(A, "C:/Users/alber/Desktop/mat.mtx", Eigen::UpLoType::Symmetric);
@@ -12,23 +12,9 @@ bool SolveFE(int* rowA, int* colA, float* valA, float* F, int dim, int dof, int 
 
     Eigen::VectorXf result;
 
-    //Eigen::SimplicialLDLT<Eigen::SparseMatrix<float>> ldlt(A);
-    //result = ldlt.solve(B);
-
-    Eigen::PardisoLLT<Eigen::SparseMatrix<float>, 2> pardiso(A);
-    //pardiso.pardisoParameterArray()[59] = 1;
+    Eigen::PardisoLLT<Eigen::SparseMatrix<float>> pardiso(A);
+    pardiso.pardisoParameterArray()[59] = 1;
     result = pardiso.solve(B);
-
-    //if (dim <= 1000)
-    //{
-    //    Eigen::SimplicialLDLT<Eigen::SparseMatrix<float>> ldlt(A);
-    //    result = ldlt.solve(B);
-    //}
-    //else
-    //{
-    //    Eigen::PardisoLDLT<Eigen::SparseMatrix<float>> pardiso(A);
-    //    result = pardiso.solve(B);
-    //}
 
     for (int i = 0; i < dim; i++)
     {
@@ -37,4 +23,3 @@ bool SolveFE(int* rowA, int* colA, float* valA, float* F, int dim, int dof, int 
 
     return true;
 }
-
