@@ -87,11 +87,11 @@ namespace ALFE.FESystem
         /// </summary>
         private void AssembleF()
         {
-            for (int i = 0; i < Model.Loads.Count; i++)
+            foreach (var item in Model.Loads)
             {
-                var id = Model.Nodes[Model.Loads[i].NodeID].ActiveID * DOF;
-                F[id + 0] = Model.Loads[i].Load.X;
-                F[id + 1] = Model.Loads[i].Load.Y;
+                var id = Model.Nodes[item.NodeID].ActiveID * DOF;
+                F[id + 0] = item.Load.X;
+                F[id + 1] = item.Load.Y;
             }
         }
 
@@ -103,9 +103,9 @@ namespace ALFE.FESystem
             InitialzeKG();
             KG.Clear();
 
-            Parallel.For(0, Model.Elements.Count, e =>
+            foreach (var elem in Model.Elements)
             {
-                var elem = Model.Elements[e];
+                //var elem = Model.Elements[e];
                 for (int i = 0; i < 4; i++)
                 {
                     Node2D ni = Model.Nodes[elem.NodeID[i]];
@@ -125,7 +125,7 @@ namespace ALFE.FESystem
                         }
                     }
                 }
-            });
+            }
         }
 
         /// <summary>
@@ -137,9 +137,10 @@ namespace ALFE.FESystem
             InitialzeKG();
             KG.Clear();
 
-            Parallel.For(0, Model.Elements.Count, e =>
+            //Parallel.For(0, Model.Elements.Count, e =>
+            foreach (var elem in Model.Elements)
             {
-                var elem = Model.Elements[e];
+                //var elem = Model.Elements[e];
                 for (int i = 0; i < 4; i++)
                 {
                     Node2D ni = Model.Nodes[elem.NodeID[i]];
@@ -159,7 +160,7 @@ namespace ALFE.FESystem
                         }
                     }
                 }
-            });
+            }
         }
 
         /// <summary>
@@ -197,7 +198,7 @@ namespace ALFE.FESystem
             AssembleF();
 
             sw.Restart();
-            Solved = SolveFE(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X);
+            Solved = SolveFE(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -334,6 +335,6 @@ namespace ALFE.FESystem
 
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern bool SolveFE(int[] rows_offset, int[] cols, float[] vals, float[] F, int dim, int dof, int nnz, float[] X);
+        private static extern int SolveFE(int[] rows_offset, int[] cols, float[] vals, float[] F, int dim, int dof, int nnz, float[] X);
     }
 }

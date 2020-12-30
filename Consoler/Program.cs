@@ -12,7 +12,7 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            Model2D model2d = new Cantilever2D(200,200).Model;
+            Model2D model2d = new Cantilever2D(1000,1000).Model;
             System2D sys = new System2D(model2d, true);
 
             sys.Solve();
@@ -21,7 +21,7 @@ namespace ALFE
             //FEPrint.PrintCSR(KG);
             //FEIO.WriteCOOMatrix(KG.ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
 
-            Console.WriteLine(sys.GetDisplacement()[9999, 1]);
+            //Console.WriteLine(sys.GetDisplacement()[5000, 1]);
             FEPrint.PrintSystemInfo(sys);
             //FEPrint.PrintDisplacement(sys);
 

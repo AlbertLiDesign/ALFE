@@ -2,7 +2,7 @@
 
 #include <unsupported/Eigen/SparseExtra>
 
-bool SolveFE(int* rows_offset, int* cols, float* vals, float* F, int dim, int dof, int nnz, float* X)
+int SolveFE(int* rows_offset, int* cols, float* vals, float* F, int dim, int dof, int nnz, float* X)
 {
     Eigen::Map<Eigen::SparseMatrix<float, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
@@ -20,14 +20,16 @@ bool SolveFE(int* rows_offset, int* cols, float* vals, float* F, int dim, int do
     else
     {
         Eigen::PardisoLLT<Eigen::SparseMatrix<float>,1> pardiso(A);
-        pardiso.pardisoParameterArray()[59] = 2;
+        pardiso.pardisoParameterArray()[59] = 1;
         result = pardiso.solve(B);
     }
+
+    //std::cout << 5000 * 2 + 1 << ": " << result(5000 * 2 + 1) << std::endl;
 
     for (int i = 0; i < dim; i++)
     {
         X[i] = result(i);
     }
 
-    return true;
+    return 1;
 }

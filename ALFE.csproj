@@ -100,7 +100,6 @@
     <Compile Include="FEModel\Nodes\Node2D.cs" />
     <Compile Include="FEModel\Supports\Support2D.cs" />
     <Compile Include="FEModel\Supports\SupportType.cs" />
-    <Compile Include="FESystem\System%28old%29.cs" />
     <Compile Include="Utils\FEIO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestData\Cantilever2D.cs" />
@@ -111,7 +110,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ToDoList.txt" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>

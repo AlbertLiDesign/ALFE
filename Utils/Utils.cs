@@ -16,12 +16,11 @@ namespace ALFE
         /// <param name="elements"> A list of all elements. </param>
         public static void ComputeNeighbours(List<Node> nodes, List<Element> elements)
         {
-            Parallel.For(0, nodes.Count, i =>
-            {
-                foreach (var item in nodes[i].ElementID)
+            foreach (var node in nodes)
+                foreach (var item in node.ElementID)
                     foreach (var neighbour in elements[item].NodeID)
-                        if (!nodes[neighbour].Active) nodes[i].Neighbours.Add(neighbour);
-            });
+                        if (!nodes[neighbour].Active) 
+                            node.Neighbours.Add(neighbour);
         }
 
         /// <summary>

@@ -22,6 +22,20 @@ namespace ALFE
             sw.Close();
             sw.Dispose();
         }
+        public static void WriteKG(CSRMatrix csr, string path)
+        {
+            StreamWriter sw = new StreamWriter(path);
+            sw.WriteLine("%%MatrixMarket matrix coordinate  real symmetric");
+            var mat = csr.ToCOO();
+            sw.WriteLine(mat.Rows.ToString() + ' ' + mat.Cols.ToString() + ' ' + mat.NNZ.ToString());
+            for (int i = 0; i < mat.NNZ; i++)
+            {
+                sw.WriteLine((mat.RowArray[i] + 1).ToString() + ' ' + (mat.ColArray[i] + 1).ToString() + ' ' + mat.ValueArray[i].ToString());
+            }
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
         //public static void writeVTK(FESystem fes, BESO_TopOpt beso, Material material, string path)
         //{
         //    List<PlanktonXYZ> nodes = fes.model.nodes;
