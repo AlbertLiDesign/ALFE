@@ -12,9 +12,17 @@ bool SolveFE(int* rows_offset, int* cols, float* vals, float* F, int dim, int do
 
     Eigen::VectorXf result;
 
-    Eigen::PardisoLLT<Eigen::SparseMatrix<float>> pardiso(A);
-    pardiso.pardisoParameterArray()[59] = 1;
-    result = pardiso.solve(B);
+    if (dim < 20000)
+    {
+        Eigen::SimplicialLLT<Eigen::SparseMatrix<float>> llt(A);
+        result = llt.solve(B);
+    }
+    else
+    {
+        Eigen::PardisoLLT<Eigen::SparseMatrix<float>,1> pardiso(A);
+        pardiso.pardisoParameterArray()[59] = 2;
+        result = pardiso.solve(B);
+    }
 
     for (int i = 0; i < dim; i++)
     {
