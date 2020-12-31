@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ALFE.FEModel
 {
-    public class UnitQuad : Element
+    public class Pixel : Element
     {
-        public UnitQuad(List<int> nodesID, Material material, bool exist = true)
+        public Pixel(List<int> nodesID, Material material, bool exist = true)
         {
-            if (nodesID.Count != 4 || nodesID.Count != 4)
+            if (nodesID.Count != 4)
             {
                 throw new Exception("The number of nodes must be 4.");
             }
@@ -18,7 +18,7 @@ namespace ALFE.FEModel
             NodeID = nodesID;
             Material = material;
             Exist = exist;
-            Type = ElementType.UnitQuadElement;
+            Type = ElementType.PixelElement;
         }
 
         public override void ComputeD()
@@ -29,7 +29,7 @@ namespace ALFE.FEModel
 
             D[0, 0] = D[1, 1] = coeff1;
             D[0, 1] = D[1, 0] = Material.u * coeff1;
-            D[3, 3] = (1.0f - Material.u) * 0.5f * coeff1;
+            D[2, 2] = (1.0f - Material.u) * 0.5f * coeff1;
         }
 
         /// <summary>

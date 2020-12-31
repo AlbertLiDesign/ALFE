@@ -32,9 +32,11 @@ namespace ALFE.FEModel
         public Model2D() { }
         public Model2D(List<Vector2D> nodes, List<Element> elements)
         {
+            int id = 0;
             foreach (var item in nodes)
             {
-                this.Nodes.Add(new Node2D(item));
+                this.Nodes.Add(new Node2D(item, id));
+                id++;
             }
             this.Elements = elements;
         }
@@ -45,9 +47,11 @@ namespace ALFE.FEModel
         }
         public Model2D(List<Vector2D> nodes, List<Element> elements, List<Load2D> loads, List<Support2D> supports)
         {
+            int id = 0;
             foreach (var item in nodes)
             {
-                this.Nodes.Add(new Node2D(item));
+                this.Nodes.Add(new Node2D(item,id));
+                id++;
             }
             this.Elements = elements;
             this.Loads = loads;

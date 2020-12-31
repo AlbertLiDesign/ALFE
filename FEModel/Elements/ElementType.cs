@@ -10,9 +10,10 @@ namespace ALFE.FEModel
     {
         TriangleElement,
         QuadElement,
-        UnitQuadElement,
+        PixelElement,
         TetrahedronElement,
-        HexahedronElement
+        HexahedronElement,
+        VoxelElement
     }
 
 }

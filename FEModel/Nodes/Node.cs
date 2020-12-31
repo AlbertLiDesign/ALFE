@@ -20,13 +20,15 @@ namespace ALFE.FEModel
 
         public List<int> ElementID = new List<int>();
 
+        public int ID;
+
         /// <summary>
         /// If the node is active, it will get an ID.
         /// </summary>
         public int ActiveID;
 
         public int row_nnz;
-        public SortedList<int, int> Position_KG;
+        public SortedList<int, int> PositionKG;
 
         /// <summary>
         /// This function is used in the process of constructing the structure of CSR.
@@ -57,13 +59,13 @@ namespace ALFE.FEModel
             // If idx is such index, then the values will also go to (idx+1) and (idx+2), but
             // we do not store (idx+1) and (idx+2) explicitly in Position_KG - only idx is stored.
             // The stiffness values will also be written to (idx + row_nnz), (idx + 2*row_nnz), (idx+row_nnz+1),...,(idx+2*row_nnz+1).
-            Position_KG = new SortedList<int, int>(Neighbours.Count);
+            PositionKG = new SortedList<int, int>(Neighbours.Count);
 
             // for each neighbor of the current node, a 3x3 entry is created in the CSR matrix
             // the number of each new entry is stored in pcsr, where key=altId, value=index
             foreach (int _altId in sortedNeighbors)
             {
-                Position_KG.Add(_altId, startIndex);
+                PositionKG.Add(_altId, startIndex);
                 for (int i = 0; i < 2; i++)
                 {
                     cols[startIndex + i] =

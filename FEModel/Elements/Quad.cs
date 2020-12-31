@@ -10,7 +10,7 @@ namespace ALFE.FEModel
     {
         public Quad(List<int> nodesID, Material material, bool exist = true)
         {
-            if (nodesID.Count != 4 || nodesID.Count != 4)
+            if (nodesID.Count != 4)
             {
                 throw new Exception("The number of nodes must be 4.");
             }
@@ -29,7 +29,7 @@ namespace ALFE.FEModel
 
             D[0, 0] = D[1, 1] = coeff1;
             D[0, 1] = D[1, 0] = Material.u * coeff1;
-            D[3, 3] = (1.0f - Material.u) * 0.5f * coeff1;
+            D[2, 2] = (1.0f - Material.u) * 0.5f * coeff1;
         }
 
         /// <summary>

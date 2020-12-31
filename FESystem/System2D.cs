@@ -40,7 +40,6 @@ namespace ALFE.FESystem
         /// </summary>
         public bool Unify = false;
 
-
         /// <summary>
         /// If the system has been solved.
         /// </summary>
@@ -106,19 +105,19 @@ namespace ALFE.FESystem
             foreach (var elem in Model.Elements)
             {
                 //var elem = Model.Elements[e];
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < elem.NodeID.Count; i++)
                 {
                     Node2D ni = Model.Nodes[elem.NodeID[i]];
                     if (ni.Active)
                     {
-                        for (int j = 0; j < 4; j++)
+                        for (int j = 0; j < elem.NodeID.Count; j++)
                         {
                             Node2D nj = Model.Nodes[elem.NodeID[j]];
 
                             if (nj.Active)
                             {
                                 // write the corresponding 2x2 fragment to CSR
-                                int idx1 = ni.Position_KG[nj.ActiveID]; // there is a room for optimization here
+                                int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
                                 for (int m = 0; m < 2; m++) for (int n = 0; n < 2; n++)
                                         KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * 2 + n, j * 2 + m];
                             }
@@ -141,19 +140,19 @@ namespace ALFE.FESystem
             foreach (var elem in Model.Elements)
             {
                 //var elem = Model.Elements[e];
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < elem.NodeID.Count; i++)
                 {
                     Node2D ni = Model.Nodes[elem.NodeID[i]];
                     if (ni.Active)
                     {
-                        for (int j = 0; j < 4; j++)
+                        for (int j = 0; j < elem.NodeID.Count; j++)
                         {
                             Node2D nj = Model.Nodes[elem.NodeID[j]];
 
                             if (nj.Active)
                             {
                                 // write the corresponding 2x2 fragment to CSR
-                                int idx1 = ni.Position_KG[nj.ActiveID]; // there is a room for optimization here
+                                int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
                                 for (int m = 0; m < 2; m++) for (int n = 0; n < 2; n++)
                                         KG.Vals[idx1 + ni.row_nnz * n + m] += Ke[i * 2 + n, j * 2 + m];
                             }
@@ -218,10 +217,7 @@ namespace ALFE.FESystem
         /// Get the global stiffness matrix.
         /// </summary>
         /// <returns> Return the global stiffness matrix.</returns>
-        public CSRMatrix GetKG()
-        {
-            return KG;
-        }
+        public CSRMatrix GetKG() { return KG; }
 
         /// <summary>
         /// Get the displacement vector.

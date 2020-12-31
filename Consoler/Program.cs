@@ -12,20 +12,33 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            Model2D model2d = new Cantilever2D(1000,1000).Model;
-            System2D sys = new System2D(model2d, true);
-
-            sys.Solve();
-            //FEPrint.PrintDisplacement(sys);
-            //var disp = sys.GetDisplacement();
-            //FEPrint.PrintCSR(KG);
-            //FEIO.WriteCOOMatrix(KG.ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
-
-            //Console.WriteLine(sys.GetDisplacement()[5000, 1]);
-            FEPrint.PrintSystemInfo(sys);
-            //FEPrint.PrintDisplacement(sys);
-
+            TestTriangles();
+            //TestPixels();
             Console.ReadKey();
+        }
+        public static void TestTriangles(int x = 7, int y = 5)
+        {
+            Model2D model2d = new Cantilever2D(ElementType.TriangleElement, x, y).Model;
+            System2D sys = new System2D(model2d, false);
+            sys.Solve();
+            FEPrint.PrintSystemInfo(sys);
+            FEPrint.PrintDisplacement(sys);
+            FEIO.WriteCOOMatrix(sys.GetKG().ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
+        }
+        public static void TestPixels(int x = 7, int y = 5)
+        {
+            Model2D model2d = new Cantilever2D(ElementType.PixelElement, x, y).Model;
+            System2D sys = new System2D(model2d, true);
+            sys.Solve();
+            FEPrint.PrintSystemInfo(sys);
+
+            ////FEPrint.PrintDisplacement(sys);
+            ////var disp = sys.GetDisplacement();
+            ////FEPrint.PrintCSR(KG);
+            ////FEIO.WriteCOOMatrix(KG.ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
+
+            ////Console.WriteLine(sys.GetDisplacement()[5000, 1]);
+            FEPrint.PrintDisplacement(sys);
         }
     }
 }
