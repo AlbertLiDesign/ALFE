@@ -21,21 +21,13 @@ namespace ALFE.FEModel
             Type = ElementType.PixelElement;
         }
 
-        public override void ComputeD()
-        {
-            D = new float[3, 3];
-
-            float coeff1 = Material.E / ((1.0f - Material.u) * (1.0f - Material.u));
-
-            D[0, 0] = D[1, 1] = coeff1;
-            D[0, 1] = D[1, 0] = Material.u * coeff1;
-            D[2, 2] = (1.0f - Material.u) * 0.5f * coeff1;
-        }
+        public override void ComputeD() { }
+        public override void ComputeB() { }
 
         /// <summary>
         /// Compute the stiffness matrix
         /// </summary>
-        public override void ComputeK()
+        public override void ComputeKe()
         {
             float coeff = Material.E / (1.0f - Material.u * Material.u);
 

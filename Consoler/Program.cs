@@ -12,8 +12,7 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            TestTriangles();
-            //TestPixels();
+            TestQuads();
             Console.ReadKey();
         }
         public static void TestTriangles(int x = 7, int y = 5)
@@ -24,6 +23,12 @@ namespace ALFE
             FEPrint.PrintSystemInfo(sys);
             FEPrint.PrintDisplacement(sys);
             FEIO.WriteCOOMatrix(sys.GetKG().ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
+        }
+        public static void TestQuads(int x = 7, int y = 5)
+        {
+            Model2D model2d = new Cantilever2D(ElementType.QuadElement, x, y).Model;
+            model2d.Elements[0].ComputeKe();
+            FEPrint.PrintMatrix(model2d.Elements[0].Ke);
         }
         public static void TestPixels(int x = 7, int y = 5)
         {

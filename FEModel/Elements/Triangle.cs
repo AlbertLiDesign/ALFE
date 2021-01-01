@@ -12,8 +12,9 @@ namespace ALFE.FEModel
         public List<Node2D> Nodes;
         public float Area;
         public float[,] B;
+        public float Thickness = 1.0f;
 
-        public Triangle(List<Node2D> nodes, Material material, bool exist = true)
+        public Triangle(List<Node2D> nodes, Material material, float thickness = 1.0f, bool exist = true)
         {
             if (nodes.Count != 3)
                 throw new Exception("The number of nodes must be 3.");
@@ -24,6 +25,7 @@ namespace ALFE.FEModel
 
             NodeID = nodesID;
             Material = material;
+            this.Thickness = thickness;
             Exist = exist;
             Type = ElementType.TriangleElement;
             ComputeArea();
@@ -40,7 +42,7 @@ namespace ALFE.FEModel
             D[2, 2] = (1.0f - Material.u) * 0.5f * coeff1;
         }
 
-        private void ComputeB()
+        public override void ComputeB()
         {
             var val = 1.0f / (2.0f * Area);
 
@@ -63,12 +65,12 @@ namespace ALFE.FEModel
         /// <summary>
         /// Compute the stiffness matrix
         /// </summary>
-        public override void ComputeK()
+        public override void ComputeKe()
         {
             ComputeB();
             ComputeD();
 
-            Ke = B.TransposeAndDot(D).Dot(B).Multiply(Area);
+            Ke = B.TransposeAndDot(D).Dot(B).Multiply(Area).Multiply(Thickness); ;
         }
 
         public void ComputeArea()

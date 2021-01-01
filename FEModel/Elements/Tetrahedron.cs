@@ -31,10 +31,15 @@ namespace ALFE.FEModel.Elements
             D[3, 3] = D[4, 4] = D[5, 5] = (0.5f - Material.u) * coeff1;
         }
 
+        public override void ComputeB()
+        {
+
+        }
+
         /// <summary>
         /// Compute the stiffness matrix
         /// </summary>
-        public override void ComputeK()
+        public override void ComputeKe()
         {
             //ComputeD();
 

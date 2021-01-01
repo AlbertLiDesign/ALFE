@@ -172,7 +172,7 @@ namespace ALFE.FESystem
             if (Unify == true)
             {
                 sw.Start();
-                var Ke = Model.ComputeUniformK();
+                var Ke = ComputeUniformK();
                 sw.Stop();
                 TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -323,10 +323,19 @@ namespace ALFE.FESystem
         /// </summary>
         private void ComputeAllKe()
         {
-            Parallel.For(0, Model.Elements.Count, i =>
-            {
-                Model.Elements[i].ComputeK();
-            });
+            foreach (var item in Model.Elements)
+                item.ComputeKe();
+        }
+
+        /// <summary>
+        /// Compute the uniform elementary stiffness matrix.
+        /// </summary>
+        /// <returns></returns>
+        public float[,] ComputeUniformK()
+        {
+            var ele = Model.Elements[0];
+            ele.ComputeKe();
+            return ele.Ke;
         }
 
 

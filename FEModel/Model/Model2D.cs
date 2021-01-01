@@ -65,16 +65,5 @@ namespace ALFE.FEModel
             this.Supports = supports;
         }
         #endregion
-
-        /// <summary>
-        /// Compute the uniform elementary stiffness matrix.
-        /// </summary>
-        /// <returns></returns>
-        public float[,] ComputeUniformK()
-        {
-            var ele = this.Elements[0];
-            ele.ComputeK();
-            return ele.Ke;
-        }
     }
 }

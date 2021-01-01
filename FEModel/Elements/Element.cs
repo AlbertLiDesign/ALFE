@@ -17,14 +17,14 @@ namespace ALFE.FEModel
         public ElementType Type;
 
         /// <summary>
-        /// Stiffness matrix of the element of size 8x8
+        /// Elementary stiffness matrix
         /// </summary>
         public float[,] Ke;
 
-        // 3x3 matrix
         public float[,] D;
 
         public abstract void ComputeD();
-        public abstract void ComputeK();
+        public abstract void ComputeB();
+        public abstract void ComputeKe();
     }
 }
