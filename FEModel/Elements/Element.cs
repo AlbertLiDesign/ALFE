@@ -20,11 +20,10 @@ namespace ALFE.FEModel
         /// Elementary stiffness matrix
         /// </summary>
         public float[,] Ke;
-
+        public float[,] B;
         public float[,] D;
 
         public abstract void ComputeD();
-        public abstract void ComputeB();
         public abstract void ComputeKe();
     }
 }

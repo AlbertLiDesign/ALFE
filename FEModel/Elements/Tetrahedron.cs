@@ -31,7 +31,7 @@ namespace ALFE.FEModel.Elements
             D[3, 3] = D[4, 4] = D[5, 5] = (0.5f - Material.u) * coeff1;
         }
 
-        public override void ComputeB()
+        public void ComputeB()
         {
 
         }

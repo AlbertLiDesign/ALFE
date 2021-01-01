@@ -11,7 +11,6 @@ namespace ALFE.FEModel
     {
         public List<Node2D> Nodes;
         public float Area;
-        public float[,] B;
         public float Thickness = 1.0f;
 
         public Triangle(List<Node2D> nodes, Material material, float thickness = 1.0f, bool exist = true)
@@ -42,7 +41,7 @@ namespace ALFE.FEModel
             D[2, 2] = (1.0f - Material.u) * 0.5f * coeff1;
         }
 
-        public override void ComputeB()
+        public void ComputeB()
         {
             var val = 1.0f / (2.0f * Area);
 

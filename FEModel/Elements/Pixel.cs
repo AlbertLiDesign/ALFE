@@ -22,7 +22,6 @@ namespace ALFE.FEModel
         }
 
         public override void ComputeD() { }
-        public override void ComputeB() { }
 
         /// <summary>
         /// Compute the stiffness matrix

@@ -28,7 +28,7 @@ namespace ALFE
         {
             Model2D model2d = new Cantilever2D(ElementType.QuadElement, x, y).Model;
             model2d.Elements[0].ComputeKe();
-            FEPrint.PrintMatrix(model2d.Elements[0].Ke);
+            FEPrint.PrintMatrix(model2d.Elements[0].B);
         }
         public static void TestPixels(int x = 7, int y = 5)
         {
