@@ -39,11 +39,26 @@ namespace ALFE.FEModel
                 id++;
             }
             this.Elements = elements;
+
+            foreach (var elem in elements)
+                foreach (var item in elem.Nodes)
+                    elem.NodeID.Add(item.ID);
         }
         public Model2D(List<Node2D> nodes, List<Element> elements)
         {
-            this.Nodes = nodes;
+            int id = 0;
+            foreach (var item in nodes)
+            {
+                if (item.hasID == false)
+                    item.SetID(id);
+                Nodes.Add(item);
+                id++;
+            }
             this.Elements = elements;
+
+            foreach (var elem in elements)
+                foreach (var item in elem.Nodes)
+                    elem.NodeID.Add(item.ID);
         }
         public Model2D(List<Vector2D> nodes, List<Element> elements, List<Load2D> loads, List<Support2D> supports)
         {
@@ -56,13 +71,28 @@ namespace ALFE.FEModel
             this.Elements = elements;
             this.Loads = loads;
             this.Supports = supports;
+
+            foreach (var elem in elements)
+                foreach (var item in elem.Nodes)
+                    elem.NodeID.Add(item.ID);
         }
         public Model2D(List<Node2D> nodes, List<Element> elements, List<Load2D> loads, List<Support2D> supports)
         {
-            this.Nodes = nodes;
+            int id = 0;
+            foreach (var item in nodes)
+            {
+                if (item.hasID == false)
+                    item.SetID(id);
+                Nodes.Add(item);
+                id++;
+            }
             this.Elements = elements;
             this.Loads = loads;
             this.Supports = supports;
+
+            foreach (var elem in elements)
+                foreach (var item in elem.Nodes)
+                    elem.NodeID.Add(item.ID);
         }
         #endregion
     }

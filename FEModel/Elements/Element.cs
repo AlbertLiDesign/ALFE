@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra.Single;
 
 namespace ALFE.FEModel
 {
     public abstract class Element
     {
         public List<int> NodeID = new List<int>();
-
+        public List<Node> Nodes = new List<Node>();
         public Material Material { get; set; }
 
         public bool Exist { get; set; }
@@ -19,9 +20,9 @@ namespace ALFE.FEModel
         /// <summary>
         /// Elementary stiffness matrix
         /// </summary>
-        public float[,] Ke;
-        public float[,] B;
-        public float[,] D;
+        public Matrix Ke;
+        public Matrix B;
+        public Matrix D;
 
         public abstract void ComputeD();
         public abstract void ComputeKe();

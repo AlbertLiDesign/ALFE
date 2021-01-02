@@ -23,12 +23,12 @@ namespace ALFE.FEModel.Elements
 
         public override void ComputeD()
         {
-            D = new float[6, 6];
+            //D = new float[6, 6];
 
-            float coeff1 = Material.E / ((1.0f + Material.u) * (1.0f - 2.0f * Material.u));
-            D[0, 0] = D[1, 1] = D[2, 2] = (1.0f - Material.u) * coeff1;
-            D[0, 1] = D[0, 2] = D[1, 2] = D[1, 0] = D[2, 0] = D[2, 1] = Material.u * coeff1;
-            D[3, 3] = D[4, 4] = D[5, 5] = (0.5f - Material.u) * coeff1;
+            //float coeff1 = Material.E / ((1.0f + Material.u) * (1.0f - 2.0f * Material.u));
+            //D[0, 0] = D[1, 1] = D[2, 2] = (1.0f - Material.u) * coeff1;
+            //D[0, 1] = D[0, 2] = D[1, 2] = D[1, 0] = D[2, 0] = D[2, 1] = Material.u * coeff1;
+            //D[3, 3] = D[4, 4] = D[5, 5] = (0.5f - Material.u) * coeff1;
         }
 
         public void ComputeB()

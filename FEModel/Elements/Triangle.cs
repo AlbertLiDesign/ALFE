@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Accord.Math;
+using MathNet.Numerics.LinearAlgebra.Single;
 
 namespace ALFE.FEModel
 {
     public class Triangle : Element
     {
-        public List<Node2D> Nodes;
         public float Area;
         public float Thickness = 1.0f;
 
@@ -17,14 +16,12 @@ namespace ALFE.FEModel
         {
             if (nodes.Count != 3)
                 throw new Exception("The number of nodes must be 3.");
-            Nodes = nodes;
-            List<int> nodesID = new List<int>(3);
-            foreach (var item in nodes)
-                nodesID.Add(item.ID);
 
-            NodeID = nodesID;
+            foreach (var item in nodes)
+                Nodes.Add(item);
+
             Material = material;
-            this.Thickness = thickness;
+            Thickness = thickness;
             Exist = exist;
             Type = ElementType.TriangleElement;
             ComputeArea();
@@ -32,7 +29,7 @@ namespace ALFE.FEModel
 
         public override void ComputeD()
         {
-            D = new float[3, 3];
+            D = new DenseMatrix(3, 3);
 
             float coeff1 = Material.E / (1.0f - Material.u* Material.u);
 
@@ -45,20 +42,20 @@ namespace ALFE.FEModel
         {
             var val = 1.0f / (2.0f * Area);
 
-            var belta0 = (Nodes[1].Position.Y - Nodes[2].Position.Y) * val;
-            var belta1 = (Nodes[2].Position.Y - Nodes[0].Position.Y) * val;
-            var belta2 = (Nodes[0].Position.Y - Nodes[1].Position.Y) * val;
+            var belta0 = ((Nodes[1] as Node2D).Position.Y - (Nodes[2] as Node2D).Position.Y) * val;
+            var belta1 = ((Nodes[2] as Node2D).Position.Y - (Nodes[0] as Node2D).Position.Y) * val;
+            var belta2 = ((Nodes[0] as Node2D).Position.Y - (Nodes[1] as Node2D).Position.Y) * val;
 
-            var gama0 = (Nodes[2].Position.X - Nodes[1].Position.X) * val;
-            var gama1 = (Nodes[0].Position.X - Nodes[2].Position.X) * val;
-            var gama2 = (Nodes[1].Position.X - Nodes[0].Position.X) * val;
+            var gama0 = ((Nodes[2]as Node2D).Position.X - (Nodes[1] as Node2D).Position.X) * val;
+            var gama1 = ((Nodes[0]as Node2D).Position.X - (Nodes[2] as Node2D).Position.X) * val;
+            var gama2 = ((Nodes[1] as Node2D).Position.X - (Nodes[0] as Node2D).Position.X) * val;
 
-            B = new float[3, 6]
+            B = DenseMatrix.OfArray(new float[3,6]
                {
                     { belta0, 0.0f, belta1, 0.0f, belta2, 0.0f },
                     { 0.0f, gama0, 0.0f, gama1, 0.0f, gama2 },
                     { gama0, belta0, gama1, belta1, gama2,belta2 }
-               };
+               });
         }
 
         /// <summary>
@@ -69,14 +66,14 @@ namespace ALFE.FEModel
             ComputeB();
             ComputeD();
 
-            Ke = B.TransposeAndDot(D).Dot(B).Multiply(Area).Multiply(Thickness); ;
+            Ke = (Matrix)B.TransposeThisAndMultiply(D).Multiply(B).Multiply(Area).Multiply(Thickness);
         }
 
         public void ComputeArea()
         {
-            Area = Math.Abs(Nodes[0].Position.X * (Nodes[1].Position.Y - Nodes[2].Position.Y) +
-                Nodes[1].Position.X * (Nodes[2].Position.Y - Nodes[0].Position.Y) + 
-                Nodes[2].Position.X * (Nodes[0].Position.Y - Nodes[1].Position.Y)) * 0.5f;
+            Area = Math.Abs((Nodes[0] as Node2D).Position.X * ((Nodes[1] as Node2D).Position.Y - (Nodes[2] as Node2D).Position.Y) +
+                (Nodes[1] as Node2D).Position.X * ((Nodes[2] as Node2D).Position.Y - (Nodes[0] as Node2D).Position.Y) + 
+                (Nodes[2] as Node2D).Position.X * ((Nodes[0] as Node2D).Position.Y - (Nodes[1] as Node2D).Position.Y)) * 0.5f;
         }
     }
 }

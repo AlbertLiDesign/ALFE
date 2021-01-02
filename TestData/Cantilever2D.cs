@@ -95,7 +95,7 @@ namespace ALFE
             {
                 for (int j = 0; j < ynum; j++)
                 {
-                    nodes.Add(new Node2D(new Vector2D(i, j), i * ynum + j));
+                    nodes.Add(new Node2D(i, j));
                     if (i == 0)
                         supports.Add(new Support2D(j, SupportType.Fixed));
                 }
@@ -147,7 +147,7 @@ namespace ALFE
             {
                 for (int j = 0; j < ynum; j++)
                 {
-                    nodes.Add(new Node2D(i, j, i*ynum + j));
+                    nodes.Add(new Node2D(i,j));
                     if (i == 0)
                         supports.Add(new Support2D(j, SupportType.Fixed));
                 }

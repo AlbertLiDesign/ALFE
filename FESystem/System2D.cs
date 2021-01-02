@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra.Single;
 
 namespace ALFE.FESystem
 {
@@ -131,7 +132,7 @@ namespace ALFE.FESystem
         /// Assemble the global stiffness matrix
         /// </summary>
         /// <param name="Ke">Input an elementary stiffness matrix.</param>
-        private void AssembleKG(float[,] Ke)
+        private void AssembleKG(Matrix Ke)
         {
             InitialzeKG();
             KG.Clear();
@@ -260,7 +261,7 @@ namespace ALFE.FESystem
             count = 0;
             foreach (Node nd in ActiveNodes)
             {
-                int row_nnz = nd.ComputePositionInKG(count, KG.Cols);
+                int row_nnz = (nd as Node2D).ComputePositionInKG(count, KG.Cols);
                 KG.Rows[nd.ActiveID * 2 + 0] = count;
                 KG.Rows[nd.ActiveID * 2 + 1] = count + row_nnz;
                 count += row_nnz * 2;
@@ -331,7 +332,7 @@ namespace ALFE.FESystem
         /// Compute the uniform elementary stiffness matrix.
         /// </summary>
         /// <returns></returns>
-        public float[,] ComputeUniformK()
+        public Matrix ComputeUniformK()
         {
             var ele = Model.Elements[0];
             ele.ComputeKe();

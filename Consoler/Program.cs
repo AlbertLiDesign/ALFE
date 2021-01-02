@@ -28,7 +28,7 @@ namespace ALFE
         {
             Model2D model2d = new Cantilever2D(ElementType.QuadElement, x, y).Model;
             model2d.Elements[0].ComputeKe();
-            FEPrint.PrintMatrix(model2d.Elements[0].B);
+            Console.WriteLine(model2d.Elements[0].B);
         }
         public static void TestPixels(int x = 7, int y = 5)
         {
@@ -43,7 +43,7 @@ namespace ALFE
             ////FEIO.WriteCOOMatrix(KG.ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
 
             ////Console.WriteLine(sys.GetDisplacement()[5000, 1]);
-            FEPrint.PrintDisplacement(sys);
+            //FEPrint.PrintDisplacement(sys);
         }
     }
 }

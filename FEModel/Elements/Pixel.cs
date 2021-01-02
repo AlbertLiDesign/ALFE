@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra.Single;
 
 namespace ALFE.FEModel
 {
@@ -19,6 +20,7 @@ namespace ALFE.FEModel
             Material = material;
             Exist = exist;
             Type = ElementType.PixelElement;
+            
         }
 
         public override void ComputeD() { }
@@ -41,7 +43,7 @@ namespace ALFE.FEModel
                 array[i] *= coeff;
             }
 
-            Ke = new float[8, 8]
+            Ke = DenseMatrix.OfArray(new float[8, 8]
             {
                 { array[0], array[1], array[2],array[3],array[4],array[5], array[6], array[7]},
                 { array[1], array[0], array[7],array[6],array[5],array[4], array[3], array[2]},
@@ -51,7 +53,7 @@ namespace ALFE.FEModel
                 { array[5], array[4], array[3],array[2],array[1],array[0], array[7], array[6]},
                 { array[6], array[3], array[4],array[1],array[2],array[7], array[0], array[5]},
                 { array[7], array[2], array[1],array[4],array[3],array[6], array[5], array[0]}
-            };
+            });
         }
     }
 }
