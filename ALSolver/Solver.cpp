@@ -19,7 +19,7 @@ int SolveFE(int* rows_offset, int* cols, float* vals, float* F, int dim, int dof
     }
     else
     {
-        Eigen::PardisoLLT<Eigen::SparseMatrix<float>> pardiso(A);
+        Eigen::PardisoLLT<Eigen::SparseMatrix<float>,1> pardiso(A);
         pardiso.pardisoParameterArray()[59] = 1;
         result = pardiso.solve(B);
     }

@@ -2,18 +2,20 @@
 A simple Finite Element Library based on .NET (very young now)
 
 ```
+------------------- Device Info -------------------
+CPU:Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
 ------------------- Model Info -------------------
-Nodes: 1000000
-Elements: 998001
-Type: UnitQuadElement
+Nodes: 1002001
+Elements: 1000000
+Type: PixelElement
 ------------------- Matrix Info -------------------
-Rows: 1998000
-Cols: 1998000
-NNZ: 35916040
+Rows: 2002000
+Cols: 2002000
+NNZ: 35987992
 ------------------- Time Cost -------------------
-Computing Ke: 1.5272 ms
-Assembling KG: 3975.2869 ms
-Solving: 6415.7871 ms
+Computing Ke: 3.0401 ms
+Assembling KG: 3900.3937 ms
+Solving: 8701.911 ms
 ```
 
 Test

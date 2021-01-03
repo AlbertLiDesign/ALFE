@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra.Single;
+using System.Management;
 
 namespace ALFE
 {
@@ -12,9 +12,16 @@ namespace ALFE
     {
         public static void PrintSystemInfo(System2D sys)
         {
+            PrintDeviceInfo();
             PrintModelInfo(sys);
             PrintMatrixInfo(sys.GetKG());
             PrintTimeCost(sys.TimeCost);
+        }
+        public static void PrintDeviceInfo()
+        {
+            Console.WriteLine("------------------- Device Info -------------------");
+            Console.Write("CPU:");
+            GetComponent("Win32_Processor", "Name");
         }
         public static void PrintModelInfo(System2D sys)
         {
@@ -59,6 +66,15 @@ namespace ALFE
             {
                 Console.WriteLine(item.Displacement.X.ToString() + '\t'
                   + item.Displacement.Y.ToString());
+            }
+        }
+        private static void GetComponent(string hwclass, string syntax)
+        {
+            ManagementObjectSearcher mos = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM " + hwclass);
+            foreach (ManagementObject mj in mos.Get())
+            {
+                if (Convert.ToString(mj[syntax]) != "")
+                    Console.WriteLine(Convert.ToString(mj[syntax]));
             }
         }
     }

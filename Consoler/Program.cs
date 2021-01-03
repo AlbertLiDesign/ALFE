@@ -12,7 +12,7 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            TestQuads();
+            TestPixels(1001,1001);
             Console.ReadKey();
         }
         public static void TestTriangles(int x = 7, int y = 5)
@@ -42,7 +42,7 @@ namespace ALFE
             ////FEPrint.PrintCSR(KG);
             ////FEIO.WriteCOOMatrix(KG.ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
 
-            ////Console.WriteLine(sys.GetDisplacement()[5000, 1]);
+            Console.WriteLine(sys.GetDisplacement()[5000, 1]);
             //FEPrint.PrintDisplacement(sys);
         }
     }

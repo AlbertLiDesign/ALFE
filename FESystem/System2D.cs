@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra.Single;
+using System.Threading;
 
 namespace ALFE.FESystem
 {
@@ -137,7 +138,6 @@ namespace ALFE.FESystem
             InitialzeKG();
             KG.Clear();
 
-            //Parallel.For(0, Model.Elements.Count, e =>
             foreach (var elem in Model.Elements)
             {
                 //var elem = Model.Elements[e];
@@ -154,8 +154,10 @@ namespace ALFE.FESystem
                             {
                                 // write the corresponding 2x2 fragment to CSR
                                 int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
-                                for (int m = 0; m < 2; m++) for (int n = 0; n < 2; n++)
+                                for (int m = 0; m < 2; m++)
+                                    for (int n = 0; n < 2; n++)
                                         KG.Vals[idx1 + ni.row_nnz * n + m] += Ke[i * 2 + n, j * 2 + m];
+
                             }
                         }
                     }
@@ -273,13 +275,14 @@ namespace ALFE.FESystem
         /// </summary>
         private void GetAdjacentNodes()
         {
-            for (int i = 0; i < Model.Nodes.Count; i++)
+            Parallel.ForEach(Model.Nodes, node =>
             {
-                foreach (var item in Model.Nodes[i].ElementID)
+                foreach (var item in node.ElementID)
                     foreach (var neighbour in Model.Elements[item].NodeID)
                         if (Model.Nodes[neighbour].Active)
-                            Model.Nodes[i].Neighbours.Add(Model.Nodes[neighbour].ActiveID);
-            }
+                            lock (node.Neighbours)
+                                node.Neighbours.Add(Model.Nodes[neighbour].ActiveID);
+            });
         }
 
         /// <summary>
