@@ -3,7 +3,8 @@ A simple Finite Element Library based on .NET (very young now)
 
 ```
 ------------------- Device Info -------------------
-CPU:Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+CPU: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Number Of Cores: 6
 ------------------- Model Info -------------------
 Nodes: 1002001
 Elements: 1000000
@@ -13,20 +14,9 @@ Rows: 2002000
 Cols: 2002000
 NNZ: 35987992
 ------------------- Time Cost -------------------
-Computing Ke: 3.0401 ms
-Assembling KG: 3900.3937 ms
-Solving: 8701.911 ms
-```
-
-Test
-```
-Eigen::SimplicialLLT:
-20, 000 dim = 82 ms
-80, 000 dim = 800 ms
-180,000 dim = 2970 ms
-
-Eigen::PardisoLLT:
-20000 dim = 157ms
-80, 000 dim = 334 ms
-180,000 dim = 748 ms
+Computing Ke: 3.4716 ms
+Assembling KG: 3893.7803 ms
+Solving: 8736.7694 ms
+------------------- Result Info -------------------
+Displacement[5000].Y = -0.03365567
 ```

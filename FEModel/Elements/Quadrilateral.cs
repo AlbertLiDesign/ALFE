@@ -8,12 +8,12 @@ using MathNet.Numerics.LinearAlgebra.Single;
 
 namespace ALFE.FEModel
 {
-    public class Quad : Element
+    public class Quadrilateral : Element
     {
         public float J;
         public float Thickness = 1.0f;
 
-        public Quad(List<Node2D> nodes, Material material, float thichness = 1.0f, bool exist = true)
+        public Quadrilateral(List<Node2D> nodes, Material material, float thichness = 1.0f, bool exist = true)
         {
             if (nodes.Count != 4)
                 throw new Exception("The number of nodes must be 4.");

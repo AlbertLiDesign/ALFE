@@ -41,8 +41,8 @@ namespace ALFE
             ////var disp = sys.GetDisplacement();
             ////FEPrint.PrintCSR(KG);
             ////FEIO.WriteCOOMatrix(KG.ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
-
-            Console.WriteLine(sys.GetDisplacement()[5000, 1]);
+            Console.WriteLine("------------------- Result Info -------------------");
+            Console.WriteLine("Displacement[5000].Y = " + sys.GetDisplacement()[5000, 1].ToString());
             //FEPrint.PrintDisplacement(sys);
         }
     }

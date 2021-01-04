@@ -20,8 +20,14 @@ namespace ALFE
         public static void PrintDeviceInfo()
         {
             Console.WriteLine("------------------- Device Info -------------------");
-            Console.Write("CPU:");
+            Console.Write("CPU: ");
             GetComponent("Win32_Processor", "Name");
+            int coreCount = 0;
+            foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
+            {
+                coreCount += int.Parse(item["NumberOfCores"].ToString());
+            }
+            Console.WriteLine("Number Of Cores: {0}", coreCount);
         }
         public static void PrintModelInfo(System2D sys)
         {

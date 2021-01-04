@@ -113,7 +113,7 @@ namespace ALFE
                         nodes[(i+1) * ynum+ (j+1)],
                         nodes[i * ynum + (j+1)]
                     };
-                    elems.Add(new Quad(nodesElem, new Material(1.0f, 0.3f)));
+                    elems.Add(new Quadrilateral(nodesElem, new Material(1.0f, 0.3f)));
                 }
             }
 
