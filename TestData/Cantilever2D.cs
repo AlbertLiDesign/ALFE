@@ -37,19 +37,19 @@ namespace ALFE
                 > #-----#-----#-----#-----#-----#-----#
                 ^
              */
-            List<Vector2D> nodes = new List<Vector2D>(xnum * ynum);
+            List<Node> nodes = new List<Node>(xnum * ynum);
             List<Element> elems = new List<Element>((xnum - 1) * (ynum - 1));
-            List<Load2D> loads = new List<Load2D>(1);
-            List<Support2D> supports = new List<Support2D>(ynum);
+            List<Load> loads = new List<Load>(1);
+            List<Support> supports = new List<Support>(ynum);
 
             // Add all nodes
             for (int i = 0; i < xnum; i++)
             {
                 for (int j = 0; j < ynum; j++)
                 {
-                    nodes.Add(new Vector2D(i, j));
+                    nodes.Add(new Node(i, j));
                     if (i == 0)
-                        supports.Add(new Support2D(j, SupportType.Fixed));
+                        supports.Add(new Support(j, SupportType.Fixed));
                 }
             }
 
@@ -67,7 +67,7 @@ namespace ALFE
             }
 
             // Apply the load
-            loads.Add(new Load2D(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
+            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
 
             Model = new Model2D(nodes, elems, loads, supports);
         }
@@ -85,19 +85,19 @@ namespace ALFE
                > #-----#-----#-----#-----#-----#-----#
                ^
             */
-            List<Node2D> nodes = new List<Node2D>(xnum * ynum);
+            List<Node> nodes = new List<Node>(xnum * ynum);
             List<Element> elems = new List<Element>((xnum - 1) * (ynum - 1));
-            List<Load2D> loads = new List<Load2D>(1);
-            List<Support2D> supports = new List<Support2D>(ynum);
+            List<Load> loads = new List<Load>(1);
+            List<Support> supports = new List<Support>(ynum);
 
             // Add all nodes
             for (int i = 0; i < xnum; i++)
             {
                 for (int j = 0; j < ynum; j++)
                 {
-                    nodes.Add(new Node2D(i, j));
+                    nodes.Add(new Node(i, j));
                     if (i == 0)
-                        supports.Add(new Support2D(j, SupportType.Fixed));
+                        supports.Add(new Support(j, SupportType.Fixed));
                 }
             }
 
@@ -106,7 +106,7 @@ namespace ALFE
             {
                 for (int j = 0; j < ynum - 1; j++)
                 {
-                    List<Node2D> nodesElem = new List<Node2D>(4)
+                    List<Node> nodesElem = new List<Node>(4)
                     {
                         nodes[i * ynum + j],
                         nodes[(i + 1) * ynum + j],
@@ -118,7 +118,7 @@ namespace ALFE
             }
 
             // Apply the load
-            loads.Add(new Load2D(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
+            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
 
             Model = new Model2D(nodes, elems, loads, supports);
         }
@@ -137,19 +137,19 @@ namespace ALFE
                ^
             */
 
-            List<Node2D> nodes = new List<Node2D>(xnum * ynum);
+            List<Node> nodes = new List<Node>(xnum * ynum);
             List<Element> elems = new List<Element>((xnum - 1) * (ynum - 1)*2);
-            List<Load2D> loads = new List<Load2D>(1);
-            List<Support2D> supports = new List<Support2D>(ynum);
+            List<Load> loads = new List<Load>(1);
+            List<Support> supports = new List<Support>(ynum);
 
             // Add all nodes
             for (int i = 0; i < xnum; i++)
             {
                 for (int j = 0; j < ynum; j++)
                 {
-                    nodes.Add(new Node2D(i,j));
+                    nodes.Add(new Node(i,j));
                     if (i == 0)
-                        supports.Add(new Support2D(j, SupportType.Fixed));
+                        supports.Add(new Support(j, SupportType.Fixed));
                 }
             }
 
@@ -158,13 +158,13 @@ namespace ALFE
             {
                 for (int j = 0; j < ynum - 1; j++)
                 {
-                    List<Node2D> nodesIDL = new List<Node2D>(3)
+                    List<Node> nodesIDL = new List<Node>(3)
                     {
                         nodes[i * ynum + j],
                         nodes[(i + 1) * ynum + j],
                         nodes[(i+1) * ynum+ (j+1)]
                     };
-                    List<Node2D> nodesIDU = new List<Node2D>(3)
+                    List<Node> nodesIDU = new List<Node>(3)
                     {
                         nodes[i * ynum + j],
                         nodes[(i+1) * ynum+ (j+1)],
@@ -176,7 +176,7 @@ namespace ALFE
             }
 
             // Apply the load
-            loads.Add(new Load2D(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
+            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
 
             Model = new Model2D(nodes, elems, loads, supports);
         }

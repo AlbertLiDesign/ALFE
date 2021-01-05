@@ -11,7 +11,7 @@ namespace ALFE.FEModel
         /// <summary>
         /// Nodes
         /// </summary>
-        public List<Node2D> Nodes = new List<Node2D>();
+        public List<Node> Nodes = new List<Node>();
 
         /// <summary>
         /// Elements
@@ -21,34 +21,23 @@ namespace ALFE.FEModel
         /// <summary>
         /// Loads
         /// </summary>
-        public List<Load2D> Loads = new List<Load2D>();
+        public List<Load> Loads = new List<Load>();
 
         /// <summary>
         /// Supports
         /// </summary>
-        public List<Support2D> Supports = new List<Support2D>();
+        public List<Support> Supports = new List<Support>();
 
         #region Construction
         public Model2D() { }
-        public Model2D(List<Vector2D> nodes, List<Element> elements)
+        public Model2D(List<Node> nodes, List<Element> elements)
         {
             int id = 0;
             foreach (var item in nodes)
             {
-                this.Nodes.Add(new Node2D(item, id));
-                id++;
-            }
-            this.Elements = elements;
+                if (item.Dof != 2)
+                    throw new Exception("The dimension of all nodes must be 2.");
 
-            foreach (var elem in elements)
-                foreach (var item in elem.Nodes)
-                    elem.NodeID.Add(item.ID);
-        }
-        public Model2D(List<Node2D> nodes, List<Element> elements)
-        {
-            int id = 0;
-            foreach (var item in nodes)
-            {
                 if (item.hasID == false)
                     item.SetID(id);
                 Nodes.Add(item);
@@ -60,23 +49,7 @@ namespace ALFE.FEModel
                 foreach (var item in elem.Nodes)
                     elem.NodeID.Add(item.ID);
         }
-        public Model2D(List<Vector2D> nodes, List<Element> elements, List<Load2D> loads, List<Support2D> supports)
-        {
-            int id = 0;
-            foreach (var item in nodes)
-            {
-                this.Nodes.Add(new Node2D(item,id));
-                id++;
-            }
-            this.Elements = elements;
-            this.Loads = loads;
-            this.Supports = supports;
-
-            foreach (var elem in elements)
-                foreach (var item in elem.Nodes)
-                    elem.NodeID.Add(item.ID);
-        }
-        public Model2D(List<Node2D> nodes, List<Element> elements, List<Load2D> loads, List<Support2D> supports)
+        public Model2D(List<Node> nodes, List<Element> elements, List<Load> loads, List<Support> supports)
         {
             int id = 0;
             foreach (var item in nodes)
@@ -87,7 +60,14 @@ namespace ALFE.FEModel
                 id++;
             }
             this.Elements = elements;
-            this.Loads = loads;
+
+            foreach (var item in loads)
+            {
+                if (item.Dof != 2)
+                    throw new Exception("The dimension of all loads must be 2.");
+                Loads.Add(item);
+            }
+
             this.Supports = supports;
 
             foreach (var elem in elements)

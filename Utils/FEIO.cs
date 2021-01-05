@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ALFE.FEModel;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,44 @@ namespace ALFE
             sw.Flush();
             sw.Close();
             sw.Dispose();
+        }
+        public static void ReadVTK(string path)
+        {
+            List<Node> nodes;
+            List<Element> elems;
+
+            if (File.Exists(path))
+            {
+                StreamReader SR = new StreamReader(path);
+                while (!SR.EndOfStream)
+                {
+                    string line = SR.ReadLine();//Read Line
+
+                    string[] tokens = line.Split(' ');
+
+                    if (tokens[0] == "POINTS")
+                    {
+                        int nodeCount = int.Parse(tokens[1]);
+                        nodes = new List<Node>(nodeCount);
+                        for (int i = 0; i < nodeCount; i++)
+                        {
+                            string nodeLine = SR.ReadLine();
+                            string[] parts = nodeLine.Split(' ');
+                            nodes.Add(new Node(double.Parse(parts[0]), double.Parse(parts[1]), double.Parse(parts[2])));
+                        }
+                    }
+                    else if (tokens[0] == "CELLS")
+                    {
+                        int elemCount = int.Parse(tokens[1]);
+                        elems = new List<Element>(elemCount);
+                    }
+                   
+                }
+                SR.Close();
+                SR.Dispose();
+            }
+
+
         }
         //public static void writeVTK(FESystem fes, BESO_TopOpt beso, Material material, string path)
         //{

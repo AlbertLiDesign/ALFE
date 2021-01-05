@@ -7,6 +7,15 @@ using MathNet.Numerics.LinearAlgebra.Single;
 
 namespace ALFE.FEModel
 {
+    public enum ElementType
+    {
+        TriangleElement,
+        QuadElement,
+        PixelElement,
+        TetrahedronElement,
+        HexahedronElement,
+        VoxelElement
+    }
     public abstract class Element
     {
         public List<int> NodeID = new List<int>();

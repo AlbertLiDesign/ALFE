@@ -16,16 +16,16 @@ namespace ALFE.FEModel
         /// <summary>
         /// Poisson ratio
         /// </summary>
-        public float u { get; set; }
+        public float nu { get; set; }
         public Material() 
         {
             this.E = 1.0f;
-            this.u = 0.3f;
+            this.nu = 0.3f;
         }
-        public Material(float E, float u)
+        public Material(float E, float nu)
         {
             this.E = E;
-            this.u = u;
+            this.nu = nu;
         }
     }
 }

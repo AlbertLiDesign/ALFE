@@ -30,12 +30,12 @@ namespace ALFE.FEModel
         /// </summary>
         public override void ComputeKe()
         {
-            float coeff = Material.E / (1.0f - Material.u * Material.u);
+            float coeff = Material.E / (1.0f - Material.nu * Material.nu);
 
             float[] array = new float[8]
             {
-                0.5f-Material.u/6.0f , 0.125f + Material.u * 0.125f, -0.25f - Material.u / 12.0f, -0.125f + Material.u * 0.375f,
-                -0.25f + Material.u/12f, -0.125f - Material.u *0.125f, Material.u / 6.0f, 0.125f- Material.u*0.375f
+                0.5f-Material.nu/6.0f , 0.125f + Material.nu * 0.125f, -0.25f - Material.nu / 12.0f, -0.125f + Material.nu * 0.375f,
+                -0.25f + Material.nu/12f, -0.125f - Material.nu *0.125f, Material.nu / 6.0f, 0.125f- Material.nu*0.375f
              };
 
             for (int i = 0; i < 8; i++)

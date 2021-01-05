@@ -20,7 +20,7 @@ namespace ALFE.FESystem
         /// <summary>
         /// Active nodes
         /// </summary>
-        public List<Node2D> ActiveNodes = new List<Node2D>();
+        public List<Node> ActiveNodes = new List<Node>();
 
         /// <summary>
         /// Finite element model
@@ -91,8 +91,8 @@ namespace ALFE.FESystem
             foreach (var item in Model.Loads)
             {
                 var id = Model.Nodes[item.NodeID].ActiveID * DOF;
-                F[id + 0] = item.Load.X;
-                F[id + 1] = item.Load.Y;
+                F[id + 0] = item.ForceVector.X;
+                F[id + 1] = item.ForceVector.Y;
             }
         }
 
@@ -109,12 +109,12 @@ namespace ALFE.FESystem
                 //var elem = Model.Elements[e];
                 for (int i = 0; i < elem.NodeID.Count; i++)
                 {
-                    Node2D ni = Model.Nodes[elem.NodeID[i]];
+                    Node ni = Model.Nodes[elem.NodeID[i]];
                     if (ni.Active)
                     {
                         for (int j = 0; j < elem.NodeID.Count; j++)
                         {
-                            Node2D nj = Model.Nodes[elem.NodeID[j]];
+                            Node nj = Model.Nodes[elem.NodeID[j]];
 
                             if (nj.Active)
                             {
@@ -143,12 +143,12 @@ namespace ALFE.FESystem
                 //var elem = Model.Elements[e];
                 for (int i = 0; i < elem.NodeID.Count; i++)
                 {
-                    Node2D ni = Model.Nodes[elem.NodeID[i]];
+                    Node ni = Model.Nodes[elem.NodeID[i]];
                     if (ni.Active)
                     {
                         for (int j = 0; j < elem.NodeID.Count; j++)
                         {
-                            Node2D nj = Model.Nodes[elem.NodeID[j]];
+                            Node nj = Model.Nodes[elem.NodeID[j]];
 
                             if (nj.Active)
                             {
@@ -210,7 +210,7 @@ namespace ALFE.FESystem
             {
                 if (item.Active == true)
                 {
-                    item.Displacement = new Vector2D(X[id * DOF + 0], X[id * DOF + 1]);
+                    item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0f);
                     id++;
                 }
             }
@@ -263,7 +263,7 @@ namespace ALFE.FESystem
             count = 0;
             foreach (Node nd in ActiveNodes)
             {
-                int row_nnz = (nd as Node2D).ComputePositionInKG(count, KG.Cols);
+                int row_nnz = (nd as Node).ComputePositionInKG(count, KG.Cols);
                 KG.Rows[nd.ActiveID * 2 + 0] = count;
                 KG.Rows[nd.ActiveID * 2 + 1] = count + row_nnz;
                 count += row_nnz * 2;

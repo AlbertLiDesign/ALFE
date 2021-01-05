@@ -13,7 +13,7 @@ namespace ALFE.FEModel
         public float J;
         public float Thickness = 1.0f;
 
-        public Quadrilateral(List<Node2D> nodes, Material material, float thichness = 1.0f, bool exist = true)
+        public Quadrilateral(List<Node> nodes, Material material, float thichness = 1.0f, bool exist = true)
         {
             if (nodes.Count != 4)
                 throw new Exception("The number of nodes must be 4.");
@@ -31,24 +31,24 @@ namespace ALFE.FEModel
         {
             D = new DenseMatrix(3, 3);
 
-            float coeff1 = Material.E / (1.0f - Material.u * Material.u);
+            float coeff1 = Material.E / (1.0f - Material.nu * Material.nu);
 
             D[0, 0] = D[1, 1] = coeff1;
-            D[0, 1] = D[1, 0] = Material.u * coeff1;
-            D[2, 2] = (1.0f - Material.u) * 0.5f * coeff1;
+            D[0, 1] = D[1, 0] = Material.nu * coeff1;
+            D[2, 2] = (1.0f - Material.nu) * 0.5f * coeff1;
         }
 
         public void ComputeB(float s, float t)
         {
-            var x0 = (Nodes[0] as Node2D).Position.X;
-            var x1 = (Nodes[1] as Node2D).Position.X;
-            var x2 = (Nodes[2] as Node2D).Position.X;
-            var x3 = (Nodes[3] as Node2D).Position.X;
+            var x0 = Nodes[0].Position.X;
+            var x1 = Nodes[1].Position.X;
+            var x2 = Nodes[2].Position.X;
+            var x3 = Nodes[3].Position.X;
 
-            var y0 = (Nodes[0] as Node2D).Position.Y;
-            var y1 = (Nodes[1] as Node2D).Position.Y;
-            var y2 = (Nodes[2] as Node2D).Position.Y;
-            var y3 = (Nodes[3] as Node2D).Position.Y;
+            var y0 = Nodes[0].Position.Y;
+            var y1 = Nodes[1].Position.Y;
+            var y2 = Nodes[2].Position.Y;
+            var y3 = Nodes[3].Position.Y;
 
             var a = 0.25f * (y0 * (s - 1.0f) + y1 * (-1.0f - s) + y2 * (1.0f + s) + y3 * (1.0f - s));
             var b = 0.25f * (y0 * (t - 1.0f) + y1 * (1.0f - t) + y2 * (1.0f + t) + y3 * (-1.0f - t));
