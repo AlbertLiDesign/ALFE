@@ -26,7 +26,7 @@ namespace ALFE
         public static void WriteKG(CSRMatrix csr, string path)
         {
             StreamWriter sw = new StreamWriter(path);
-            sw.WriteLine("%%MatrixMarket matrix coordinate  real symmetric");
+            sw.WriteLine("%%MatrixMarket matrix coordinate real symmetric");
             var mat = csr.ToCOO();
             sw.WriteLine(mat.Rows.ToString() + ' ' + mat.Cols.ToString() + ' ' + mat.NNZ.ToString());
             for (int i = 0; i < mat.NNZ; i++)
@@ -37,10 +37,11 @@ namespace ALFE
             sw.Close();
             sw.Dispose();
         }
-        public static void ReadVTK(string path)
+        public static Model3D ReadVTK(string path)
         {
-            List<Node> nodes;
-            List<Element> elems;
+            List<Node> nodes = new List<Node>();
+            List<Element> elems = new List<Element>();
+            Dictionary<int, List<Node>> elemDir = new Dictionary<int, List<Node>>();
 
             if (File.Exists(path))
             {
@@ -65,15 +66,44 @@ namespace ALFE
                     else if (tokens[0] == "CELLS")
                     {
                         int elemCount = int.Parse(tokens[1]);
-                        elems = new List<Element>(elemCount);
+                        for (int i = 0; i < elemCount; i++)
+                        {
+                            string elemLine = SR.ReadLine();
+                            string[] parts = elemLine.Split(' ');
+
+                            // Tetrahedron or Quadrilateral
+                            if (int.Parse(parts[0]) == 4)
+                            {
+                                List<Node> elemNodes = new List<Node>(4)
+                                {
+                                    nodes[int.Parse(parts[1])], nodes[int.Parse(parts[2])],
+                                     nodes[int.Parse(parts[3])], nodes[int.Parse(parts[4])]
+                                };
+                                elemDir.Add(i, elemNodes);
+                            }
+                        }
                     }
-                   
+                    else if (tokens[0] == "CELL_TYPES")
+                    {
+                        elems = new List<Element>(elemDir.Count);
+                        int typeCount = int.Parse(tokens[1]);
+                        for (int i = 0; i < typeCount; i++)
+                        {
+                            string typeLine = SR.ReadLine();
+
+                            // Tetrahedron
+                            if (int.Parse(typeLine) == 10 && elemDir[i].Count == 4)
+                                elems.Add(new Tetrahedron(elemDir[i], new Material()));
+                        }
+                    }
                 }
                 SR.Close();
                 SR.Dispose();
             }
+            else
+                Console.WriteLine("The file cannot be loaded.");
 
-
+            return new Model3D(nodes, elems);
         }
         //public static void writeVTK(FESystem fes, BESO_TopOpt beso, Material material, string path)
         //{

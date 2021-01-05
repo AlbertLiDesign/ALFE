@@ -19,7 +19,11 @@ namespace ALFE.FEModel
                 throw new Exception("The number of nodes must be 4.");
 
             foreach (var item in nodes)
+            {
+                if (item.Dof != 2)
+                    throw new Exception("The dof of all nodes in the element must be 2");
                 Nodes.Add(item);
+            }
 
             Material = material;
             Thickness = thichness;
