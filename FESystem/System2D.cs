@@ -120,8 +120,8 @@ namespace ALFE.FESystem
                             {
                                 // write the corresponding 2x2 fragment to CSR
                                 int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
-                                for (int m = 0; m < 2; m++) for (int n = 0; n < 2; n++)
-                                        KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * 2 + n, j * 2 + m];
+                                for (int m = 0; m < DOF; m++) for (int n = 0; n < DOF; n++)
+                                        KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
                             }
                         }
                     }
@@ -154,9 +154,9 @@ namespace ALFE.FESystem
                             {
                                 // write the corresponding 2x2 fragment to CSR
                                 int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
-                                for (int m = 0; m < 2; m++)
-                                    for (int n = 0; n < 2; n++)
-                                        KG.Vals[idx1 + ni.row_nnz * n + m] += Ke[i * 2 + n, j * 2 + m];
+                                for (int m = 0; m < DOF; m++)
+                                    for (int n = 0; n < DOF; n++)
+                                        KG.Vals[idx1 + ni.row_nnz * n + m] += Ke[i * DOF + n, j * DOF + m];
 
                             }
                         }
@@ -257,16 +257,16 @@ namespace ALFE.FESystem
             // allocate CSR
             // each neighbor contributes 2 rows and 2 columns to CSR matrix, so NNZ = count * 4
             // the size of the matrix is (number of active nodes)*(2 coordinates)
-            KG = new CSRMatrix(ActiveNodes.Count * 2, count * 4);
+            KG = new CSRMatrix(ActiveNodes.Count * DOF, count * DOF * DOF);
 
             // 3) create CSR indices
             count = 0;
             foreach (Node nd in ActiveNodes)
             {
                 int row_nnz = (nd as Node).ComputePositionInKG(count, KG.Cols);
-                KG.Rows[nd.ActiveID * 2 + 0] = count;
-                KG.Rows[nd.ActiveID * 2 + 1] = count + row_nnz;
-                count += row_nnz * 2;
+                KG.Rows[nd.ActiveID * DOF + 0] = count;
+                KG.Rows[nd.ActiveID * DOF + 1] = count + row_nnz;
+                count += row_nnz * DOF;
             }
         }
 
