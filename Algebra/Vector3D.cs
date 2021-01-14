@@ -96,6 +96,28 @@ namespace ALFE
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vector">A vector.</param>
+        /// <param name="t">A number.</param>
+        /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
+        public static Vector3D operator /(Vector3D vector, float t)
+        {
+            return new Vector3D(vector._x / t, vector._y / t, vector._z / t);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vector">A vector.</param>
+        /// <param name="other">Another vector.</param>
+        /// <returns>The result number of dot product.</returns>
+        public static float operator /(Vector3D vector, Vector3D other)
+        {
+            return vector._x / other._x + vector._y / other._y + vector._z / other._z;
+        }
+
+        /// <summary>
         /// Computes the cross product (or vector product, or exterior product) of two vectors.
         /// <para>This operation is not commutative.</para>
         /// </summary>

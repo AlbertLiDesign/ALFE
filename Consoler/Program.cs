@@ -1,5 +1,6 @@
 ﻿using ALFE.FEModel;
 using ALFE.FESystem;
+using ALFE.TopOpt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,18 @@ namespace ALFE
         static void Main(string[] args)
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
-            //TestMethods.TestPixels(1001,1001);
-            string path = "box.vtk";
-            var model = FEIO.ReadVTK(path);
-            Console.WriteLine(model.Nodes.Count);
-            Console.WriteLine(model.Elements.Count);
-            model.Elements[0].ComputeKe();
-            Console.WriteLine(model.Elements[0].Ke);
+            //TestMethods.TestPixels();
+            //string path = "box.vtk";
+            //var model = FEIO.ReadVTK(path);
+
+            Model2D model2d = new Cantilever2D(ElementType.PixelElement).Model;
+            System2D sys = new System2D(model2d, true);
+            sys.Solve();
+            FEPrint.PrintSystemInfo(sys);
+
+            BESO beso = new BESO(sys);
+            beso.CalSensitivity();
+            Console.WriteLine(model2d.Elements[0].C);
             Console.ReadKey();
         }
     }

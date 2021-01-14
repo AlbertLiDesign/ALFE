@@ -9,18 +9,20 @@ namespace ALFE.FEModel
 {
     public class Pixel : Element
     {
-        public Pixel(List<int> nodesID, Material material, bool exist = true)
+        public Pixel(List<Node> nodes, Material material, bool exist = true)
         {
-            if (nodesID.Count != 4)
+            foreach (var item in nodes)
             {
-                throw new Exception("The number of nodes must be 4.");
+                if (item.Dof != 2)
+                    throw new Exception("The dof of all nodes in the element must be 2");
+                Nodes.Add(item);
             }
 
-            NodeID = nodesID;
+            Nodes = nodes;
             Material = material;
             Exist = exist;
             Type = ElementType.PixelElement;
-            
+            DOF = 2;
         }
 
         public override void ComputeD() { }

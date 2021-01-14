@@ -25,6 +25,7 @@ namespace ALFE.FEModel
             Material = material;
             Exist = exist;
             Type = ElementType.TetrahedronElement;
+            DOF = 3;
         }
 
         public override void ComputeD()

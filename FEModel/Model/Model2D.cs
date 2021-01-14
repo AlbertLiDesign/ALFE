@@ -45,9 +45,13 @@ namespace ALFE.FEModel
             }
             this.Elements = elements;
 
+            int e = 0;
             foreach (var elem in elements)
-                foreach (var item in elem.Nodes)
-                    elem.NodeID.Add(item.ID);
+            {
+                elem.ID = e;
+                e++;
+            }
+                
         }
         public Model2D(List<Node> nodes, List<Element> elements, List<Load> loads, List<Support> supports)
         {
@@ -70,9 +74,12 @@ namespace ALFE.FEModel
 
             this.Supports = supports;
 
+            int e = 0;
             foreach (var elem in elements)
-                foreach (var item in elem.Nodes)
-                    elem.NodeID.Add(item.ID);
+            {
+                elem.ID = e;
+                e++;
+            }
         }
         #endregion
     }

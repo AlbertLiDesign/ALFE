@@ -58,11 +58,14 @@ namespace ALFE
             {
                 for (int j = 0; j < ynum - 1; j++)
                 {
-                    List<int> nodesID = new List<int>(4)
+                    List<Node> nodesElem = new List<Node>(4)
                     {
-                        i * ynum + j, (i + 1) * ynum + j, (i+1) * ynum+ (j+1) , i * ynum + (j+1)
+                        nodes[i * ynum + j],
+                        nodes[(i + 1) * ynum + j],
+                        nodes[(i+1) * ynum+ (j+1)],
+                        nodes[i * ynum + (j+1)]
                     };
-                    elems.Add(new Pixel(nodesID, new Material(1.0f, 0.3f)));
+                    elems.Add(new Pixel(nodesElem, new Material(1.0f, 0.3f)));
                 }
             }
 

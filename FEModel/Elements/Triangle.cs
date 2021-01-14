@@ -28,6 +28,7 @@ namespace ALFE.FEModel
             Thickness = thickness;
             Exist = exist;
             Type = ElementType.TriangleElement;
+            DOF = 2;
             ComputeArea();
         }
 

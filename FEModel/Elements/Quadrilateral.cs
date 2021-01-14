@@ -29,6 +29,7 @@ namespace ALFE.FEModel
             Thickness = thichness;
             Exist = exist;
             Type = ElementType.QuadElement;
+            DOF = 2;
         }
 
         public override void ComputeD()

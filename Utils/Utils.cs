@@ -10,20 +10,6 @@ namespace ALFE
     public class Utils
     {
         /// <summary>
-        /// Compute all neighbours of each node.
-        /// </summary>
-        /// <param name="nodes"> A list of all nodes. </param>
-        /// <param name="elements"> A list of all elements. </param>
-        public static void ComputeNeighbours(List<Node> nodes, List<Element> elements)
-        {
-            foreach (var node in nodes)
-                foreach (var item in node.ElementID)
-                    foreach (var neighbour in elements[item].NodeID)
-                        if (!nodes[neighbour].Active) 
-                            node.Neighbours.Add(neighbour);
-        }
-
-        /// <summary>
         /// Return a scan dictionary <index, difference>
         /// </summary>
         /// <param name="nodesNum"></param>

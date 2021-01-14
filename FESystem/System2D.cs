@@ -107,14 +107,14 @@ namespace ALFE.FESystem
             foreach (var elem in Model.Elements)
             {
                 //var elem = Model.Elements[e];
-                for (int i = 0; i < elem.NodeID.Count; i++)
+                for (int i = 0; i < elem.Nodes.Count; i++)
                 {
-                    Node ni = Model.Nodes[elem.NodeID[i]];
+                    Node ni = elem.Nodes[i];
                     if (ni.Active)
                     {
-                        for (int j = 0; j < elem.NodeID.Count; j++)
+                        for (int j = 0; j < elem.Nodes.Count; j++)
                         {
-                            Node nj = Model.Nodes[elem.NodeID[j]];
+                            Node nj = elem.Nodes[j];
 
                             if (nj.Active)
                             {
@@ -130,72 +130,21 @@ namespace ALFE.FESystem
         }
 
         /// <summary>
-        /// Assemble the global stiffness matrix
-        /// </summary>
-        /// <param name="Ke">Input an elementary stiffness matrix.</param>
-        private void AssembleKG(Matrix Ke)
-        {
-            InitialzeKG();
-            KG.Clear();
-
-            foreach (var elem in Model.Elements)
-            {
-                //var elem = Model.Elements[e];
-                for (int i = 0; i < elem.NodeID.Count; i++)
-                {
-                    Node ni = Model.Nodes[elem.NodeID[i]];
-                    if (ni.Active)
-                    {
-                        for (int j = 0; j < elem.NodeID.Count; j++)
-                        {
-                            Node nj = Model.Nodes[elem.NodeID[j]];
-
-                            if (nj.Active)
-                            {
-                                // write the corresponding 2x2 fragment to CSR
-                                int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
-                                for (int m = 0; m < DOF; m++)
-                                    for (int n = 0; n < DOF; n++)
-                                        KG.Vals[idx1 + ni.row_nnz * n + m] += Ke[i * DOF + n, j * DOF + m];
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Solve the finite element system. You can get the displacement vector after running this function.
         /// </summary>
         public void Solve()
         {
             Stopwatch sw = new Stopwatch();
 
-            if (Unify == true)
-            {
-                sw.Start();
-                var Ke = ComputeUniformK();
-                sw.Stop();
-                TimeCost.Add(sw.Elapsed.TotalMilliseconds);
+            sw.Start();
+            ComputeAllKe();
+            sw.Stop();
+            TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-                sw.Restart();
-                AssembleKG(Ke);
-                sw.Stop();
-                TimeCost.Add(sw.Elapsed.TotalMilliseconds);
-            }
-            else
-            {
-                sw.Start();
-                ComputeAllKe();
-                sw.Stop();
-                TimeCost.Add(sw.Elapsed.TotalMilliseconds);
-
-                sw.Restart();
-                AssembleKG();
-                sw.Stop();
-                TimeCost.Add(sw.Elapsed.TotalMilliseconds);
-            }
+            sw.Restart();
+            AssembleKG();
+            sw.Stop();
+            TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
             AssembleF();
 
@@ -263,7 +212,7 @@ namespace ALFE.FESystem
             count = 0;
             foreach (Node nd in ActiveNodes)
             {
-                int row_nnz = (nd as Node).ComputePositionInKG(count, KG.Cols);
+                int row_nnz = nd.ComputePositionInKG(count, KG.Cols);
                 KG.Rows[nd.ActiveID * DOF + 0] = count;
                 KG.Rows[nd.ActiveID * DOF + 1] = count + row_nnz;
                 count += row_nnz * DOF;
@@ -278,10 +227,10 @@ namespace ALFE.FESystem
             Parallel.ForEach(Model.Nodes, node =>
             {
                 foreach (var item in node.ElementID)
-                    foreach (var neighbour in Model.Elements[item].NodeID)
-                        if (Model.Nodes[neighbour].Active)
+                    foreach (var neighbour in Model.Elements[item].Nodes)
+                        if (neighbour.Active)
                             lock (node.Neighbours)
-                                node.Neighbours.Add(Model.Nodes[neighbour].ActiveID);
+                                node.Neighbours.Add(neighbour.ActiveID);
             });
         }
 
@@ -291,10 +240,10 @@ namespace ALFE.FESystem
         private void GetConnectedElements()
         {
             // in each node make a list of elements to which it belongs
-            for (int i = 0; i < Model.Elements.Count; i++)
+            foreach (var elem in Model.Elements)
             {
-                foreach (int nd in Model.Elements[i].NodeID)
-                    Model.Nodes[nd].ElementID.Add(i);
+                foreach (var node in elem.Nodes)
+                    node.ElementID.Add(elem.ID);
             }
         }
 
@@ -327,20 +276,23 @@ namespace ALFE.FESystem
         /// </summary>
         private void ComputeAllKe()
         {
-            foreach (var item in Model.Elements)
-                item.ComputeKe();
+            if (Unify == true)
+            {
+                var elem0 = Model.Elements[0];
+                elem0.ComputeKe();
+                var K = elem0.Ke;
+                foreach (var elem in Model.Elements)
+                {
+                    elem.Ke = K;
+                }
+            }
+            else
+            {
+                foreach (var item in Model.Elements)
+                    item.ComputeKe();
+            }
         }
 
-        /// <summary>
-        /// Compute the uniform elementary stiffness matrix.
-        /// </summary>
-        /// <returns></returns>
-        public Matrix ComputeUniformK()
-        {
-            var ele = Model.Elements[0];
-            ele.ComputeKe();
-            return ele.Ke;
-        }
 
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
