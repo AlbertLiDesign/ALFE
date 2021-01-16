@@ -23,8 +23,7 @@ namespace ALFE
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);
 
-            BESO beso = new BESO(sys);
-            beso.CalSensitivity();
+            BESO beso = new BESO(sys, 3.0f);
             Console.WriteLine(model2d.Elements[0].C);
             Console.ReadKey();
         }
