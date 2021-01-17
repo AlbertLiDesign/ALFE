@@ -43,7 +43,7 @@ namespace ALFE.FEModel
                 Nodes.Add(item);
                 id++;
             }
-            this.Elements = elements;
+            Elements = elements;
 
             int e = 0;
             foreach (var elem in elements)
@@ -62,7 +62,7 @@ namespace ALFE.FEModel
                 Nodes.Add(item);
                 id++;
             }
-            this.Elements = elements;
+            Elements = elements;
 
             foreach (var item in loads)
             {
@@ -71,7 +71,7 @@ namespace ALFE.FEModel
                 Loads.Add(item);
             }
 
-            this.Supports = supports;
+            Supports = supports;
 
             int e = 0;
             foreach (var elem in elements)
@@ -81,5 +81,20 @@ namespace ALFE.FEModel
             }
         }
         #endregion
+
+        public void SetLoads(List<Load> loads)
+        {
+            foreach (var item in loads)
+            {
+                if (item.Dof != 2)
+                    throw new Exception("The dimension of all loads must be 2.");
+                Loads.Add(item);
+            }
+        }
+
+        public void SetSupports(List<Support> supports)
+        {
+            Supports = supports;
+        }
     }
 }
