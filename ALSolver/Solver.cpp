@@ -15,17 +15,26 @@ int SolveFE(int* rows_offset, int* cols, float* vals, float* F, int dim, int dof
     if (dim < 20000)
     {
         Eigen::SimplicialLLT<Eigen::SparseMatrix<float>> llt(A);
+
+        llt.analyzePattern(A);
+        llt.factorize(A);
+
         result = llt.solve(B);
     }
     else
     {
-        Eigen::PardisoLLT<Eigen::SparseMatrix<float>,1> pardiso(A);
+        Eigen::PardisoLLT<Eigen::SparseMatrix<float>, 1> pardiso;
         //pardiso.pardisoParameterArray()[3] = 32; // PCG method
-        pardiso.pardisoParameterArray()[59] = 1;
+        pardiso.pardisoParameterArray()[59] = 0;
+        pardiso.pardisoParameterArray()[1] =3; // 	The parallel (OpenMP) version of the nested dissection algorithm.
+
+        pardiso.analyzePattern(A);
+        pardiso.factorize(A);
+        
         result = pardiso.solve(B);
     }
 
-    //std::cout << 5000 * 2 + 1 << ": " << result(5000 * 2 + 1) << std::endl;
+   //std::cout << 5000 * 2 + 1 << ": " << result(5000 * 2 + 1) << std::endl;
 
     for (int i = 0; i < dim; i++)
     {

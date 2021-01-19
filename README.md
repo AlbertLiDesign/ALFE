@@ -14,9 +14,7 @@ Rows: 2002000
 Cols: 2002000
 NNZ: 35987992
 ------------------- Time Cost -------------------
-Computing Ke: 3.4716 ms
-Assembling KG: 3893.7803 ms
-Solving: 8736.7694 ms
-------------------- Result Info -------------------
-Displacement[5000].Y = -0.03365567
+Computing Ke: 17.0455 ms
+Assembling KG: 4347.1111 ms
+Solving: 7523.3614 ms
 ```
