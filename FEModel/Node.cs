@@ -41,7 +41,7 @@ namespace ALFE.FEModel
         public int row_nnz;
         public SortedList<int, int> PositionKG;
 
-        public int Dof;
+        public int DOF;
 
         #region Constructor
         public Node(Node node)
@@ -49,44 +49,44 @@ namespace ALFE.FEModel
             Position = node.Position;
             ID = node.ID;
             hasID = true;
-            Dof = node.Dof;
+            DOF = node.DOF;
         }
         public Node(Node node, int index)
         {
             Position = node.Position;
             ID = index;
             hasID = true;
-            Dof = node.Dof;
+            DOF = node.DOF;
         }
         public Node(double x, double y)
         {
             Position = new Vector3D((float)x, (float)y, 0.0f);
-            Dof = 2;
+            DOF = 2;
         }
         public Node(float x, float y)
         {
             Position = new Vector3D(x, y, 0.0f);
-            Dof = 2;
+            DOF = 2;
         }
         public Node(float x, float y, bool active)
         {
             Position = new Vector3D(x, y, 0.0f);
             Active = active;
-            Dof = 2;
+            DOF = 2;
         }
         public Node(float x, float y, int index)
         {
             Position = new Vector3D(x, y, 0.0f);
             ID = index;
             hasID = true;
-            Dof = 2;
+            DOF = 2;
         }
         public Node(Vector2D position, int index)
         {
             Position = new Vector3D(position.X, position.Y, 0.0f);
             ID = index;
             hasID = true;
-            Dof = 2;
+            DOF = 2;
         }
         public Node(Vector2D position, int index, bool active)
         {
@@ -94,37 +94,37 @@ namespace ALFE.FEModel
             ID = index;
             Active = active;
             hasID = true;
-            Dof = 2;
+            DOF = 2;
         }
         public Node(double x, double y, double z)
         {
             Position = new Vector3D((float)x, (float)y, (float)z);
-            Dof = 3;
+            DOF = 3;
         }
         public Node(float x, float y, float z)
         {
             Position = new Vector3D(x, y, z);
-            Dof = 3;
+            DOF = 3;
         }
         public Node(float x, float y, float z, bool active)
         {
             Position = new Vector3D(x, y, z);
             Active = active;
-            Dof = 3;
+            DOF = 3;
         }
         public Node(float x, float y, float z, int index)
         {
             Position = new Vector3D(x, y, z);
             ID = index;
             hasID = true;
-            Dof = 3;
+            DOF = 3;
         }
         public Node(Vector3D position, int index)
         {
             Position = position;
             ID = index;
             hasID = true;
-            Dof = 3;
+            DOF = 3;
         }
         public Node(Vector3D position, int index, bool active)
         {
@@ -132,7 +132,7 @@ namespace ALFE.FEModel
             ID = index;
             Active = active;
             hasID = true;
-            Dof = 3;
+            DOF = 3;
         }
         #endregion
         public void SetID(int index)
@@ -157,7 +157,7 @@ namespace ALFE.FEModel
         {
             // number of non-zero entries (nnz) in this row is (number of neighbors)*(2 coordinates)
             // we save this value, because it will be used to look up indices in CSR.vals[] at assembly stage
-            row_nnz = Neighbours.Count * Dof;
+            row_nnz = Neighbours.Count * DOF;
 
             // In each row of the CSR matrix, non-zero values are stored left-to-write,
             // therefore we transfer neighboring nodes from HashSet to SortedList (sort by altId before inserting into CSR).
@@ -177,14 +177,14 @@ namespace ALFE.FEModel
             foreach (int _altId in sortedNeighbors)
             {
                 PositionKG.Add(_altId, startIndex);
-                for (int i = 0; i < Dof; i++)
+                for (int i = 0; i < DOF; i++)
                 {
                     cols[startIndex + i] =
-                    cols[startIndex + i + row_nnz] = _altId * Dof + i;
-                    if (Dof == 3)
-                        cols[startIndex + i + row_nnz * 2] = _altId * Dof + i;
+                    cols[startIndex + i + row_nnz] = _altId * DOF + i;
+                    if (DOF == 3)
+                        cols[startIndex + i + row_nnz * 2] = _altId * DOF + i;
                 }
-                startIndex += Dof;
+                startIndex += DOF;
             }
             return row_nnz;
         }

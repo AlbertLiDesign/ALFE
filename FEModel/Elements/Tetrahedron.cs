@@ -17,7 +17,7 @@ namespace ALFE.FEModel
 
             foreach (var item in nodes)
             {
-                if (item.Dof != 3)
+                if (item.DOF != 3)
                     throw new Exception("The dof of all nodes in the element must be 3");
                 Nodes.Add(item);
             }

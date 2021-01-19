@@ -10,7 +10,7 @@ namespace ALFE
 {
     public class FEPrint
     {
-        public static void PrintSystemInfo(System2D sys)
+        public static void PrintSystemInfo(FESystem.System sys)
         {
             PrintDeviceInfo();
             PrintModelInfo(sys);
@@ -29,7 +29,7 @@ namespace ALFE
             }
             Console.WriteLine("Number Of Cores: {0}", coreCount);
         }
-        public static void PrintModelInfo(System2D sys)
+        public static void PrintModelInfo(FESystem.System sys)
         {
             Console.WriteLine("------------------- Model Info -------------------");
             Console.WriteLine("Nodes: " + sys.Model.Nodes.Count.ToString());
@@ -66,7 +66,7 @@ namespace ALFE
             Console.WriteLine("Assembling KG: " + timeCost[1].ToString() + " ms");
             Console.WriteLine("Solving: " + timeCost[2].ToString() + " ms");
         }
-        public static void PrintDisplacement(System2D sys)
+        public static void PrintDisplacement(FESystem.System sys)
         {
             foreach (var item in sys.Model.Nodes)
             {

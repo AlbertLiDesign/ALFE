@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace ALFE.FESystem
 {
-    public class System2D
+    public class System
     {
         /// <summary>
         /// Time cost in each step: 0 = Computing Ke, 1 = Assembling KG, 2 = Solving
@@ -25,7 +25,7 @@ namespace ALFE.FESystem
         /// <summary>
         /// Finite element model
         /// </summary>
-        public Model2D Model;
+        public Model Model;
 
         /// <summary>
         /// Dimensions of the global stiffness matrix
@@ -35,7 +35,7 @@ namespace ALFE.FESystem
         /// <summary>
         /// Degree of freedom
         /// </summary>
-        public int DOF = 2;
+        public int DOF;
 
         /// <summary>
         /// If all elements are the same, It should be set True for reducing workload.
@@ -71,10 +71,11 @@ namespace ALFE.FESystem
         /// Initialize the finite element system.
         /// </summary>
         /// <param name="model"> A finite element model</param>
-        public System2D(Model2D model, bool unify = false)
+        public System(Model model, bool unify = false)
         {
             Model = model;
             Unify = unify;
+            DOF = model.DOF;
 
             ApplySupports2D();
             Dim = (Model.Nodes.Count - FixedID.Count) * DOF;

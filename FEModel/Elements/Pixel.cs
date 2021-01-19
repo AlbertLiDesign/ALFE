@@ -13,7 +13,7 @@ namespace ALFE.FEModel
         {
             foreach (var item in nodes)
             {
-                if (item.Dof != 2)
+                if (item.DOF != 2)
                     throw new Exception("The dof of all nodes in the element must be 2");
                 Nodes.Add(item);
             }

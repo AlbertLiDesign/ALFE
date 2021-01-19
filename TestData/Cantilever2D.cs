@@ -11,7 +11,7 @@ namespace ALFE
     {
         public int Xnum { get; set; }
         public int Ynum { get; set; }
-        public Model2D Model { get; set; }
+        public Model Model { get; set; }
         public Cantilever2D(ElementType type, int xnum = 7, int ynum = 5)
         {
             // Create a cantilever with unit quads
@@ -72,7 +72,7 @@ namespace ALFE
             // Apply the load
             loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
 
-            Model = new Model2D(nodes, elems, loads, supports);
+            Model = new Model(2, nodes, elems, loads, supports);
         }
         private void QuadType(int xnum, int ynum)
         {
@@ -123,7 +123,7 @@ namespace ALFE
             // Apply the load
             loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
 
-            Model = new Model2D(nodes, elems, loads, supports);
+            Model = new Model(2, nodes, elems, loads, supports);
         }
         private void TriangleType(int xnum, int ynum)
         {
@@ -181,7 +181,7 @@ namespace ALFE
             // Apply the load
             loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
 
-            Model = new Model2D(nodes, elems, loads, supports);
+            Model = new Model(2, nodes, elems, loads, supports);
         }
     }
 }

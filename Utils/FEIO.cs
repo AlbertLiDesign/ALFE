@@ -37,7 +37,7 @@ namespace ALFE
             sw.Close();
             sw.Dispose();
         }
-        public static Model3D ReadVTK(string path)
+        public static Model ReadVTK(string path)
         {
             List<Node> nodes = new List<Node>();
             List<Element> elems = new List<Element>();
@@ -103,7 +103,7 @@ namespace ALFE
             else
                 Console.WriteLine("The file cannot be loaded.");
 
-            return new Model3D(nodes, elems);
+            return new Model(3, nodes, elems);
         }
         //public static void writeVTK(FESystem fes, BESO_TopOpt beso, Material material, string path)
         //{

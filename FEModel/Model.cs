@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ALFE.FEModel
 {
-    public class Model2D
+    public class Model
     {
         /// <summary>
         /// Nodes
@@ -28,36 +28,49 @@ namespace ALFE.FEModel
         /// </summary>
         public List<Support> Supports = new List<Support>();
 
+        public int DOF;
+
         #region Construction
-        public Model2D() { }
-        public Model2D(List<Node> nodes, List<Element> elements)
+        public Model() { }
+        public Model(int dof, List<Node> nodes, List<Element> elements)
         {
             int id = 0;
+            int e = 0;
+            DOF = dof;
+
             foreach (var item in nodes)
             {
-                if (item.Dof != 2)
-                    throw new Exception("The dimension of all nodes must be 2.");
+                if (item.DOF != DOF)
+                    throw new Exception("The DOF of the model fails to match the DOF of the nodes.");
 
                 if (item.hasID == false)
                     item.SetID(id);
                 Nodes.Add(item);
                 id++;
             }
+
+
             Elements = elements;
 
-            int e = 0;
             foreach (var elem in elements)
             {
+                if (elem.DOF != DOF)
+                    throw new Exception("The DOF of the model fails to match the DOF of the elements.");
+
                 elem.ID = e;
                 e++;
             }
-                
         }
-        public Model2D(List<Node> nodes, List<Element> elements, List<Load> loads, List<Support> supports)
+        public Model(int dof, List<Node> nodes, List<Element> elements, List<Load> loads, List<Support> supports)
         {
+            DOF = dof;
+
             int id = 0;
             foreach (var item in nodes)
             {
+                if (item.DOF != DOF)
+                    throw new Exception("The DOF of the model fails to match the DOF of the nodes.");
+
                 if (item.hasID == false)
                     item.SetID(id);
                 Nodes.Add(item);
@@ -67,8 +80,8 @@ namespace ALFE.FEModel
 
             foreach (var item in loads)
             {
-                if (item.Dof != 2)
-                    throw new Exception("The dimension of all loads must be 2.");
+                if (item.DOF != DOF)
+                    throw new Exception("The DOF of the model fails to match the DOF of the loads.");
                 Loads.Add(item);
             }
 
@@ -87,8 +100,8 @@ namespace ALFE.FEModel
         {
             foreach (var item in loads)
             {
-                if (item.Dof != 2)
-                    throw new Exception("The dimension of all loads must be 2.");
+                if (item.DOF != DOF)
+                    throw new Exception("The DOF of the model fails to match the DOF of the loads.");
                 Loads.Add(item);
             }
         }

@@ -11,8 +11,8 @@ namespace ALFE.TopOpt
 {
     public class BESO
     {
-        public System2D System;
-        public Model2D Model;
+        public FESystem.System System;
+        public Model Model;
 
         /// <summary>
         /// Minimum filter radius
@@ -42,7 +42,7 @@ namespace ALFE.TopOpt
         /// </summary>
         public int MaxIteration;
 
-        public BESO(System2D system, float rmin, int p=3,  float vt=0.5f, int maxIter=100)
+        public BESO(FESystem.System system, float rmin, int p=3,  float vt=0.5f, int maxIter=100)
         {
             System = system;
             Model = system.Model;

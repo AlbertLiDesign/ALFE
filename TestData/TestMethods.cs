@@ -13,8 +13,8 @@ namespace ALFE
 
         public static void TestTriangles(int x = 7, int y = 5)
         {
-            Model2D model2d = new Cantilever2D(ElementType.TriangleElement, x, y).Model;
-            System2D sys = new System2D(model2d, false);
+            Model model2d = new Cantilever2D(ElementType.TriangleElement, x, y).Model;
+            FESystem.System sys = new FESystem.System(model2d, false);
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);
             FEPrint.PrintDisplacement(sys);
@@ -22,14 +22,14 @@ namespace ALFE
         }
         public static void TestQuads(int x = 7, int y = 5)
         {
-            Model2D model2d = new Cantilever2D(ElementType.QuadElement, x, y).Model;
+            Model model2d = new Cantilever2D(ElementType.QuadElement, x, y).Model;
             model2d.Elements[0].ComputeKe();
             Console.WriteLine(model2d.Elements[0].B);
         }
         public static void TestPixels(int x = 7, int y = 5)
         {
-            Model2D model2d = new Cantilever2D(ElementType.PixelElement, x, y).Model;
-            System2D sys = new System2D(model2d, true);
+            Model model2d = new Cantilever2D(ElementType.PixelElement, x, y).Model;
+            FESystem.System sys = new FESystem.System(model2d, true);
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);
 
