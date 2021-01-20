@@ -1,5 +1,5 @@
-﻿using ALFE.FEModel;
-using ALFE.FESystem;
+﻿using ALFE;
+using ALFE;
 using ALFE.TopOpt;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace ALFE
 
 
             Model model2d = new Cantilever2D(ElementType.PixelElement, 1001, 1001).Model;
-            FESystem.System sys = new FESystem.System(model2d, true);
+            FESystem sys = new FESystem(model2d, true);
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);
 

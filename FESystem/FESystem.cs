@@ -1,4 +1,4 @@
-﻿using ALFE.FEModel;
+﻿using ALFE;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra.Single;
 using System.Threading;
 
-namespace ALFE.FESystem
+namespace ALFE
 {
-    public class System
+    public class FESystem
     {
         /// <summary>
         /// Time cost in each step: 0 = Computing Ke, 1 = Assembling KG, 2 = Solving
@@ -71,7 +71,7 @@ namespace ALFE.FESystem
         /// Initialize the finite element system.
         /// </summary>
         /// <param name="model"> A finite element model</param>
-        public System(Model model, bool unify = false)
+        public FESystem(Model model, bool unify = false)
         {
             Model = model;
             Unify = unify;

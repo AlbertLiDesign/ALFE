@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MathNet.Numerics.Integration;
 using MathNet.Numerics.LinearAlgebra.Single;
 
-namespace ALFE.FEModel
+namespace ALFE
 {
     public class Tetrahedron : Element
     {

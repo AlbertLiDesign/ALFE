@@ -97,7 +97,7 @@
     <Compile Include="FEModel\Material.cs" />
     <Compile Include="FEModel\Model.cs" />
     <Compile Include="FEModel\Node.cs" />
-    <Compile Include="FESystem\System.cs" />
+    <Compile Include="FESystem\FESystem.cs" />
     <Compile Include="Algebra\Vector2D.cs" />
     <Compile Include="Algebra\Vector3D.cs" />
     <Compile Include="FEModel\Support.cs" />

@@ -1,5 +1,4 @@
-﻿using ALFE.FEModel;
-using ALFE.FESystem;
+﻿using ALFE;
 using MathNet.Numerics.LinearAlgebra.Single;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ namespace ALFE.TopOpt
 {
     public class BESO
     {
-        public FESystem.System System;
+        public FESystem System;
         public Model Model;
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace ALFE.TopOpt
         /// </summary>
         public int MaxIteration;
 
-        public BESO(FESystem.System system, float rmin, int p=3,  float vt=0.5f, int maxIter=100)
+        public BESO(FESystem system, float rmin, int p=3,  float vt=0.5f, int maxIter=100)
         {
             System = system;
             Model = system.Model;

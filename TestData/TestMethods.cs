@@ -1,5 +1,4 @@
-﻿using ALFE.FEModel;
-using ALFE.FESystem;
+﻿using ALFE;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +13,7 @@ namespace ALFE
         public static void TestTriangles(int x = 7, int y = 5)
         {
             Model model2d = new Cantilever2D(ElementType.TriangleElement, x, y).Model;
-            FESystem.System sys = new FESystem.System(model2d, false);
+            FESystem sys = new FESystem(model2d, false);
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);
             FEPrint.PrintDisplacement(sys);
@@ -29,7 +28,7 @@ namespace ALFE
         public static void TestPixels(int x = 7, int y = 5)
         {
             Model model2d = new Cantilever2D(ElementType.PixelElement, x, y).Model;
-            FESystem.System sys = new FESystem.System(model2d, true);
+            FESystem sys = new FESystem(model2d, true);
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);
 

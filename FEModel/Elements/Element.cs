@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra.Single;
 
-namespace ALFE.FEModel
+namespace ALFE
 {
     public enum ElementType
     {

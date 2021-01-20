@@ -1,4 +1,4 @@
-﻿namespace ALFE.FEModel
+﻿namespace ALFE
 {
     public class Support
     {
