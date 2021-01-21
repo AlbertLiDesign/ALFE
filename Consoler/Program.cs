@@ -15,22 +15,39 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
+            TestBESO();
+            Console.ReadKey();
+        }
+        public static void TestBESO()
+        {
+            string path = @"E:\ALCoding\ALFE\topoptTest";
+            Model model = new Cantilever2D(ElementType.PixelElement, 7, 5).Model;
+            FESystem sys = new FESystem(model, true);
+            sys.Solve();
+            FEPrint.PrintSystemInfo(sys);
 
+            BESO beso = new BESO(sys, 1.5f);
+            beso.Optimize(path);
+
+            ////FEPrint.PrintDisplacement(sys);
+            ////var disp = sys.GetDisplacement();
+            ////FEPrint.PrintCSR(KG);
+            ////FEIO.WriteCOOMatrix(KG.ToCOO(), "C:/Users/alber/Desktop/matA.mtx");
+            Console.WriteLine("------------------- Result Info -------------------");
+            Console.WriteLine("Displacement[12].Y = " + sys.GetDisplacement()[12, 1].ToString());
+
+        }
+        public static void Test1001()
+        {
             Model model2d = new Cantilever2D(ElementType.PixelElement, 1001, 1001).Model;
             FESystem sys = new FESystem(model2d, true);
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);
-
-            //BESO beso = new BESO(sys, 3.0f);
-            //Console.WriteLine(model2d.Elements[0].C);
-            Console.ReadKey();
         }
-        public void Test()
+        public static void TestTet()
         {
-            TestMethods.TestPixels();
-            string path = "box.vtk";
-            var model = FEIO.ReadVTK(path);
-            
+            //string path = "box.vtk";
+            //var model = FEIO.ReadVTK(path);
         }
     }
 }

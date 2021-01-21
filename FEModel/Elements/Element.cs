@@ -43,6 +43,9 @@ namespace ALFE
         public Matrix B;
         public Matrix D;
 
+        /// <summary>
+        /// Degree of freedom
+        /// </summary>
         public int DOF;
 
         /// <summary>

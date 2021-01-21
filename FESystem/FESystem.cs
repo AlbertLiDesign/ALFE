@@ -82,6 +82,13 @@ namespace ALFE
 
             F = new float[Dim];
             X = new float[Dim];
+
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+            ComputeAllKe();
+            sw.Stop();
+            TimeCost.Add(sw.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -107,22 +114,24 @@ namespace ALFE
 
             foreach (var elem in Model.Elements)
             {
-                //var elem = Model.Elements[e];
-                for (int i = 0; i < elem.Nodes.Count; i++)
+                if (elem.Exist == true)
                 {
-                    Node ni = elem.Nodes[i];
-                    if (ni.Active)
+                    for (int i = 0; i < elem.Nodes.Count; i++)
                     {
-                        for (int j = 0; j < elem.Nodes.Count; j++)
+                        Node ni = elem.Nodes[i];
+                        if (ni.Active)
                         {
-                            Node nj = elem.Nodes[j];
-
-                            if (nj.Active)
+                            for (int j = 0; j < elem.Nodes.Count; j++)
                             {
-                                // write the corresponding 2x2 fragment to CSR
-                                int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
-                                for (int m = 0; m < DOF; m++) for (int n = 0; n < DOF; n++)
-                                        KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
+                                Node nj = elem.Nodes[j];
+
+                                if (nj.Active)
+                                {
+                                    // write the corresponding 2x2 fragment to CSR
+                                    int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
+                                    for (int m = 0; m < DOF; m++) for (int n = 0; n < DOF; n++)
+                                            KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
+                                }
                             }
                         }
                     }
@@ -138,11 +147,6 @@ namespace ALFE
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
-            ComputeAllKe();
-            sw.Stop();
-            TimeCost.Add(sw.Elapsed.TotalMilliseconds);
-
-            sw.Restart();
             AssembleKG();
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);

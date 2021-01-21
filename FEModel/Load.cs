@@ -9,6 +9,10 @@
 
         public Vector3D ForceVector { get; set; }
 
+
+        /// <summary>
+        /// Degree of freedom
+        /// </summary>
         public int DOF { get; set; }
 
         #region Constructor

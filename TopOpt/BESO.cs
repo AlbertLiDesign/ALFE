@@ -21,46 +21,143 @@ namespace ALFE.TopOpt
         /// <summary>
         /// .Target volume
         /// </summary>
-        public float Vt;
+        public float Vt;     
 
         /// <summary>
-        /// Sensitivity
+        /// Penalty exponent
         /// </summary>
-        public List<float> Ae;
-
-        /// <summary>
-        /// Global strain energy
-        /// </summary>
-        public float SumC;
-
-
         public int P;
+
+        /// <summary>
+        /// Evolution rate
+        /// </summary>
+        public float EvolutionRate;
+
+        /// <summary>
+        /// The iterative history of the global strain energy
+        /// </summary>
+        public List<float> HistoryGSE = new List<float>();
+
+        /// <summary>
+        /// The iterative history of the volume
+        /// </summary>
+        public List<float> HistoryV = new List<float>();
 
         /// <summary>
         /// The maximum iteration
         /// </summary>
         public int MaxIteration;
 
-        public BESO(FESystem system, float rmin, int p=3,  float vt=0.5f, int maxIter=100)
+        /// <summary>
+        /// Dimension
+        /// </summary>
+        public int Dim;
+
+        public BESO(FESystem system, float rmin, float ert = 0.02f, int p=3,  float vt=0.5f, int maxIter=100)
         {
+            if (rmin <= 0.0f)
+                throw new Exception("Rmin must be large than 0.");
+            if (!(vt> 0.0f && vt< 1.0f))
+                throw new Exception("Vt must be large than 0 and be less than 1.");
+
             System = system;
             Model = system.Model;
             Vt = vt;
             P = p;
+            EvolutionRate = ert;
             MaxIteration = maxIter;
             Rmin = rmin;
+            Dim = system.Model.DOF;
         }
 
-        public void Optimize()
+        public void Optimize(string path)
         {
-            Filter filter = new Filter(Model.Elements, Rmin, 2);
+            foreach (var elem in Model.Elements)
+                elem.Xe = 1.0f;
 
+            Filter filter = new Filter(Model.Elements, Rmin, Dim);
+            filter.PreFlt();
 
+            float delta = 1.0f;
+            int iter = 0;
 
-            CalSensitivity();
-            CalGlobalStrainEnergy();
+            List<float> Ae_old = new List<float>();
+
+            while (delta > 0.01 && iter < MaxIteration)
+            {
+                // Run FEA
+                System.Solve();
+
+                // Calculate sensitivities and global strain energy
+                List<float> Ae = CalSensitivity();
+                HistoryGSE.Add(CalGlobalStrainEnergy());
+
+                // Process sensitivities
+                FltAe(filter, ref Ae);
+                if (iter > 0)
+                    for (int i = 0; i < Ae.Count; i++)
+                        Ae[i] = (Ae[i] + Ae_old[i]) * 0.5f;
+
+                // Record the sensitiveies in each step
+                var raw = new float[Ae.Count];
+                Ae.CopyTo(raw);
+                Ae_old = raw.ToList();
+
+                // Run BESO
+                float sum = 0.0f;
+                foreach (var elem in Model.Elements)
+                    sum += elem.Xe;
+
+                HistoryV.Add(sum / Model.Elements.Count);
+                float curV = Math.Max(Vt, HistoryV.Last() * (1.0f - EvolutionRate));
+                MarkElements(curV, Ae);
+
+                string output = path + '\\' + iter.ToString() + ".txt";
+                FEIO.WriteValidElements(output, Model.Elements);
+
+                iter += 1;
+
+                // Check convergence 
+                if (iter > 20)
+                {
+                    var newV = 0.0f;
+                    var lastV = 0.0f;
+                    for (int i = 1; i < 6; i++)
+                    {
+                        newV += HistoryGSE[HistoryGSE.Count - i];
+                        lastV += HistoryGSE[HistoryGSE.Count - 5 - i];
+                    }
+                    delta = Math.Abs((newV - lastV) / lastV);
+                }
+            }
         }
-        private void CalSensitivity()
+
+
+        private void MarkElements(float curV, List<float> Ae)
+        {
+            float lowest = Ae.Min();
+            float highest = Ae.Max();
+
+            float tv = curV * Model.Elements.Count;
+
+            while (((highest - lowest) / highest) > 1.0e-5f)
+            {
+                float th = (highest + lowest) * 0.5f;
+                float sum = 0.0f;
+                foreach (var elem in Model.Elements)
+                {
+                    var v = Ae[elem.ID] > th ? 1.0f : 0.001f;
+                    elem.Xe = v;
+                    sum += v;
+                }
+                if (sum - tv > 0.0f) lowest = th;
+                else highest = th;
+            }
+
+            foreach (var elem in Model.Elements)
+                elem.Exist = elem.Xe == 1.0f ? true : false;
+        }
+        private List<float> CalSensitivity()
         {
             float[] Sensitivities = new float[Model.Elements.Count];
             Parallel.ForEach(Model.Elements, elem =>
@@ -77,13 +174,28 @@ namespace ALFE.TopOpt
                 Sensitivities[elem.ID] = elem.C / elem.Xe;
             });
 
-            Ae = Sensitivities.ToList();
+            var Ae = Sensitivities.ToList();
             Ae.Sort();
+            return Ae;
         }
-        private void CalGlobalStrainEnergy()
+        private float CalGlobalStrainEnergy()
         {
+            float GlobalStrainEnergy = 0.0f;
             foreach (var elem in Model.Elements)
-                SumC += elem.C;
+                GlobalStrainEnergy += elem.C;
+            return GlobalStrainEnergy;
+        }
+        private void FltAe(Filter filter, ref List<float> Ae)
+        {
+            var raw = new float[Ae.Count];
+            Ae.CopyTo(raw);
+
+            foreach (var elem in Model.Elements)
+            {
+                Ae[elem.ID] = 0.0f;
+                for (int i = 0; i < filter.FME[elem].Count; i++)
+                    Ae[elem.ID] += raw[filter.FME[elem][i].ID] * filter.FMW[elem][i];
+            }
         }
     }
 }

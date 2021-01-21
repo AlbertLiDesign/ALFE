@@ -10,6 +10,16 @@ namespace ALFE
 {
     public class FEIO
     {
+        public static void WriteValidElements(string path, List<Element> elems)
+        {
+            StreamWriter sw = new StreamWriter(path);
+            foreach (var elem in elems)
+                if (elem.Exist == true)
+                    sw.WriteLine(elem.ID.ToString());
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
         public static void WriteCOOMatrix(COOMatrix mat, string path)
         {
             StreamWriter sw = new StreamWriter(path);

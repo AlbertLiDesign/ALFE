@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ALFE;
 using System.Collections.Concurrent;
-using Supercluster.KDTree;
+using KDTree;
 
 namespace ALFE.TopOpt
 {
@@ -13,6 +13,16 @@ namespace ALFE.TopOpt
     {
         public float Rmin;
         public List<Element> Elements;
+
+        /// <summary>
+        /// A mapping dictionary storing adjacent elements
+        /// </summary>
+        public Dictionary<Element, List<Element>> FME;
+
+        /// <summary>
+        /// A mapping dictionary storing the relevant weight factors 
+        /// </summary>
+        public Dictionary<Element, List<float>> FMW;
         
         /// <summary>
         /// The neighbour elements of each element.
@@ -24,19 +34,30 @@ namespace ALFE.TopOpt
         /// </summary>
         public List<float>[] Weights;
 
+        /// <summary>
+        /// Dimension
+        /// </summary>
         public int Dim;
         public Filter(List<Element> elems, float rmin, int dim)
         {
             Elements = elems;
             Rmin = rmin;
             Dim = dim;
+
+            FME = new Dictionary<Element, List<Element>>(Elements.Count);
+            FMW = new Dictionary<Element, List<float>>(Elements.Count);
         }
 
+        /// <summary>
+        /// Function of preparing filter map.
+        /// </summary>
         public void PreFlt()
         {
             // Calculate element centre coordinates
-            float[][] centres = new float[Elements.Count][];
-            string[] nodes = new string[Elements.Count];
+            List<Vector3D> centres = new List<Vector3D>(Elements.Count);
+
+            // Construct KDTree
+            var tree = new KDTree<int>(3);
 
             // Get centres
             int id = 0;
@@ -44,46 +65,64 @@ namespace ALFE.TopOpt
             {
                 Vector3D centre = new Vector3D();
                 foreach (var node in elem.Nodes)
-                {
                     centre += node.Position;
-                }
 
                 centre /= elem.Nodes.Count;
 
-                centres[id] = new float[3] { centre.X, centre.Y, centre.Z };
-                nodes[id] = centres[id].ToString();
+                centres.Add(centre);
+                tree.AddPoint(new double[3] { centre.X, centre.Y, centre.Z }, id);
                 id++;
             }
 
-            // Construct KDTree
-            var tree = new KDTree<float, string>(3, centres, nodes, L2Norm_Squared_Float);
-
-            for (int i = 0; i < centres.Length; i++)
-            {
-                // Get all points with in a distance of 100 from the target.
-                var radialTest = tree.RadialSearch(centres[i], 100);
-                
-            }
-
             // Searching
+            var result = KDTreeMultiSearch(centres, tree, Rmin, 32);
 
             foreach (var elem in Elements)
             {
+                List<Element> adjacentElems = new List<Element>(result[elem.ID].Count);
+                List<float> weights = new List<float>(result[elem.ID].Count);
+                float sum = 0.0f;
 
+                Vector3D curCentre = centres[elem.ID];
+
+                foreach (var item in result[elem.ID])
+                {
+                    Vector3D adjCentre = new Vector3D(centres[item].X, centres[item].Y, centres[item].Z);
+
+                    adjacentElems.Add(Elements[item]);
+                    var dis = curCentre.DistanceTo(adjCentre);
+                    weights.Add(dis);
+                    sum += dis;
+                }
+
+                // Compute weights
+                for (int i = 0; i < weights.Count; i++)
+                    weights[i] /= sum;
+
+                FME.Add(elem, adjacentElems);
+                FMW.Add(elem, weights);
             }
-
         }
 
-        // Define the distance function
-        private static Func<float[], float[], double> L2Norm_Squared_Float = (x1, x2) =>
+        private static List<int>[] KDTreeMultiSearch(List<Vector3D> pts, KDTree<int> tree, float radius, int maxReturned)
         {
-            float dist = 0f;
-            for (int i = 0; i < x1.Length; i++)
+            List<int>[] indices = new List<int>[pts.Count];
+            Parallel.ForEach<Tuple<int, int>>(Partitioner.Create(0, pts.Count, (int)Math.Ceiling((double)pts.Count / (double)Environment.ProcessorCount * 2.0)), delegate (Tuple<int, int> rng, ParallelLoopState loopState)
             {
-                dist += (x1[i] - x2[i]) * (x1[i] - x2[i]);
-            }
-
-            return dist;
-        };
+                for (int i = rng.Item1; i < rng.Item2; i++)
+                {
+                    Vector3D point3d = pts[i];
+                    double num = radius;
+                    List<int> list = tree.NearestNeighbors(new double[]
+                    {
+                        point3d.X,
+                        point3d.Y,
+                        point3d.Z
+                    }, maxReturned, num * num).ToList<int>();
+                    indices[i] = list;
+                }
+            });
+            return indices;
+        }
     }
 }

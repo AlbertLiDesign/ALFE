@@ -37,6 +37,9 @@ namespace ALFE
         public int row_nnz;
         public SortedList<int, int> PositionKG;
 
+        /// <summary>
+        /// Degree of freedom
+        /// </summary>
         public int DOF;
 
         #region Constructor

@@ -25,6 +25,9 @@ namespace ALFE
         /// </summary>
         public List<Support> Supports = new List<Support>();
 
+        /// <summary>
+        /// Degree of freedom
+        /// </summary>
         public int DOF;
 
         #region Construction
