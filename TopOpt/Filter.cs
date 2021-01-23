@@ -11,7 +11,14 @@ namespace ALFE.TopOpt
 {
     public class Filter
     {
-        public float Rmin;
+        /// <summary>
+        /// Filter Radius
+        /// </summary>
+        public float FilterRadius;
+
+        /// <summary>
+        /// Elements
+        /// </summary>
         public List<Element> Elements;
 
         /// <summary>
@@ -41,7 +48,7 @@ namespace ALFE.TopOpt
         public Filter(List<Element> elems, float rmin, int dim)
         {
             Elements = elems;
-            Rmin = rmin;
+            FilterRadius = rmin;
             Dim = dim;
 
             FME = new Dictionary<Element, List<Element>>(Elements.Count);
@@ -75,7 +82,7 @@ namespace ALFE.TopOpt
             }
 
             // Searching
-            var result = KDTreeMultiSearch(centres, tree, Rmin, 32);
+            var result = KDTreeMultiSearch(centres, tree, FilterRadius, 32);
 
             foreach (var elem in Elements)
             {

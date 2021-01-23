@@ -1,4 +1,5 @@
 ﻿using ALFE;
+using ALFE.TopOpt;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -115,6 +116,12 @@ namespace ALFE
 
             return new Model(3, nodes, elems);
         }
+
+        /// <summary>
+        /// Write a finite element model into a .al file.
+        /// </summary>
+        /// <param name="path">File path.</param>
+        /// <param name="model">A finite element model.</param>
         public static void WriteFEModel(string path, Model model)
         {
             StreamWriter sw = new StreamWriter(path);
@@ -158,6 +165,11 @@ namespace ALFE
             sw.Dispose();
         }
 
+        /// <summary>
+        /// Read a finite element model with .al format
+        /// </summary>
+        /// <param name="path">File path.</param>
+        /// <returns>Return a finite element model.</returns>
         public static Model ReadFEModel(string path)
         {
             Model model = new Model();
@@ -278,234 +290,236 @@ namespace ALFE
             return model;
         }
 
-        //    sw.Flush();
-        //    sw.Close();
-        //    sw.Dispose();
-        //}
-        //public static void writeVoxels(List<PlanktonXYZ> nodes, List<Element> elements, string path)
-        //{
-        //    StreamWriter sw = new StreamWriter(path);
-        //    sw.WriteLine(nodes.Count.ToString() + '\t' + (elements.Count).ToString());
-        //    var ci = System.Globalization.CultureInfo.InvariantCulture;
 
-        //    sw.WriteLine("Nodes");
-        //    for (int i = 0; i < nodes.Count; i++)
-        //    {
-        //        var v = nodes[i];
-        //        sw.WriteLine('\t' + i.ToString() + ',' + '\t' +
-        //            v.X.ToString() + ',' + '\t' +
-        //            v.Y.ToString() + ',' + '\t' +
-        //            v.Z.ToString());
-        //    }
+        /// <summary>
+        /// Write a finite element model and the parameters of BESO topology optimization into a .al file.
+        /// </summary>
+        /// <param name="path">File path.</param>
+        /// <param name="BESO">A finite element model for BESO topology optimization.</param>
+        public static void WriteBESO(string path, BESO beso)
+        {
+            StreamWriter sw = new StreamWriter(path);
+            sw.WriteLine("%This file is created by ALFE.");
 
-        //    sw.WriteLine("Elements");
-        //    for (int i = 0; i < elements.Count; i++)
-        //    {
-        //        sw.WriteLine('\t' + i.ToString() + ',' + '\t' + elements[i].node[0].ToString() + ',' + '\t' + elements[i].node[1].ToString() + ',' + '\t'
-        //            + elements[i].node[2].ToString() + ',' + '\t' + elements[i].node[3].ToString() + ',' + '\t' + elements[i].node[4].ToString() + ','
-        //            + '\t' + elements[i].node[5].ToString() + ',' + '\t' + elements[i].node[7].ToString() + ',' + '\t' + elements[i].node[6].ToString());
-        //    }
+            Model model = beso.Model;
+            sw.WriteLine("FEA Parameters: ");
+            sw.WriteLine("DOF: " + model.DOF.ToString());
+            sw.WriteLine("Element Type: " + model.Elements[0].Type.ToString());
+            sw.WriteLine("Node Count: " + model.Nodes.Count.ToString());
+            sw.WriteLine("Element Count: " + model.Elements.Count.ToString());
+            sw.WriteLine("Load Count: " + model.Loads.Count.ToString());
+            sw.WriteLine("Support Count: " + model.Supports.Count.ToString());
+            sw.WriteLine("Young's Modulus: " + model.Elements[0].Material.E.ToString());
+            sw.WriteLine("Possion Rate: " + model.Elements[0].Material.nu.ToString());
 
-        //    sw.Flush();
-        //    sw.Close();
-        //    sw.Dispose();
-        //}
-        //public static void writeBESO(FESystem fes, BESO_TopOpt beso, Material material, string path)
-        //{
-        //    List<PlanktonXYZ> nodes = fes.model.nodes;
-        //    List<Element> elements = fes.model.elements;
-        //    List<Load> loads = fes.loads;
-        //    List<Support> supports = fes.supports;
+            sw.WriteLine();
 
-        //    int dim = fes.model.dim;
+            sw.WriteLine("BESO Parameters: ");
+            sw.WriteLine("Volume Fraction: " + beso.VolumeFraction.ToString());
+            sw.WriteLine("Evolution Rate: " + beso.EvolutionRate.ToString());
+            sw.WriteLine("Filter Radius: " + beso.FilterRadius.ToString());
+            sw.WriteLine("Penalty Exponent: " + beso.PenaltyExponent.ToString());
+            sw.WriteLine("Maximum Iteration: " + beso.MaximumIteration.ToString());
 
-        //    StreamWriter sw = new StreamWriter(path);
-        //    sw.WriteLine("NC," + nodes.Count.ToString() + ",EC," + (elements.Count).ToString());
-        //    sw.WriteLine("BESO," + beso.VF.ToString() + ',' + beso.ER.ToString() + ',' + beso.RMin.ToString() + ',' + beso.Iter.ToString());
-        //    sw.WriteLine("Material," + material.E.ToString() + ',' + material.u.ToString());
+            sw.WriteLine();
 
-        //    var ci = System.Globalization.CultureInfo.InvariantCulture;
+            sw.WriteLine("Model Info: ");
+            foreach (var node in model.Nodes)
+                sw.WriteLine("N," + node.Position.X.ToString() + ',' + node.Position.Y.ToString() + ',' + node.Position.Z.ToString());
+            foreach (var elem in model.Elements)
+            {
+                sw.Write("E,");
+                int n = 1;
+                foreach (var node in elem.Nodes)
+                {
+                    sw.Write(node.ID.ToString());
+                    if (n != elem.Nodes.Count)
+                        sw.Write(',');
+                    n++;
+                }
+                sw.Write("\n");
+            }
+            foreach (var item in model.Loads)
+                sw.WriteLine("L," + item.NodeID.ToString() + ',' +
+                    item.ForceVector.X.ToString() + ',' + item.ForceVector.Y.ToString() + ',' + item.ForceVector.Z.ToString());
+            foreach (var item in model.Supports)
+                sw.WriteLine("S," + item.NodeID.ToString() + ',' + item.Type.ToString());
 
-        //    // 2D case
-        //    if (dim == 2)
-        //    {
-        //        for (int i = 0; i < nodes.Count; i++)
-        //        {
-        //            var v = nodes[i];
-        //            sw.WriteLine("N," + i.ToString() + ',' +
-        //                v.X.ToString() + ',' +
-        //                v.Y.ToString());
-        //        }
-
-        //        for (int i = 0; i < elements.Count; i++)
-        //        {
-        //            sw.WriteLine("E," + i.ToString() + ',' + elements[i].node[0].ToString() + ',' + elements[i].node[1].ToString() + ','
-        //                + elements[i].node[2].ToString() + ',' + elements[i].node[3].ToString());
-        //        }
-
-        //        for (int i = 0; i < loads.Count; i++)
-        //        {
-        //            sw.WriteLine("L," + loads[i].node.ToString() + ',' + loads[i].load[0].ToString() + ',' + loads[i].load[1].ToString());
-        //        }
-        //        for (int i = 0; i < supports.Count; i++)
-        //        {
-        //            sw.WriteLine("S," + supports[i].node.ToString() + ',' + supports[i].support.ToString());
-        //        }
-        //    }
-
-        //    // 3D case
-        //    if (dim == 3)
-        //    {
-        //        for (int i = 0; i < nodes.Count; i++)
-        //        {
-        //            var v = nodes[i];
-        //            sw.WriteLine("N," + i.ToString() + ',' +
-        //                v.X.ToString() + ',' +
-        //                v.Y.ToString() + ',' +
-        //                v.Z.ToString());
-        //        }
-
-        //        for (int i = 0; i < elements.Count; i++)
-        //        {
-        //            sw.WriteLine("E," + i.ToString() + ',' + elements[i].node[0].ToString() + ',' + elements[i].node[1].ToString() + ','
-        //                + elements[i].node[2].ToString() + ',' + elements[i].node[3].ToString() + ',' + elements[i].node[4].ToString() + ','
-        //                + elements[i].node[5].ToString() + ',' + elements[i].node[7].ToString() + ',' + elements[i].node[6].ToString());
-        //        }
-
-        //        for (int i = 0; i < loads.Count; i++)
-        //        {
-        //            sw.WriteLine("L," + loads[i].node.ToString() + ',' + loads[i].load[0].ToString() + ',' + loads[i].load[1].ToString() + ','
-        //                + loads[i].load[2].ToString());
-        //        }
-        //        for (int i = 0; i < supports.Count; i++)
-        //        {
-        //            sw.WriteLine("S," + supports[i].node.ToString() + ',' + supports[i].support.ToString());
-        //        }
-        //    }
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
 
 
-        //    sw.Flush();
-        //    sw.Close();
-        //    sw.Dispose();
-        //}
-        //public static void writeBESO_AMR(FESystem_AMR fes, BESO_TopOpt beso, Material material, string path)
-        //{
-        //    List<PlanktonXYZ> centers = fes.model.centers;
-        //    float[] size = fes.model.size;
-        //    List<Load> loads = fes.loads;
-        //    List<Support> supports = fes.supports;
-        //    int dim = fes.model.dim;
+        /// <summary>
+        /// Read a finite element model and the parameters of BESO topology optimization with .al format
+        /// </summary>
+        /// <param name="path">File path.</param>
+        /// <returns>Return a finite element model.</returns>
+        public static BESO ReadBESO(string path)
+        {
+            bool unify = false;
+            Model model = new Model();
 
-        //    StreamWriter sw = new StreamWriter(path);
-        //    sw.WriteLine("EC," + centers.Count.ToString());
-        //    sw.WriteLine("BESO," + beso.VF.ToString() + ',' + beso.ER.ToString() + ',' + beso.RMin.ToString() + ',' + beso.Iter.ToString());
-        //    sw.WriteLine("Material," + material.E.ToString() + ',' + material.u.ToString());
+            int dof = 0;
+            ElementType elementType = ElementType.PixelElement;
+            List<Node> nodes = new List<Node>();
+            List<Element> elements = new List<Element>();
+            List<Load> loads = new List<Load>();
+            List<Support> supports = new List<Support>();
+            Material material = new Material();
+            float ert = 0.0f;
+            float rmin = 0.0f;
+            float vf = 0.0f;
+            int p = 0;
+            int maxIter = 0;
 
-        //    var ci = System.Globalization.CultureInfo.InvariantCulture;
+            if (File.Exists(path))
+            {
+                StreamReader SR = new StreamReader(path);
 
-        //    // 2D case
-        //    if (dim == 2)
-        //    {
-        //        for (int i = 0; i < centers.Count; i++)
-        //        {
-        //            var v = centers[i];
-        //            sw.WriteLine("C," + i.ToString() + ',' +
-        //                v.X.ToString() + ',' +
-        //                v.Y.ToString());
-        //        }
+                #region Read FE parameters
+                bool readFEpara = false;
+                while (readFEpara == false)
+                {
+                    string line = SR.ReadLine();
 
-        //        sw.WriteLine("Z," + size[0].ToString() + ',' + size[1].ToString());
+                    if (line == "FEA Parameters: ")
+                    {
+                        string[] value = SR.ReadLine().Split(':');
+                        if (value[0] == "DOF")
+                            dof = int.Parse(value[1].Split(' ')[1]);
 
-        //        for (int i = 0; i < loads.Count; i++)
-        //        {
-        //            sw.WriteLine("L," + loads[i].node.ToString() + ',' + loads[i].load[0].ToString() + ',' + loads[i].load[1].ToString());
-        //        }
-        //        for (int i = 0; i < supports.Count; i++)
-        //        {
-        //            sw.WriteLine("S," + supports[i].node.ToString() + ',' + supports[i].support.ToString());
-        //        }
-        //    }
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Element Type")
+                        {
+                            string type = value[1].Split(' ')[1];
+                            if (type == "PixelElement")
+                            {
+                                elementType = ElementType.PixelElement;
+                                unify = true;
+                            }
+                            else if (type == "TriangleElement")
+                                elementType = ElementType.TriangleElement;
+                            else if (type == "QuadElement")
+                                elementType = ElementType.QuadElement;
+                            else if (type == "TetrahedronElement")
+                                elementType = ElementType.TetrahedronElement;
+                            else if (type == "VoxelElement")
+                            {
+                                elementType = ElementType.VoxelElement;
+                                unify = true;
+                            }
+                            else if (type == "HexahedronElement")
+                                elementType = ElementType.HexahedronElement;
+                            else
+                                throw new Exception("Unknown element type.");
+                        }
 
-        //    // 3D case
-        //    if (dim == 3)
-        //    {
-        //        for (int i = 0; i < centers.Count; i++)
-        //        {
-        //            var v = centers[i];
-        //            sw.WriteLine("C," + i.ToString() + ',' +
-        //                v.X.ToString() + ',' +
-        //                v.Y.ToString() + ',' +
-        //                v.Z.ToString());
-        //        }
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Node Count")
+                            nodes = new List<Node>(int.Parse(value[1].Split(' ')[1]));
 
-        //        sw.WriteLine("Z," + size[0].ToString() + ',' + size[1].ToString() + ',' + size[2].ToString());
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Element Count")
+                            elements = new List<Element>(int.Parse(value[1].Split(' ')[1]));
 
-        //        for (int i = 0; i < loads.Count; i++)
-        //        {
-        //            sw.WriteLine("L," + loads[i].node.ToString() + ',' + loads[i].load[0].ToString() + ',' + loads[i].load[1].ToString() + ','
-        //                + loads[i].load[2].ToString());
-        //        }
-        //        for (int i = 0; i < supports.Count; i++)
-        //        {
-        //            sw.WriteLine("S," + supports[i].node.ToString() + ',' + supports[i].support.ToString());
-        //        }
-        //    }
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Load Count")
+                            loads = new List<Load>(int.Parse(value[1].Split(' ')[1]));
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Support Count")
+                            supports = new List<Support>(int.Parse(value[1].Split(' ')[1]));
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Young's Modulus")
+                            material.E = float.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Possion Rate")
+                            material.nu = float.Parse(value[1].Split(' ')[1]);
+
+                        readFEpara = true;
+                    }
+                }
+                #endregion
+
+                #region Read BESO parameters
+                bool readBESOpara = false;
+                while (readBESOpara == false)
+                {
+                    string line = SR.ReadLine();
+
+                    if (line == "BESO Parameters: ")
+                    {
+                        string[] value = SR.ReadLine().Split(':');
+                        if (value[0] == "Volume Fraction")
+                            vf = float.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Evolution Rate")
+                            ert = float.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Filter Radius")
+                            rmin = float.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Penalty Exponent")
+                            p = int.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Maximum Iteration")
+                            maxIter = int.Parse(value[1].Split(' ')[1]);
+
+                        readBESOpara = true;
+                    }
+                }
+                #endregion
+
+                #region Read the model
+                while (!SR.EndOfStream)
+                {
+                    string[] value = SR.ReadLine().Split(',');
 
 
-        //    sw.Flush();
-        //    sw.Close();
-        //    sw.Dispose();
-        //}
-        //public static List<Mesh> readVoxels(string path)
-        //{
-        //    List<Mesh> meshes = new List<Mesh>();
-        //    if (File.Exists(path))
-        //    {
-        //        List<Point3f> pts = new List<Point3f>();
-        //        StreamReader SR = new StreamReader(path);
-        //        int num = 0;
-        //        while (!SR.EndOfStream)
-        //        {
-        //            string line = SR.ReadLine();//Read Line
+                    if (value[0] == "N")
+                        nodes.Add(new Node(dof, float.Parse(value[1]), float.Parse(value[2]), float.Parse(value[3])));
 
-        //            if (num > 1)
-        //            {
 
-        //                string[] tokens = line.Split(',');//Divide every line as name and values
+                    if (value[0] == "E")
+                    {
+                        List<Node> elemNodes = new List<Node>();
+                        for (int i = 1; i < value.Length; i++)
+                        {
+                            int id = int.Parse(value[i]);
+                            elemNodes.Add(nodes[id]);
+                        }
+                        if (elementType == ElementType.PixelElement)
+                            elements.Add(new Pixel(elemNodes, material));
+                        else if (elementType == ElementType.TriangleElement)
+                            elements.Add(new Triangle(elemNodes, material));
+                        else
+                            throw new Exception("Unknown element type.");
+                    }
 
-        //                if (tokens.Length == 4)
-        //                {
-        //                    pts.Add(new Point3f(float.Parse(tokens[1]), float.Parse(tokens[2]), float.Parse(tokens[3])));
-        //                }
-        //                else if (tokens.Length == 9)
-        //                {
-        //                    Mesh voxel = new Mesh();
-        //                    voxel.Vertices.Add(pts[int.Parse(tokens[1])]);
-        //                    voxel.Vertices.Add(pts[int.Parse(tokens[2])]);
-        //                    voxel.Vertices.Add(pts[int.Parse(tokens[3])]);
-        //                    voxel.Vertices.Add(pts[int.Parse(tokens[4])]);
-        //                    voxel.Vertices.Add(pts[int.Parse(tokens[5])]);
-        //                    voxel.Vertices.Add(pts[int.Parse(tokens[6])]);
-        //                    voxel.Vertices.Add(pts[int.Parse(tokens[7])]);
-        //                    voxel.Vertices.Add(pts[int.Parse(tokens[8])]);
+                    if (value[0] == "L")
+                        loads.Add(new Load(dof, int.Parse(value[1]), float.Parse(value[2]), float.Parse(value[3]), float.Parse(value[4])));
 
-        //                    voxel.Faces.AddFace(1, 0, 3, 2);
-        //                    voxel.Faces.AddFace(0, 1, 5, 4);
-        //                    voxel.Faces.AddFace(1, 2, 6, 5);
-        //                    voxel.Faces.AddFace(6, 2, 3, 7);
-        //                    voxel.Faces.AddFace(3, 0, 4, 7);
-        //                    voxel.Faces.AddFace(6, 7, 4, 5);
+                    if (value[0] == "S")
+                        if (value[2] == "Fixed")
+                            supports.Add(new Support(int.Parse(value[1]), SupportType.Fixed));
+                }
+                #endregion
 
-        //                    meshes.Add(voxel);
-        //                }
-        //            }
-        //            num++;
-        //        }
-        //        SR.Close();
-        //        SR.Dispose();
-        //    }
+                model = new Model(2, nodes, elements, loads, supports);
 
-        //    return meshes;
-        //}
+                SR.Close();
+                SR.Dispose();
+            }
+            BESO beso = new BESO(new FESystem(model, unify), rmin, ert, p, vf, maxIter);
+            return beso;
+        }
     }
 }

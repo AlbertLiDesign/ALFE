@@ -14,19 +14,19 @@ namespace ALFE.TopOpt
         public Model Model;
 
         /// <summary>
-        /// Minimum filter radius
+        /// Filter Radius
         /// </summary>
-        public float Rmin;
+        public float FilterRadius;
 
         /// <summary>
-        /// .Target volume
+        /// .Volume fraction
         /// </summary>
-        public float Vt;     
+        public float VolumeFraction;     
 
         /// <summary>
         /// Penalty exponent
         /// </summary>
-        public int P;
+        public int PenaltyExponent;
 
         /// <summary>
         /// Evolution rate
@@ -34,39 +34,39 @@ namespace ALFE.TopOpt
         public float EvolutionRate;
 
         /// <summary>
-        /// The iterative history of the global strain energy
-        /// </summary>
-        public List<float> HistoryGSE = new List<float>();
-
-        /// <summary>
-        /// The iterative history of the volume
-        /// </summary>
-        public List<float> HistoryV = new List<float>();
-
-        /// <summary>
         /// The maximum iteration
         /// </summary>
-        public int MaxIteration;
+        public int MaximumIteration;
 
         /// <summary>
         /// Dimension
         /// </summary>
         public int Dim;
 
-        public BESO(FESystem system, float rmin, float ert = 0.02f, int p=3,  float vt=0.5f, int maxIter=100)
+        /// <summary>
+        /// The iterative history of the global strain energy
+        /// </summary>
+        private List<float> HistoryGSE = new List<float>();
+
+        /// <summary>
+        /// The iterative history of the volume
+        /// </summary>
+        private List<float> HistoryV = new List<float>();
+
+        public BESO(FESystem system, float rmin, float ert = 0.02f, int p=3,  float vf=0.5f, int maxIter=100)
         {
             if (rmin <= 0.0f)
                 throw new Exception("Rmin must be large than 0.");
-            if (!(vt> 0.0f && vt< 1.0f))
+            if (!(vf> 0.0f && vf< 1.0f))
                 throw new Exception("Vt must be large than 0 and be less than 1.");
 
             System = system;
             Model = system.Model;
-            Vt = vt;
-            P = p;
+            VolumeFraction = vf;
+            PenaltyExponent = p;
             EvolutionRate = ert;
-            MaxIteration = maxIter;
-            Rmin = rmin;
+            MaximumIteration = maxIter;
+            FilterRadius = rmin;
             Dim = system.Model.DOF;
         }
 
@@ -75,7 +75,7 @@ namespace ALFE.TopOpt
             foreach (var elem in Model.Elements)
                 elem.Xe = 1.0f;
 
-            Filter filter = new Filter(Model.Elements, Rmin, Dim);
+            Filter filter = new Filter(Model.Elements, FilterRadius, Dim);
             filter.PreFlt();
 
             float delta = 1.0f;
@@ -83,8 +83,9 @@ namespace ALFE.TopOpt
 
             List<float> Ae_old = new List<float>();
 
-            while (delta > 0.01 && iter < MaxIteration)
+            while (delta > 0.01 && iter < MaximumIteration)
             {
+                Console.WriteLine(iter);
                 // Run FEA
                 System.Solve();
 
@@ -109,7 +110,7 @@ namespace ALFE.TopOpt
                     sum += elem.Xe;
 
                 HistoryV.Add(sum / Model.Elements.Count);
-                float curV = Math.Max(Vt, HistoryV.Last() * (1.0f - EvolutionRate));
+                float curV = Math.Max(VolumeFraction, HistoryV.Last() * (1.0f - EvolutionRate));
                 MarkElements(curV, Ae);
 
                 string output = path + '\\' + iter.ToString() + ".txt";
@@ -167,7 +168,7 @@ namespace ALFE.TopOpt
                var Ke = elem.Ke;
                var Ue = elem.Ue;
                if (elem.Exist != true)
-                   Ke.Multiply((float)Math.Pow(0.001, P));
+                   Ke.Multiply((float)Math.Pow(0.001, PenaltyExponent));
 
                elem.C = Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
