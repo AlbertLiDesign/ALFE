@@ -15,7 +15,8 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestBESO();
+            var model = FEIO.ReadFEModel("E:/model.txt");
+
             Console.ReadKey();
         }
         public static void TestBESO()

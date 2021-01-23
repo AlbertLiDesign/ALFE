@@ -53,6 +53,12 @@
             ForceVector = new Vector3D((float)x, (float)y, (float)z);
             DOF = 3;
         }
+        public Load(int dof, int node, double x, double y, double z)
+        {
+            NodeID = node;
+            ForceVector = new Vector3D((float)x, (float)y, (float)z);
+            DOF = dof;
+        }
         #endregion
     }
 }

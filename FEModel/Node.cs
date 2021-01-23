@@ -100,6 +100,11 @@ namespace ALFE
             Position = new Vector3D((float)x, (float)y, (float)z);
             DOF = 3;
         }
+        public Node(int dof, double x, double y, double z)
+        {
+            Position = new Vector3D((float)x, (float)y, (float)z);
+            DOF = dof;
+        }
         public Node(float x, float y, float z)
         {
             Position = new Vector3D(x, y, z);
@@ -117,6 +122,13 @@ namespace ALFE
             ID = index;
             hasID = true;
             DOF = 3;
+        }
+        public Node(int dof, float x, float y, float z, int index)
+        {
+            Position = new Vector3D(x, y, z);
+            ID = index;
+            hasID = true;
+            DOF = dof;
         }
         public Node(Vector3D position, int index)
         {
