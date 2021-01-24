@@ -29,6 +29,7 @@ namespace ALFE
         {
             Model model2d = new Cantilever2D(ElementType.PixelElement, 1001, 1001).Model;
             FESystem sys = new FESystem(model2d, true);
+            sys.Initialize();
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);
         }

@@ -13,9 +13,9 @@ namespace ALFE
     public class FESystem
     {
         /// <summary>
-        /// Time cost in each step: 0 = Computing Ke, 1 = Assembling KG, 2 = Solving
+        /// Time cost in each step: 0 = Computing Ke, 1 = Initializing KG, 2 = Assembling KG, 3 = Solving
         /// </summary>
-        public List<double> TimeCost = new List<double>(3);
+        public List<double> TimeCost = new List<double>(4);
 
         /// <summary>
         /// Active nodes
@@ -89,17 +89,26 @@ namespace ALFE
             ComputeAllKe();
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
+
+            sw.Restart();
+            InitialzeKG();
+            sw.Stop();
+            TimeCost.Add(sw.Elapsed.TotalMilliseconds);
         }
 
+        /// <summary>
+        /// Update the system
+        /// </summary>
         public void Update()
         {
             F = new float[Dim];
             X = new float[Dim];
 
             double KeTime = TimeCost[0];
+            double KGTime = TimeCost[1];
             TimeCost = new List<double>(3);
             TimeCost.Add(KeTime);
-            ActiveNodes = new List<Node>();
+            TimeCost.Add(KGTime);
         }
 
         /// <summary>
@@ -120,9 +129,7 @@ namespace ALFE
         /// </summary>
         private void AssembleKG()
         {
-            InitialzeKG();
             KG.Clear();
-
             foreach (var elem in Model.Elements)
             {
                 if (elem.Exist == true)
@@ -149,7 +156,19 @@ namespace ALFE
                 }
             }
         }
+        /// <summary>
+        /// Initialize the system for solving
+        /// </summary>
+        public void Initialize()
+        {
+            Stopwatch sw = new Stopwatch();
 
+            sw.Start();
+            AssembleKG();
+            AssembleF();
+            sw.Stop();
+            TimeCost.Add(sw.Elapsed.TotalMilliseconds);
+        }
         /// <summary>
         /// Solve the finite element system. You can get the displacement vector after running this function.
         /// </summary>
@@ -158,13 +177,6 @@ namespace ALFE
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
-            AssembleKG();
-            sw.Stop();
-            TimeCost.Add(sw.Elapsed.TotalMilliseconds);
-
-            AssembleF();
-
-            sw.Restart();
             Solved = SolveFE(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
@@ -211,7 +223,7 @@ namespace ALFE
         /// <summary>
         /// Initialize the global stiffness matrix
         /// </summary>
-        public void InitialzeKG()
+        private void InitialzeKG()
         {
             // list non-anchored nodes and give them sequential ids
             ActiveNodes = Model.Nodes.FindAll(nd => nd.Active);
@@ -249,11 +261,10 @@ namespace ALFE
             Parallel.ForEach(Model.Nodes, node =>
             {
                 foreach (var item in node.ElementID)
-                    if (Model.Elements[item].Exist)
-                        foreach (var neighbour in Model.Elements[item].Nodes)
-                            if (neighbour.Active)
-                                lock (node.Neighbours)
-                                    node.Neighbours.Add(neighbour.ActiveID);
+                    foreach (var neighbour in Model.Elements[item].Nodes)
+                        if (neighbour.Active)
+                            lock (node.Neighbours)
+                                node.Neighbours.Add(neighbour.ActiveID);
             });
         }
 
@@ -264,13 +275,8 @@ namespace ALFE
         {
             // in each node make a list of elements to which it belongs
             foreach (var elem in Model.Elements)
-            {
-                if (elem.Exist == true)
-                {
-                    foreach (var node in elem.Nodes)
-                        node.ElementID.Add(elem.ID);
-                }
-            }
+                foreach (var node in elem.Nodes)
+                    node.ElementID.Add(elem.ID);
         }
 
         /// <summary>

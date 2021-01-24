@@ -72,7 +72,8 @@ namespace ALFE.TopOpt
 
         public void Optimize(string path)
         {
-            FEPrint.PrintDeviceInfo();
+
+            FEPrint.PrintPreprocessing(this);
 
             foreach (var elem in Model.Elements)
                 elem.Xe = 1.0f;
@@ -86,10 +87,13 @@ namespace ALFE.TopOpt
             List<float> Ae_old = new List<float>();
             FEIO.WriteValidElements(iter, path, Model.Elements);
 
-            while (delta > 0.01 && iter < MaximumIteration)
+            while (delta > 0.01f && iter < MaximumIteration)
             {
                 // Run FEA
+                System.Initialize();
                 System.Solve();
+
+                FEIO.WriteKG(System.GetKG(), "E:\\KG.mtx");
 
                 // Calculate sensitivities and global strain energy
                 List<float> Ae = CalSensitivity();
@@ -122,7 +126,7 @@ namespace ALFE.TopOpt
                 System.Update();
 
                 // Check convergence 
-                if (iter > 30)
+                if (iter > 10)
                 {
                     var newV = 0.0f;
                     var lastV = 0.0f;

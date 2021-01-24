@@ -16,5 +16,5 @@ NNZ: 35987992
 ------------------- Time Cost -------------------
 Computing Ke: 17.0455 ms
 Assembling KG: 4347.1111 ms
-Solving: 7523.3614 ms
+Solving: 7223.3614 ms
 ```

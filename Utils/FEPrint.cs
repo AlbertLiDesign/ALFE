@@ -11,15 +11,27 @@ namespace ALFE
 {
     public class FEPrint
     {
+        public static void PrintPreprocessing(BESO beso)
+        {
+            PrintDeviceInfo();
+            PrintModelInfo(beso.System);
+            PrintMatrixInfo(beso.System.GetKG());
+
+            Console.WriteLine("------------------- Time Cost -------------------");
+            Console.WriteLine("Computing Ke: " + beso.System.TimeCost[0].ToString() + " ms");
+            Console.WriteLine("Initializing KG: " + beso.System.TimeCost[1].ToString() + " ms");
+
+            Console.WriteLine();
+        }
         public static void PrintBESOInfo(BESO beso, int iter, float gse, float vf)
         {
-            Console.WriteLine("################### Step: " + iter.ToString() + " ###################");
-            PrintModelInfo(beso.System);
+            Console.WriteLine("################### Step: " + iter.ToString() + " #####################");
             Console.WriteLine("Global Strain Energy: " + gse.ToString());
             Console.WriteLine("Volume: " + vf.ToString());
 
-            PrintMatrixInfo(beso.System.GetKG());
-            PrintTimeCost(beso.System.TimeCost);
+            Console.WriteLine("------------------- Time Cost -------------------");
+            Console.WriteLine("Assembling KG: " + beso.System.TimeCost[2].ToString() + " ms");
+            Console.WriteLine("Solving: " + beso.System.TimeCost[3].ToString() + " ms");
 
             Console.WriteLine();
         }
@@ -75,8 +87,9 @@ namespace ALFE
         {
             Console.WriteLine("------------------- Time Cost -------------------");
             Console.WriteLine("Computing Ke: " + timeCost[0].ToString() + " ms");
-            Console.WriteLine("Assembling KG: " + timeCost[1].ToString() + " ms");
-            Console.WriteLine("Solving: " + timeCost[2].ToString() + " ms");
+            Console.WriteLine("Initializing KG: " + timeCost[1].ToString() + " ms");
+            Console.WriteLine("Assembling KG: " + timeCost[2].ToString() + " ms");
+            Console.WriteLine("Solving: " + timeCost[3].ToString() + " ms");
         }
         public static void PrintDisplacement(FESystem sys)
         {
