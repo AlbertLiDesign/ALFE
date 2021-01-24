@@ -72,6 +72,8 @@ namespace ALFE.TopOpt
 
         public void Optimize(string path)
         {
+            FEPrint.PrintDeviceInfo();
+
             foreach (var elem in Model.Elements)
                 elem.Xe = 1.0f;
 
@@ -82,10 +84,10 @@ namespace ALFE.TopOpt
             int iter = 0;
 
             List<float> Ae_old = new List<float>();
+            FEIO.WriteValidElements(iter, path, Model.Elements);
 
             while (delta > 0.01 && iter < MaximumIteration)
             {
-                Console.WriteLine(iter);
                 // Run FEA
                 System.Solve();
 
@@ -112,14 +114,15 @@ namespace ALFE.TopOpt
                 HistoryV.Add(sum / Model.Elements.Count);
                 float curV = Math.Max(VolumeFraction, HistoryV.Last() * (1.0f - EvolutionRate));
                 MarkElements(curV, Ae);
-
-                string output = path + '\\' + iter.ToString() + ".txt";
-                FEIO.WriteValidElements(output, Model.Elements);
-
+                FEPrint.PrintBESOInfo(this, iter, HistoryGSE.Last(), HistoryV.Last());
+                
                 iter += 1;
+                FEIO.WriteValidElements(iter, path, Model.Elements);
+
+                System.Update();
 
                 // Check convergence 
-                if (iter > 20)
+                if (iter > 30)
                 {
                     var newV = 0.0f;
                     var lastV = 0.0f;
@@ -175,9 +178,7 @@ namespace ALFE.TopOpt
                 Sensitivities[elem.ID] = elem.C / elem.Xe;
             });
 
-            var Ae = Sensitivities.ToList();
-            Ae.Sort();
-            return Ae;
+            return Sensitivities.ToList();
         }
         private float CalGlobalStrainEnergy()
         {

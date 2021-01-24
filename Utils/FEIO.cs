@@ -11,9 +11,10 @@ namespace ALFE
 {
     public class FEIO
     {
-        public static void WriteValidElements(string path, List<Element> elems)
+        public static void WriteValidElements(int iter, string path, List<Element> elems)
         {
-            StreamWriter sw = new StreamWriter(path);
+            string output = path + '\\' + iter.ToString() + ".txt";
+            StreamWriter sw = new StreamWriter(output);
             foreach (var elem in elems)
                 if (elem.Exist == true)
                     sw.WriteLine(elem.ID.ToString());
@@ -124,7 +125,8 @@ namespace ALFE
         /// <param name="model">A finite element model.</param>
         public static void WriteFEModel(string path, Model model)
         {
-            StreamWriter sw = new StreamWriter(path);
+            string output = path + ".al";
+            StreamWriter sw = new StreamWriter(output);
             sw.WriteLine("%This file is created by ALFE.");
             sw.WriteLine("FEA Parameters: ");
             sw.WriteLine("DOF: " + model.DOF.ToString());
@@ -298,7 +300,8 @@ namespace ALFE
         /// <param name="BESO">A finite element model for BESO topology optimization.</param>
         public static void WriteBESO(string path, BESO beso)
         {
-            StreamWriter sw = new StreamWriter(path);
+            string output = path + ".al";
+            StreamWriter sw = new StreamWriter(output);
             sw.WriteLine("%This file is created by ALFE.");
 
             Model model = beso.Model;

@@ -22,7 +22,7 @@ namespace ALFE
         public static void TestBESO()
         {
             string path = @"E:\ALCoding\ALFE\topoptTest";
-            BESO beso = FEIO.ReadBESO(@"E:\beso.txt");
+            BESO beso = FEIO.ReadBESO(@"E:\beso.al");
             beso.Optimize(path);
         }
         public static void Test1001()

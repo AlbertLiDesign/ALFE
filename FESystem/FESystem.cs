@@ -91,6 +91,17 @@ namespace ALFE
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
         }
 
+        public void Update()
+        {
+            F = new float[Dim];
+            X = new float[Dim];
+
+            double KeTime = TimeCost[0];
+            TimeCost = new List<double>(3);
+            TimeCost.Add(KeTime);
+            ActiveNodes = new List<Node>();
+        }
+
         /// <summary>
         /// Assemble the force vector.
         /// </summary>
@@ -159,14 +170,20 @@ namespace ALFE
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
             int id = 0;
-
-            foreach (var item in Model.Nodes)
+            if (Solved)
             {
-                if (item.Active == true)
+                foreach (var item in Model.Nodes)
                 {
-                    item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0f);
-                    id++;
+                    if (item.Active == true)
+                    {
+                        item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0f);
+                        id++;
+                    }
                 }
+            }
+            else
+            {
+                throw new Exception("Calculation failure.");
             }
         }
 
@@ -232,10 +249,11 @@ namespace ALFE
             Parallel.ForEach(Model.Nodes, node =>
             {
                 foreach (var item in node.ElementID)
-                    foreach (var neighbour in Model.Elements[item].Nodes)
-                        if (neighbour.Active)
-                            lock (node.Neighbours)
-                                node.Neighbours.Add(neighbour.ActiveID);
+                    if (Model.Elements[item].Exist)
+                        foreach (var neighbour in Model.Elements[item].Nodes)
+                            if (neighbour.Active)
+                                lock (node.Neighbours)
+                                    node.Neighbours.Add(neighbour.ActiveID);
             });
         }
 
@@ -247,8 +265,11 @@ namespace ALFE
             // in each node make a list of elements to which it belongs
             foreach (var elem in Model.Elements)
             {
-                foreach (var node in elem.Nodes)
-                    node.ElementID.Add(elem.ID);
+                if (elem.Exist == true)
+                {
+                    foreach (var node in elem.Nodes)
+                        node.ElementID.Add(elem.ID);
+                }
             }
         }
 

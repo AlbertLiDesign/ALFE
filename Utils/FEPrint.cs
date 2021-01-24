@@ -5,14 +5,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Management;
+using ALFE.TopOpt;
 
 namespace ALFE
 {
     public class FEPrint
     {
+        public static void PrintBESOInfo(BESO beso, int iter, float gse, float vf)
+        {
+            Console.WriteLine("################### Step: " + iter.ToString() + " ###################");
+            PrintModelInfo(beso.System);
+            Console.WriteLine("Global Strain Energy: " + gse.ToString());
+            Console.WriteLine("Volume: " + vf.ToString());
+
+            PrintMatrixInfo(beso.System.GetKG());
+            PrintTimeCost(beso.System.TimeCost);
+
+            Console.WriteLine();
+        }
         public static void PrintSystemInfo(FESystem sys)
         {
-            PrintDeviceInfo();
             PrintModelInfo(sys);
             PrintMatrixInfo(sys.GetKG());
             PrintTimeCost(sys.TimeCost);
