@@ -97,9 +97,9 @@ namespace ALFE.TopOpt
                     Vector3D adjCentre = new Vector3D(centres[item].X, centres[item].Y, centres[item].Z);
 
                     adjacentElems.Add(Elements[item]);
-                    var dis = curCentre.DistanceTo(adjCentre);
-                    weights.Add(dis);
-                    sum += dis;
+                    var weight = FilterRadius - curCentre.DistanceTo(adjCentre);
+                    weights.Add(weight);
+                    sum += weight;
                 }
 
                 // Compute weights

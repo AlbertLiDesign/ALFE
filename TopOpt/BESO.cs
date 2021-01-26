@@ -92,6 +92,7 @@ namespace ALFE.TopOpt
                 // Run FEA
                 System.Initialize();
                 System.Solve();
+                FEPrint.PrintDisplacement(System);
 
                 FEIO.WriteKG(System.GetKG(), "E:\\KG.mtx");
 
@@ -100,7 +101,7 @@ namespace ALFE.TopOpt
                 HistoryGSE.Add(CalGlobalStrainEnergy());
 
                 // Process sensitivities
-                FltAe(filter, ref Ae);
+                Ae = FltAe(filter, Ae);
                 if (iter > 0)
                     for (int i = 0; i < Ae.Count; i++)
                         Ae[i] = (Ae[i] + Ae_old[i]) * 0.5f;
@@ -126,7 +127,7 @@ namespace ALFE.TopOpt
                 System.Update();
 
                 // Check convergence 
-                if (iter > 10)
+                if (iter > 8)
                 {
                     var newV = 0.0f;
                     var lastV = 0.0f;
@@ -148,7 +149,7 @@ namespace ALFE.TopOpt
 
             float tv = curV * Model.Elements.Count;
 
-            while (((highest - lowest) / highest) > 1.0e-5f)
+            while (((highest - lowest) / highest) > 1.0e-4f)
             {
                 float th = (highest + lowest) * 0.5f;
                 float sum = 0.0f;
@@ -156,14 +157,12 @@ namespace ALFE.TopOpt
                 {
                     var v = Ae[elem.ID] > th ? 1.0f : 0.001f;
                     elem.Xe = v;
+                    elem.Exist = elem.Xe == 1.0f ? true : false;
                     sum += v;
                 }
                 if (sum - tv > 0.0f) lowest = th;
                 else highest = th;
             }
-
-            foreach (var elem in Model.Elements)
-                elem.Exist = elem.Xe == 1.0f ? true : false;
         }
         private List<float> CalSensitivity()
         {
@@ -177,7 +176,7 @@ namespace ALFE.TopOpt
                if (elem.Exist != true)
                    Ke.Multiply((float)Math.Pow(0.001, PenaltyExponent));
 
-               elem.C = Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+               elem.C = 0.5f * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
                 Sensitivities[elem.ID] = elem.C / elem.Xe;
             });
@@ -191,17 +190,17 @@ namespace ALFE.TopOpt
                 GlobalStrainEnergy += elem.C;
             return GlobalStrainEnergy;
         }
-        private void FltAe(Filter filter, ref List<float> Ae)
+        private List<float> FltAe(Filter filter, List<float> Ae)
         {
             var raw = new float[Ae.Count];
-            Ae.CopyTo(raw);
 
             foreach (var elem in Model.Elements)
             {
-                Ae[elem.ID] = 0.0f;
+                raw[elem.ID] = 0.0f;
                 for (int i = 0; i < filter.FME[elem].Count; i++)
-                    Ae[elem.ID] += raw[filter.FME[elem][i].ID] * filter.FMW[elem][i];
+                    raw[elem.ID] += Ae[filter.FME[elem][i].ID] * filter.FMW[elem][i];
             }
+            return raw.ToList();
         }
     }
 }

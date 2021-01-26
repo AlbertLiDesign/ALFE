@@ -77,7 +77,7 @@ namespace ALFE
             Unify = unify;
             DOF = model.DOF;
 
-            ApplySupports2D();
+            ApplySupports();
             Dim = (Model.Nodes.Count - FixedID.Count) * DOF;
 
             F = new float[Dim];
@@ -283,7 +283,7 @@ namespace ALFE
         /// Apply the boundary conditions to nodes.
         /// </summary>
         /// <returns></returns>
-        private void ApplySupports2D()
+        private void ApplySupports()
         {
             var nodes = Model.Nodes;
             var supports = Model.Supports;
@@ -298,6 +298,7 @@ namespace ALFE
                 {
                     nodes[id].Displacement.X = 0.0f;
                     nodes[id].Displacement.Y = 0.0f;
+                    nodes[id].Displacement.Z = 0.0f;
                 }
             }
             FixedID = ids;
