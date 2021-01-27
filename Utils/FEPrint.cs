@@ -20,8 +20,6 @@ namespace ALFE
             Console.WriteLine("------------------- Time Cost -------------------");
             Console.WriteLine("Computing Ke: " + beso.System.TimeCost[0].ToString() + " ms");
             Console.WriteLine("Initializing KG: " + beso.System.TimeCost[1].ToString() + " ms");
-
-            Console.WriteLine();
         }
         public static void PrintBESOInfo(BESO beso, int iter, float gse, float vf)
         {

@@ -127,28 +127,33 @@ namespace ALFE
         /// <summary>
         /// Assemble the global stiffness matrix
         /// </summary>
-        private void AssembleKG()
+        private void AssembleKG(int P=3)
         {
             KG.Clear();
             foreach (var elem in Model.Elements)
             {
-                if (elem.Exist == true)
+                for (int i = 0; i < elem.Nodes.Count; i++)
                 {
-                    for (int i = 0; i < elem.Nodes.Count; i++)
+                    Node ni = elem.Nodes[i];
+                    if (ni.Active)
                     {
-                        Node ni = elem.Nodes[i];
-                        if (ni.Active)
+                        for (int j = 0; j < elem.Nodes.Count; j++)
                         {
-                            for (int j = 0; j < elem.Nodes.Count; j++)
-                            {
-                                Node nj = elem.Nodes[j];
+                            Node nj = elem.Nodes[j];
 
-                                if (nj.Active)
+                            if (nj.Active)
+                            {
+                                // write the corresponding 2x2 fragment to CSR
+                                int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
+                                for (int m = 0; m < DOF; m++)
                                 {
-                                    // write the corresponding 2x2 fragment to CSR
-                                    int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
-                                    for (int m = 0; m < DOF; m++) for (int n = 0; n < DOF; n++)
+                                    for (int n = 0; n < DOF; n++)
+                                    {
+                                        if (elem.Exist == true)
                                             KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
+                                        else
+                                            KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * (float)Math.Pow(0.001,P);
+                                    }
                                 }
                             }
                         }

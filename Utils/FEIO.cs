@@ -361,6 +361,9 @@ namespace ALFE
         /// <returns>Return a finite element model.</returns>
         public static BESO ReadBESO(string path)
         {
+            string besoPath = path + "\\beso.al";
+            string projectPath = path + "\\solution";
+
             bool unify = false;
             Model model = new Model();
 
@@ -377,9 +380,9 @@ namespace ALFE
             int p = 0;
             int maxIter = 0;
 
-            if (File.Exists(path))
+            if (File.Exists(besoPath))
             {
-                StreamReader SR = new StreamReader(path);
+                StreamReader SR = new StreamReader(besoPath);
 
                 #region Read FE parameters
                 bool readFEpara = false;
@@ -521,7 +524,7 @@ namespace ALFE
                 SR.Close();
                 SR.Dispose();
             }
-            BESO beso = new BESO(new FESystem(model, unify), rmin, ert, p, vf, maxIter);
+            BESO beso = new BESO(projectPath, new FESystem(model, unify), rmin, ert, p, vf, maxIter);
             return beso;
         }
     }

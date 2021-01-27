@@ -23,8 +23,9 @@ namespace ALFE
         public static void TestBESO()
         {
             string path = @"E:\ALCoding\ALFE\topoptTest";
-            BESO beso = FEIO.ReadBESO(@"E:\beso.al");
-            beso.Optimize(path);
+            BESO beso = FEIO.ReadBESO(path);
+            beso.Initialize();
+            beso.Optimize();
         }
         public static void Test1001()
         {
