@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra.Single;
+using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace ALFE
 {
@@ -26,12 +26,12 @@ namespace ALFE
         /// <summary>
         /// Design Variable
         /// </summary>
-        public float Xe;
+        public double Xe;
 
         /// <summary>
-        /// Strain energy
+        /// Compliance
         /// </summary>
-        public float C;
+        public double C;
         public bool Exist { get; set; }
 
         public ElementType Type;

@@ -7,17 +7,17 @@ namespace ALFE
         /// <summary>
         /// Represents a vector in Euclidean space.
         /// </summary>
-        internal float _x;
-        internal float _y;
+        internal double _x;
+        internal double _y;
 
         public Vector2D() { }
 
         /// <summary>
-        /// Constructs a new vector from 2 single precision numbers.
+        /// Constructs a new vector from 2 Double precision numbers.
         /// </summary>
         /// <param name="x">X component of vector.</param>
         /// <param name="y">Y component of vector.</param>
-        public Vector2D(float x, float y)
+        public Vector2D(double x, double y)
         {
             _x = x;
             _y = y;
@@ -26,12 +26,12 @@ namespace ALFE
         /// <summary>
         /// Gets or sets the X (first) component of this vector.
         /// </summary>
-        public float X { get { return _x; } set { _x = value; } }
+        public double X { get { return _x; } set { _x = value; } }
 
         /// <summary>
         /// Gets or sets the Y (second) component of this vector.
         /// </summary>
-        public float Y { get { return _y; } set { _y = value; } }
+        public double Y { get { return _y; } set { _y = value; } }
 
         /// <summary>
         /// Computes a hash number that represents the current vector.
@@ -71,7 +71,7 @@ namespace ALFE
         /// <param name="vector">A vector.</param>
         /// <param name="t">A number.</param>
         /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
-        public static Vector2D operator *(Vector2D vector, float t)
+        public static Vector2D operator *(Vector2D vector, double t)
         {
             return new Vector2D(vector._x * t, vector._y * t);
         }
@@ -82,7 +82,7 @@ namespace ALFE
         /// <param name="vector">A vector.</param>
         /// <param name="other">Another vector.</param>
         /// <returns>The result number of dot product.</returns>
-        public static float operator *(Vector2D vector, Vector2D other)
+        public static double operator *(Vector2D vector, Vector2D other)
         {
             return vector._x * other._x + vector._y * other._y;
         }
@@ -91,16 +91,16 @@ namespace ALFE
         /// Get the length of a vector
         /// </summary>        
         /// <returns>The length</returns>
-        public float Length
+        public double Length
         {
-            get { return (float)Math.Sqrt(this._x * this._x + this._y * this._y); }
+            get { return (double)Math.Sqrt(this._x * this._x + this._y * this._y); }
         }
 
         /// <summary>
         /// Get the square length of a vector
         /// </summary>        
         /// <returns>The length</returns>
-        public float SqrLength
+        public double SqrLength
         {
             get { return this._x * this._x + this._y * this._y ; }
         }
@@ -151,7 +151,7 @@ namespace ALFE
         {
             return this == vector;
         }
-        public float DistanceTo(Vector2D vector)
+        public double DistanceTo(Vector2D vector)
         {
             return (this - vector).Length;
         }

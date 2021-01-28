@@ -59,37 +59,32 @@ namespace ALFE
         }
         public Node(double x, double y)
         {
-            Position = new Vector3D((float)x, (float)y, 0.0f);
+            Position = new Vector3D((double)x, (double)y, 0.0);
             DOF = 2;
         }
-        public Node(float x, float y)
+        public Node(double x, double y, bool active)
         {
-            Position = new Vector3D(x, y, 0.0f);
-            DOF = 2;
-        }
-        public Node(float x, float y, bool active)
-        {
-            Position = new Vector3D(x, y, 0.0f);
+            Position = new Vector3D(x, y, 0.0);
             Active = active;
             DOF = 2;
         }
-        public Node(float x, float y, int index)
+        public Node(double x, double y, int index)
         {
-            Position = new Vector3D(x, y, 0.0f);
+            Position = new Vector3D(x, y, 0.0);
             ID = index;
             hasID = true;
             DOF = 2;
         }
         public Node(Vector2D position, int index)
         {
-            Position = new Vector3D(position.X, position.Y, 0.0f);
+            Position = new Vector3D(position.X, position.Y, 0.0);
             ID = index;
             hasID = true;
             DOF = 2;
         }
         public Node(Vector2D position, int index, bool active)
         {
-            Position = new Vector3D(position.X, position.Y, 0.0f);
+            Position = new Vector3D(position.X, position.Y, 0.0);
             ID = index;
             Active = active;
             hasID = true;
@@ -97,33 +92,29 @@ namespace ALFE
         }
         public Node(double x, double y, double z)
         {
-            Position = new Vector3D((float)x, (float)y, (float)z);
+            Position = new Vector3D((double)x, (double)y, (double)z);
             DOF = 3;
         }
         public Node(int dof, double x, double y, double z)
         {
-            Position = new Vector3D((float)x, (float)y, (float)z);
+            Position = new Vector3D((double)x, (double)y, (double)z);
             DOF = dof;
         }
-        public Node(float x, float y, float z)
-        {
-            Position = new Vector3D(x, y, z);
-            DOF = 3;
-        }
-        public Node(float x, float y, float z, bool active)
+
+        public Node(double x, double y, double z, bool active)
         {
             Position = new Vector3D(x, y, z);
             Active = active;
             DOF = 3;
         }
-        public Node(float x, float y, float z, int index)
+        public Node(double x, double y, double z, int index)
         {
             Position = new Vector3D(x, y, z);
             ID = index;
             hasID = true;
             DOF = 3;
         }
-        public Node(int dof, float x, float y, float z, int index)
+        public Node(int dof, double x, double y, double z, int index)
         {
             Position = new Vector3D(x, y, z);
             ID = index;

@@ -21,10 +21,10 @@ namespace ALFE
             Console.WriteLine("Computing Ke: " + beso.System.TimeCost[0].ToString() + " ms");
             Console.WriteLine("Initializing KG: " + beso.System.TimeCost[1].ToString() + " ms");
         }
-        public static void PrintBESOInfo(BESO beso, int iter, float gse, float vf)
+        public static void PrintBESOInfo(BESO beso, int iter, double gse, double vf)
         {
             Console.WriteLine("################### Step: " + iter.ToString() + " #####################");
-            Console.WriteLine("Global Strain Energy: " + gse.ToString());
+            Console.WriteLine("Compliance: " + gse.ToString());
             Console.WriteLine("Volume: " + vf.ToString());
 
             Console.WriteLine("------------------- Time Cost -------------------");

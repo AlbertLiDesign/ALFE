@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra.Single;
+using MathNet.Numerics.LinearAlgebra.Double;
 using System.Threading;
 
 namespace ALFE
@@ -60,12 +60,12 @@ namespace ALFE
         /// <summary>
         /// Force vector
         /// </summary>
-        private float[] F;
+        private double[] F;
 
         /// <summary>
         /// Displacement vector
         /// </summary>
-        private float[] X;
+        private double[] X;
 
         /// <summary>
         /// Initialize the finite element system.
@@ -80,8 +80,8 @@ namespace ALFE
             ApplySupports();
             Dim = (Model.Nodes.Count - FixedID.Count) * DOF;
 
-            F = new float[Dim];
-            X = new float[Dim];
+            F = new double[Dim];
+            X = new double[Dim];
 
             Stopwatch sw = new Stopwatch();
 
@@ -101,8 +101,8 @@ namespace ALFE
         /// </summary>
         public void Update()
         {
-            F = new float[Dim];
-            X = new float[Dim];
+            F = new double[Dim];
+            X = new double[Dim];
 
             double KeTime = TimeCost[0];
             double KGTime = TimeCost[1];
@@ -152,7 +152,7 @@ namespace ALFE
                                         if (elem.Exist == true)
                                             KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
                                         else
-                                            KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * (float)Math.Pow(0.001,P);
+                                            KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * (double)Math.Pow(0.001,P);
                                     }
                                 }
                             }
@@ -193,7 +193,7 @@ namespace ALFE
                 {
                     if (item.Active == true)
                     {
-                        item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0f);
+                        item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0);
                         id++;
                     }
                 }
@@ -214,9 +214,9 @@ namespace ALFE
         /// Get the displacement vector.
         /// </summary>
         /// <returns> Return the displacement vector.</returns>
-        public float[,] GetDisplacement()
+        public double[,] GetDisplacement()
         {
-            float[,] displacement = new float[Model.Nodes.Count, DOF];
+            double[,] displacement = new double[Model.Nodes.Count, DOF];
             for (int i = 0; i < Model.Nodes.Count; i++)
             {
                 displacement[i, 0] = Model.Nodes[i].Displacement.X;
@@ -301,9 +301,9 @@ namespace ALFE
                 nodes[id].Active = false;
                 if (supports[i].Type == SupportType.Fixed)
                 {
-                    nodes[id].Displacement.X = 0.0f;
-                    nodes[id].Displacement.Y = 0.0f;
-                    nodes[id].Displacement.Z = 0.0f;
+                    nodes[id].Displacement.X = 0.0;
+                    nodes[id].Displacement.Y = 0.0;
+                    nodes[id].Displacement.Z = 0.0;
                 }
             }
             FixedID = ids;
@@ -334,6 +334,6 @@ namespace ALFE
 
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int SolveFE(int[] rows_offset, int[] cols, float[] vals, float[] F, int dim, int dof, int nnz, float[] X);
+        private static extern int SolveFE(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
     }
 }

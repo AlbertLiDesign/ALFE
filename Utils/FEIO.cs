@@ -237,11 +237,11 @@ namespace ALFE
 
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Young's Modulus")
-                            material.E = float.Parse(value[1].Split(' ')[1]);
+                            material.E = double.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Possion Rate")
-                            material.nu = float.Parse(value[1].Split(' ')[1]);
+                            material.nu = double.Parse(value[1].Split(' ')[1]);
 
                         readFEpara = true;
                     }
@@ -256,7 +256,7 @@ namespace ALFE
 
 
                     if (value[0] == "N")
-                        nodes.Add(new Node(dof, float.Parse(value[1]), float.Parse(value[2]), float.Parse(value[3])));
+                        nodes.Add(new Node(dof, double.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3])));
 
 
                     if (value[0] == "E")
@@ -276,7 +276,7 @@ namespace ALFE
                     }
                         
                     if (value[0] == "L")
-                        loads.Add(new Load(dof, int.Parse(value[1]), float.Parse(value[2]), float.Parse(value[3]), float.Parse(value[4])));
+                        loads.Add(new Load(dof, int.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3]), double.Parse(value[4])));
 
                     if (value[0] == "S")
                         if (value[2] == "Fixed")
@@ -374,9 +374,9 @@ namespace ALFE
             List<Load> loads = new List<Load>();
             List<Support> supports = new List<Support>();
             Material material = new Material();
-            float ert = 0.0f;
-            float rmin = 0.0f;
-            float vf = 0.0f;
+            double ert = 0.0;
+            double rmin = 0.0;
+            double vf = 0.0;
             int p = 0;
             int maxIter = 0;
 
@@ -440,11 +440,11 @@ namespace ALFE
 
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Young's Modulus")
-                            material.E = float.Parse(value[1].Split(' ')[1]);
+                            material.E = double.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Possion Rate")
-                            material.nu = float.Parse(value[1].Split(' ')[1]);
+                            material.nu = double.Parse(value[1].Split(' ')[1]);
 
                         readFEpara = true;
                     }
@@ -461,15 +461,15 @@ namespace ALFE
                     {
                         string[] value = SR.ReadLine().Split(':');
                         if (value[0] == "Volume Fraction")
-                            vf = float.Parse(value[1].Split(' ')[1]);
+                            vf = double.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Evolution Rate")
-                            ert = float.Parse(value[1].Split(' ')[1]);
+                            ert = double.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Filter Radius")
-                            rmin = float.Parse(value[1].Split(' ')[1]);
+                            rmin = double.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Penalty Exponent")
@@ -491,7 +491,7 @@ namespace ALFE
 
 
                     if (value[0] == "N")
-                        nodes.Add(new Node(dof, float.Parse(value[1]), float.Parse(value[2]), float.Parse(value[3])));
+                        nodes.Add(new Node(dof, double.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3])));
 
 
                     if (value[0] == "E")
@@ -511,7 +511,7 @@ namespace ALFE
                     }
 
                     if (value[0] == "L")
-                        loads.Add(new Load(dof, int.Parse(value[1]), float.Parse(value[2]), float.Parse(value[3]), float.Parse(value[4])));
+                        loads.Add(new Load(dof, int.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3]), double.Parse(value[4])));
 
                     if (value[0] == "S")
                         if (value[2] == "Fixed")

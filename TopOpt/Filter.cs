@@ -14,7 +14,7 @@ namespace ALFE.TopOpt
         /// <summary>
         /// Filter Radius
         /// </summary>
-        public float FilterRadius;
+        public double FilterRadius;
 
         /// <summary>
         /// Elements
@@ -29,7 +29,7 @@ namespace ALFE.TopOpt
         /// <summary>
         /// A mapping dictionary storing the relevant weight factors 
         /// </summary>
-        public Dictionary<Element, List<float>> FMW;
+        public Dictionary<Element, List<double>> FMW;
         
         /// <summary>
         /// The neighbour elements of each element.
@@ -39,20 +39,20 @@ namespace ALFE.TopOpt
         /// <summary>
         /// The weight of the each neighbour element.
         /// </summary>
-        public List<float>[] Weights;
+        public List<double>[] Weights;
 
         /// <summary>
         /// Dimension
         /// </summary>
         public int Dim;
-        public Filter(List<Element> elems, float rmin, int dim)
+        public Filter(List<Element> elems, double rmin, int dim)
         {
             Elements = elems;
             FilterRadius = rmin;
             Dim = dim;
 
             FME = new Dictionary<Element, List<Element>>(Elements.Count);
-            FMW = new Dictionary<Element, List<float>>(Elements.Count);
+            FMW = new Dictionary<Element, List<double>>(Elements.Count);
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace ALFE.TopOpt
             foreach (var elem in Elements)
             {
                 List<Element> adjacentElems = new List<Element>(result[elem.ID].Count);
-                List<float> weights = new List<float>(result[elem.ID].Count);
-                float sum = 0.0f;
+                List<double> weights = new List<double>(result[elem.ID].Count);
+                double sum = 0.0;
 
                 Vector3D curCentre = centres[elem.ID];
 
@@ -111,7 +111,7 @@ namespace ALFE.TopOpt
             }
         }
 
-        private static List<int>[] KDTreeMultiSearch(List<Vector3D> pts, KDTree<int> tree, float radius, int maxReturned)
+        private static List<int>[] KDTreeMultiSearch(List<Vector3D> pts, KDTree<int> tree, double radius, int maxReturned)
         {
             List<int>[] indices = new List<int>[pts.Count];
             Parallel.ForEach<Tuple<int, int>>(Partitioner.Create(0, pts.Count, (int)Math.Ceiling((double)pts.Count / (double)Environment.ProcessorCount * 2.0)), delegate (Tuple<int, int> rng, ParallelLoopState loopState)

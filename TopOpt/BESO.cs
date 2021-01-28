@@ -1,5 +1,5 @@
 ﻿using ALFE;
-using MathNet.Numerics.LinearAlgebra.Single;
+using MathNet.Numerics.LinearAlgebra.Double;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +18,12 @@ namespace ALFE.TopOpt
         /// <summary>
         /// Filter Radius
         /// </summary>
-        public float FilterRadius;
+        public double FilterRadius;
 
         /// <summary>
         /// .Volume fraction
         /// </summary>
-        public float VolumeFraction;     
+        public double VolumeFraction;     
 
         /// <summary>
         /// Penalty exponent
@@ -33,7 +33,7 @@ namespace ALFE.TopOpt
         /// <summary>
         /// Evolution rate
         /// </summary>
-        public float EvolutionRate;
+        public double EvolutionRate;
 
         /// <summary>
         /// The maximum iteration
@@ -48,20 +48,20 @@ namespace ALFE.TopOpt
         private Filter _Filter;
 
         /// <summary>
-        /// The iterative history of the global strain energy
+        /// The iterative history of the global compliance
         /// </summary>
-        private List<float> HistoryGSE = new List<float>();
+        private List<double> HistoryC = new List<double>();
 
         /// <summary>
         /// The iterative history of the volume
         /// </summary>
-        private List<float> HistoryV = new List<float>();
+        private List<double> HistoryV = new List<double>();
 
-        public BESO(string path, FESystem system, float rmin, float ert = 0.02f, int p=3,  float vf=0.5f, int maxIter=100)
+        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, int p=3,  double vf=0.5, int maxIter=100)
         {
-            if (rmin <= 0.0f)
+            if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
-            if (!(vf> 0.0f && vf< 1.0f))
+            if (!(vf> 0.0 && vf< 1.0))
                 throw new Exception("Vt must be large than 0 and be less than 1.");
 
             System = system;
@@ -81,7 +81,7 @@ namespace ALFE.TopOpt
             FEPrint.PrintPreprocessing(this);
 
             foreach (var elem in Model.Elements)
-                elem.Xe = 1.0f;
+                elem.Xe = 1.0;
 
             // Filtering
             Stopwatch sw = new Stopwatch();
@@ -96,9 +96,9 @@ namespace ALFE.TopOpt
         }
         public void Optimize()
         {
-            float delta = 1.0f;
+            double delta = 1.0;
             int iter = 0;
-            List<float> Ae_old = new List<float>();
+            List<double> Ae_old = new List<double>();
             while (delta > 0.01f && iter < MaximumIteration)
             {
                 // Run FEA
@@ -106,32 +106,32 @@ namespace ALFE.TopOpt
                 System.Solve();
 
                 //FEPrint.PrintDisplacement(System);
-                //FEIO.WriteKG(System.GetKG(), "E:\\KG.mtx");
+                //FEIO.WriteKG(System.GetKG(), "E:\\KG" + iter.ToString() + ".mtx");
 
-                // Calculate sensitivities and global strain energy
-                List<float> Ae = CalSensitivity();
-                HistoryGSE.Add(CalGlobalStrainEnergy());
+                // Calculate sensitivities and global compliance
+                List<double> Ae = CalSensitivity();
+                HistoryC.Add(CalGlobalStrainEnergy());
 
                 // Process sensitivities
                 Ae = FltAe(_Filter, Ae);
                 if (iter > 0)
                     for (int i = 0; i < Ae.Count; i++)
-                        Ae[i] = (Ae[i] + Ae_old[i]) * 0.5f;
+                        Ae[i] = (Ae[i] + Ae_old[i]) * 0.5;
 
                 // Record the sensitiveies in each step
-                var raw = new float[Ae.Count];
+                var raw = new double[Ae.Count];
                 Ae.CopyTo(raw);
                 Ae_old = raw.ToList();
 
                 // Run BESO
-                float sum = 0.0f;
+                double sum = 0.0;
                 foreach (var elem in Model.Elements)
                     sum += elem.Xe;
 
                 HistoryV.Add(sum / Model.Elements.Count);
-                float curV = Math.Max(VolumeFraction, HistoryV.Last() * (1.0f - EvolutionRate));
+                double curV = Math.Max(VolumeFraction, HistoryV.Last() * (1.0 - EvolutionRate));
                 MarkElements(curV, Ae);
-                FEPrint.PrintBESOInfo(this, iter, HistoryGSE.Last(), HistoryV.Last());
+                FEPrint.PrintBESOInfo(this, iter, HistoryC.Last(), HistoryV.Last());
                 
                 iter += 1;
                 FEIO.WriteValidElements(iter, Path, Model.Elements);
@@ -141,20 +141,20 @@ namespace ALFE.TopOpt
                 // Check convergence 
                 if (iter >= 10)
                 {
-                    var newV = 0.0f;
-                    var lastV = 0.0f;
+                    var newV = 0.0;
+                    var lastV = 0.0;
                     for (int i = 1; i < 6; i++)
                     {
-                        newV += HistoryGSE[HistoryGSE.Count - i];
-                        lastV += HistoryGSE[HistoryGSE.Count - 5 - i];
+                        newV += HistoryC[HistoryC.Count - i];
+                        lastV += HistoryC[HistoryC.Count - 5 - i];
                     }
                     delta = Math.Abs((newV - lastV) / lastV);
                 }
             }
 
-            Console.WriteLine("------------------- GSE -------------------");
+            Console.WriteLine("------------------- Compliance -------------------");
             int num = 0;
-            foreach (var item in HistoryGSE)
+            foreach (var item in HistoryC)
             {
                 Console.WriteLine(num.ToString() + '\t' + item.ToString());
                 num++;
@@ -164,64 +164,66 @@ namespace ALFE.TopOpt
         }
 
 
-        private void MarkElements(float curV, List<float> Ae)
+        private void MarkElements(double curV, List<double> Ae)
         {
-            float lowest = Ae.Min();
-            float highest = Ae.Max();
+            double lowest = Ae.Min();
+            double highest = Ae.Max();
 
-            float tv = curV * Model.Elements.Count;
+            double tv = curV * Model.Elements.Count;
 
             while (((highest - lowest) / highest) > 1.0e-5f)
             {
-                float th = (highest + lowest) * 0.5f;
-                float sum = 0.0f;
+                double th = (highest + lowest) * 0.5;
+                double sum = 0.0;
                 foreach (var elem in Model.Elements)
                 {
-                    var v = Ae[elem.ID] > th ? 1.0f : 0.001f;
+                    var v = Ae[elem.ID] > th ? 1.0 : 0.001f;
                     elem.Xe = v;
-                    elem.Exist = elem.Xe == 1.0f ? true : false;
+                    elem.Exist = elem.Xe == 1.0 ? true : false;
                     sum += v;
                 }
-                if (sum - tv > 0.0f) lowest = th;
+                if (sum - tv > 0.0) lowest = th;
                 else highest = th;
             }
         }
-        private List<float> CalSensitivity()
+        private List<double> CalSensitivity()
         {
-            float[] Sensitivities = new float[Model.Elements.Count];
+            double[] Sensitivities = new double[Model.Elements.Count];
             Parallel.ForEach(Model.Elements, elem =>
             {
+                elem.ComputeUe();
+
+                Matrix Ke = null;
                 if (elem.Exist == true)
-                {
-                    elem.ComputeUe();
+                    Ke = elem.Ke;
+                else
+                    Ke = (Matrix)elem.Ke.Multiply((double)Math.Pow(0.001, (double)PenaltyExponent));
 
-                    var Ke = elem.Ke;
-                    var Ue = elem.Ue;
-                    if (elem.Exist != true)
-                        Ke.Multiply((float)Math.Pow(0.001, PenaltyExponent));
+                var Ue = elem.Ue;
+                if (elem.Exist != true)
+                    Ke.Multiply((double)Math.Pow(0.001, PenaltyExponent));
 
-                    elem.C = 0.5f * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+                elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
-                    Sensitivities[elem.ID] = elem.C / elem.Xe;
-                }
+                Sensitivities[elem.ID] = elem.C / elem.Xe;
             });
 
             return Sensitivities.ToList();
         }
-        private float CalGlobalStrainEnergy()
+        private double CalGlobalStrainEnergy()
         {
-            float GlobalStrainEnergy = 0.0f;
+            double GlobalStrainEnergy = 0.0;
             foreach (var elem in Model.Elements)
                 GlobalStrainEnergy += elem.C;
             return GlobalStrainEnergy;
         }
-        private List<float> FltAe(Filter filter, List<float> Ae)
+        private List<double> FltAe(Filter filter, List<double> Ae)
         {
-            var raw = new float[Ae.Count];
+            var raw = new double[Ae.Count];
 
             foreach (var elem in Model.Elements)
             {
-                raw[elem.ID] = 0.0f;
+                raw[elem.ID] = 0.0;
                 for (int i = 0; i < filter.FME[elem].Count; i++)
                     raw[elem.ID] += Ae[filter.FME[elem][i].ID] * filter.FMW[elem][i];
             }

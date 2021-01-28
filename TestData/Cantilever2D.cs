@@ -47,7 +47,7 @@ namespace ALFE
             {
                 for (int j = 0; j < ynum; j++)
                 {
-                    nodes.Add(new Node(i, j));
+                    nodes.Add(new Node((double)i, (double)j));
                     if (i == 0)
                         supports.Add(new Support(j, SupportType.Fixed));
                 }
@@ -65,12 +65,12 @@ namespace ALFE
                         nodes[(i+1) * ynum+ (j+1)],
                         nodes[i * ynum + (j+1)]
                     };
-                    elems.Add(new Pixel(nodesElem, new Material(1.0f, 0.3f)));
+                    elems.Add(new Pixel(nodesElem, new Material(1.0, 0.3f)));
                 }
             }
 
             // Apply the load
-            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
+            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0, -1.0)));
 
             Model = new Model(2, nodes, elems, loads, supports);
         }
@@ -98,7 +98,7 @@ namespace ALFE
             {
                 for (int j = 0; j < ynum; j++)
                 {
-                    nodes.Add(new Node(i, j));
+                    nodes.Add(new Node((double)i, (double)j));
                     if (i == 0)
                         supports.Add(new Support(j, SupportType.Fixed));
                 }
@@ -116,12 +116,12 @@ namespace ALFE
                         nodes[(i+1) * ynum+ (j+1)],
                         nodes[i * ynum + (j+1)]
                     };
-                    elems.Add(new Quadrilateral(nodesElem, new Material(1.0f, 0.3f)));
+                    elems.Add(new Quadrilateral(nodesElem, new Material(1.0, 0.3f)));
                 }
             }
 
             // Apply the load
-            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
+            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0, -1.0)));
 
             Model = new Model(2, nodes, elems, loads, supports);
         }
@@ -173,13 +173,13 @@ namespace ALFE
                         nodes[(i+1) * ynum+ (j+1)],
                         nodes[i * ynum+ (j+1)]
                     };
-                    elems.Add(new Triangle(nodesIDL, new Material(1.0f, 0.3f)));
-                    elems.Add(new Triangle(nodesIDU, new Material(1.0f, 0.3f)));
+                    elems.Add(new Triangle(nodesIDL, new Material(1.0, 0.3f)));
+                    elems.Add(new Triangle(nodesIDU, new Material(1.0, 0.3f)));
                 }
             }
 
             // Apply the load
-            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0f, -1.0f)));
+            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0, -1.0)));
 
             Model = new Model(2, nodes, elems, loads, supports);
         }

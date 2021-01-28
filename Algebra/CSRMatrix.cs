@@ -21,7 +21,7 @@ namespace ALFE
         /// <summary>
         /// The Vals array holds only the non-zero elements listed left-to-right, top-to-bottom, and its size is NNZ.
         /// </summary>
-        public float[] Vals;
+        public double[] Vals;
 
         /// <summary>
         ///  The size of CSR matrix.
@@ -41,7 +41,7 @@ namespace ALFE
             Rows[n] = nnz;
             Cols = new int[NNZ];
             Cols[n] = nnz;
-            Vals = new float[NNZ];
+            Vals = new double[NNZ];
         }
 
         public COOMatrix ToCOO()

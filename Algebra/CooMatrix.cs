@@ -10,13 +10,13 @@ namespace ALFE
     {
         public int Rows, Cols, NNZ; // Row number, column number and non-zero number
         public int[] RowArray, ColArray;
-        public float[] ValueArray;
+        public double[] ValueArray;
 
         public COOMatrix(List<Triplet> triplets, int rows, int cols)
         {
             List<int> rowArray = new List<int>();
             List<int> colArray = new List<int>();
-            List<float> valArray = new List<float>();
+            List<double> valArray = new List<double>();
 
             for (int i = 0; i < triplets.Count; i++)
             {
@@ -35,7 +35,7 @@ namespace ALFE
             Cols = cols;
             NNZ = ValueArray.Length;
         }
-        public COOMatrix(int[] rowArray, int[] colArray, float[] valArray, int rows, int cols)
+        public COOMatrix(int[] rowArray, int[] colArray, double[] valArray, int rows, int cols)
         {
             if (rowArray.Length == colArray.Length && colArray.Length == valArray.Length)
             {
