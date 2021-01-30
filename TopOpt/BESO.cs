@@ -89,6 +89,7 @@ namespace ALFE.TopOpt
             _Filter = new Filter(Model.Elements, FilterRadius, Dim);
             _Filter.PreFlt();
             sw.Stop();
+            
             Console.WriteLine("Prefiltering: " + sw.Elapsed.TotalMilliseconds.ToString() + " ms");
             Console.WriteLine();
             
@@ -101,17 +102,31 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             while (delta > 0.01f && iter < MaximumIteration)
             {
+                List<double> timeCost = new List<double>();
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 // Run FEA
                 System.Initialize();
+                sw.Stop();
+                timeCost.Add(sw.Elapsed.TotalMilliseconds);
+
+                sw.Restart();
                 System.Solve();
+                sw.Stop();
+                timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 //FEPrint.PrintDisplacement(System);
                 //FEIO.WriteKG(System.GetKG(), "E:\\KG" + iter.ToString() + ".mtx");
 
                 // Calculate sensitivities and global compliance
+                sw.Restart();
                 List<double> Ae = CalSensitivity();
-                HistoryC.Add(CalGlobalStrainEnergy());
+                HistoryC.Add(CalGlobalCompliance());
+                sw.Stop();
+                timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
+
+                sw.Restart();
                 // Process sensitivities
                 Ae = FltAe(_Filter, Ae);
                 if (iter > 0)
@@ -122,8 +137,11 @@ namespace ALFE.TopOpt
                 var raw = new double[Ae.Count];
                 Ae.CopyTo(raw);
                 Ae_old = raw.ToList();
+                sw.Stop();
+                timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 // Run BESO
+                sw.Restart();
                 double sum = 0.0;
                 foreach (var elem in Model.Elements)
                     sum += elem.Xe;
@@ -131,8 +149,10 @@ namespace ALFE.TopOpt
                 HistoryV.Add(sum / Model.Elements.Count);
                 double curV = Math.Max(VolumeFraction, HistoryV.Last() * (1.0 - EvolutionRate));
                 MarkElements(curV, Ae);
-                FEPrint.PrintBESOInfo(this, iter, HistoryC.Last(), HistoryV.Last());
-                
+                sw.Stop();
+                timeCost.Add(sw.Elapsed.TotalMilliseconds);
+
+                sw.Restart();
                 iter += 1;
                 FEIO.WriteValidElements(iter, Path, Model.Elements);
 
@@ -150,6 +170,9 @@ namespace ALFE.TopOpt
                     }
                     delta = Math.Abs((newV - lastV) / lastV);
                 }
+                sw.Stop();
+                timeCost.Add(sw.Elapsed.TotalMilliseconds);
+                FEPrint.PrintBESOInfo(this, iter  - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
             }
 
             Console.WriteLine("------------------- Compliance -------------------");
@@ -210,12 +233,12 @@ namespace ALFE.TopOpt
 
             return Sensitivities.ToList();
         }
-        private double CalGlobalStrainEnergy()
+        private double CalGlobalCompliance()
         {
-            double GlobalStrainEnergy = 0.0;
+            double compliance = 0.0;
             foreach (var elem in Model.Elements)
-                GlobalStrainEnergy += elem.C;
-            return GlobalStrainEnergy;
+                compliance += elem.C;
+            return compliance;
         }
         private List<double> FltAe(Filter filter, List<double> Ae)
         {

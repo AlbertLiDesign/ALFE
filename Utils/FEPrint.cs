@@ -21,15 +21,19 @@ namespace ALFE
             Console.WriteLine("Computing Ke: " + beso.System.TimeCost[0].ToString() + " ms");
             Console.WriteLine("Initializing KG: " + beso.System.TimeCost[1].ToString() + " ms");
         }
-        public static void PrintBESOInfo(BESO beso, int iter, double gse, double vf)
+        public static void PrintBESOInfo(BESO beso, int iter, double gse, double vf, List<double> timeCost)
         {
             Console.WriteLine("################### Step: " + iter.ToString() + " #####################");
             Console.WriteLine("Compliance: " + gse.ToString());
             Console.WriteLine("Volume: " + vf.ToString());
 
             Console.WriteLine("------------------- Time Cost -------------------");
-            Console.WriteLine("Assembling KG: " + beso.System.TimeCost[2].ToString() + " ms");
-            Console.WriteLine("Solving: " + beso.System.TimeCost[3].ToString() + " ms");
+            Console.WriteLine("Assembling KG: " + timeCost[0].ToString() + " ms");
+            Console.WriteLine("Solving: " + timeCost[1].ToString() + " ms");
+            Console.WriteLine("Computing Sensitivity: " + timeCost[2].ToString() + " ms");
+            Console.WriteLine("Fltering Sensitivity: " + timeCost[3].ToString() + " ms");
+            Console.WriteLine("Marking Elements: " + timeCost[4].ToString() + " ms");
+            Console.WriteLine("Checking Convergence: " + timeCost[5].ToString() + " ms");
 
             Console.WriteLine();
         }
