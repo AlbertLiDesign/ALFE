@@ -93,7 +93,7 @@ namespace ALFE.TopOpt
             Console.WriteLine("Prefiltering: " + sw.Elapsed.TotalMilliseconds.ToString() + " ms");
             Console.WriteLine();
             
-            FEIO.WriteValidElements(0, Path, Model.Elements);
+            FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
         public void Optimize()
         {
@@ -154,7 +154,7 @@ namespace ALFE.TopOpt
 
                 sw.Restart();
                 iter += 1;
-                FEIO.WriteValidElements(iter, Path, Model.Elements);
+                FEIO.WriteInvalidElements(iter, Path, Model.Elements);
 
                 System.Update();
 
