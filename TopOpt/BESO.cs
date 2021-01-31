@@ -93,7 +93,7 @@ namespace ALFE.TopOpt
             Console.WriteLine("Prefiltering: " + sw.Elapsed.TotalMilliseconds.ToString() + " ms");
             Console.WriteLine();
             
-            FEIO.WriteValidElements(0, Path, Model.Elements);
+            FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
         public void Optimize()
         {
@@ -116,7 +116,7 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 //FEPrint.PrintDisplacement(System);
-                //FEIO.WriteKG(System.GetKG(), "E:\\KG" + iter.ToString() + ".mtx");
+                FEIO.WriteKG(System.GetKG(), "E:\\KG" + iter.ToString() + ".mtx");
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
@@ -154,7 +154,7 @@ namespace ALFE.TopOpt
 
                 sw.Restart();
                 iter += 1;
-                FEIO.WriteValidElements(iter, Path, Model.Elements);
+                FEIO.WriteInvalidElements(iter, Path, Model.Elements);
 
                 System.Update();
 
