@@ -11,12 +11,12 @@ namespace ALFE
 {
     public class FEIO
     {
-        public static void WriteInvalidElements(int iter, string path, List<Element> elems)
+        public static void WriteValidElements(int iter, string path, List<Element> elems)
         {
             string output = path + '\\' + iter.ToString() + ".txt";
             StreamWriter sw = new StreamWriter(output);
             foreach (var elem in elems)
-                if (elem.Exist != true)
+                if (elem.Exist == true)
                     sw.WriteLine(elem.ID.ToString());
             sw.Flush();
             sw.Close();
