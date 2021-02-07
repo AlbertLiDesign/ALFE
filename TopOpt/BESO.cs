@@ -1,16 +1,16 @@
-﻿using ALFE;
-using MathNet.Numerics.LinearAlgebra.Double;
+﻿using MathNet.Numerics.LinearAlgebra.Double;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.IO;
 
 namespace ALFE.TopOpt
 {
     public class BESO
     {
+        public string solvingInfo;
         public FESystem System;
         public Model Model;
         public string Path;
@@ -77,8 +77,8 @@ namespace ALFE.TopOpt
 
         public void Initialize()
         {
-            // Print basic info
-            FEPrint.PrintPreprocessing(this);
+            // Write basic info
+            solvingInfo = PreprocessingInfo();
 
             foreach (var elem in Model.Elements)
                 elem.Xe = 1.0;
@@ -89,9 +89,9 @@ namespace ALFE.TopOpt
             _Filter = new Filter(Model.Elements, FilterRadius, Dim);
             _Filter.PreFlt();
             sw.Stop();
-            
-            Console.WriteLine("Prefiltering: " + sw.Elapsed.TotalMilliseconds.ToString() + " ms");
-            Console.WriteLine();
+
+            solvingInfo += "Prefiltering: " + sw.Elapsed.TotalMilliseconds.ToString() + " ms";
+            solvingInfo += '\n';
             
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
@@ -172,19 +172,11 @@ namespace ALFE.TopOpt
                 }
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
-                var besoInfo = BESOInfo(iter - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
-                FEPrint.PrintBESOInfo(this, iter  - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
+
+                solvingInfo += BESOInfo(iter - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
+                WritePerformanceReport();
             }
 
-            Console.WriteLine("------------------- Compliance -------------------");
-            int num = 0;
-            foreach (var item in HistoryC)
-            {
-                Console.WriteLine(num.ToString() + '\t' + item.ToString());
-                num++;
-            }
-
-            Console.WriteLine("Done");
         }
 
 
@@ -254,9 +246,27 @@ namespace ALFE.TopOpt
             return raw.ToList();
         }
 
+        public string PreprocessingInfo()
+        {
+            string info = "Project Path: " + Path.ToString();
+            info += '\n';
+            info += Model.ModelInfo();
+            info += System.MatrixInfo();
+
+            info += "------------------- Time Cost -------------------";
+            info += '\n';
+            info += "Computing Ke: " + System.TimeCost[0].ToString() + " ms";
+            info += '\n';
+            info += "Initializing KG: " + System.TimeCost[1].ToString() + " ms";
+            info += '\n';
+
+            return info;
+        }
+
         public string BESOInfo(int iter, double gse, double vf, List<double> timeCost)
         {
-            string info = "################### Step: " + iter.ToString() + " #####################";
+            string info = "\n";
+            info += "################### Step: " + iter.ToString() + " #####################";
             info += '\n';
             info += "Compliance: " + gse.ToString();
             info += "Volume: " + vf.ToString();
@@ -278,6 +288,17 @@ namespace ALFE.TopOpt
             info += '\n';
 
             return info;
+        }
+
+        public void WritePerformanceReport()
+        {
+            string output = Path + "\\report.txt";
+            StreamWriter sw = new StreamWriter(output);
+
+            sw.Write(solvingInfo);
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
         }
     }
 }

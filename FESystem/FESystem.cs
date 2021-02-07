@@ -331,9 +331,37 @@ namespace ALFE
             }
         }
 
-
-
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int SolveFE(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+
+        public string SolvingTime()
+        {
+            string info = "------------------- Time Cost -------------------";
+            info += '\n';
+            info += "Computing Ke: " + TimeCost[0].ToString() + " ms";
+            info += '\n';
+            info += "Initializing KG: " + TimeCost[1].ToString() + " ms";
+            info += '\n';
+            info += "Assembling KG: " + TimeCost[2].ToString() + " ms";
+            info += '\n';
+            info += "Solving: " + TimeCost[3].ToString() + " ms";
+            info += '\n';
+
+            return info;
+        }
+
+        public string MatrixInfo()
+        {
+            string info = "------------------- Matrix Info -------------------";
+            info += '\n';
+            info += "Rows: " + KG.N.ToString();
+            info += '\n';
+            info += "Cols: " + KG.N.ToString();
+            info += '\n';
+            info += "NNZ: " + KG.NNZ.ToString();
+            info += '\n';
+
+            return info;
+        }
     }
 }

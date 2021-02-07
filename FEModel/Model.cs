@@ -110,5 +110,21 @@ namespace ALFE
         {
             Supports = supports;
         }
+
+        public string ModelInfo()
+        {
+            string info = "------------------- Model Info -------------------";
+            info += '\n';
+            info += "Nodes: " + Nodes.Count.ToString();
+            info += '\n';
+            info += "Degree-of-freedom: " + (Nodes.Count * DOF).ToString();
+            info += '\n';
+            info += "Elements: " + Elements.Count.ToString();
+            info += '\n';
+            info += "Type: " + Elements[0].Type.ToString();
+            info += '\n';
+
+            return info;
+        }
     }
 }
