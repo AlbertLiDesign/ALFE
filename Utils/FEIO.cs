@@ -6,11 +6,47 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Management;
 
 namespace ALFE
 {
     public class FEIO
     {
+        public static string PreprocessingInfo(BESO beso)
+        {
+            //DeviceInfo();
+            ModelInfo(beso.System);
+            //MatrixInfo(beso.System.GetKG());
+
+            string info = "------------------- Time Cost -------------------";
+            info += '\n';
+            info += "Computing Ke: " + beso.System.TimeCost[0].ToString() + " ms";
+            info += '\n';
+            info += "Initializing KG: " + beso.System.TimeCost[1].ToString() + " ms";
+            info += '\n';
+
+            return info;
+        }
+        public static string ModelInfo(FESystem sys)
+        {
+            string info = "------------------- Model Info -------------------";
+            info += '\n';
+            info += "Nodes: " + sys.Model.Nodes.Count.ToString();
+            info += '\n';
+            info += "Elements: " + sys.Model.Elements.Count.ToString();
+            info += '\n';
+            info += "Type: " + sys.Model.Elements[0].Type.ToString();
+            info += '\n';
+
+            return info;
+        }
+
+        public static void WritePerformanceReport(string path, List<double> times)
+        {
+            string output = path + "\\report.txt";
+            StreamWriter sw = new StreamWriter(output);
+
+        }
         public static void WriteInvalidElements(int iter, string path, List<Element> elems)
         {
             string output = path + '\\' + iter.ToString() + ".txt";

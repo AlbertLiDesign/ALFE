@@ -172,6 +172,7 @@ namespace ALFE.TopOpt
                 }
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
+                var besoInfo = BESOInfo(iter - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
                 FEPrint.PrintBESOInfo(this, iter  - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
             }
 
@@ -251,6 +252,32 @@ namespace ALFE.TopOpt
                     raw[elem.ID] += Ae[filter.FME[elem][i].ID] * filter.FMW[elem][i];
             }
             return raw.ToList();
+        }
+
+        public string BESOInfo(int iter, double gse, double vf, List<double> timeCost)
+        {
+            string info = "################### Step: " + iter.ToString() + " #####################";
+            info += '\n';
+            info += "Compliance: " + gse.ToString();
+            info += "Volume: " + vf.ToString();
+            info += '\n';
+
+            info += "------------------- Time Cost -------------------";
+            info += '\n';
+            info += "Assembling KG: " + timeCost[0].ToString() + " ms";
+            info += '\n';
+            info += "Solving: " + timeCost[1].ToString() + " ms";
+            info += '\n';
+            info += "Computing Sensitivity: " + timeCost[2].ToString() + " ms";
+            info += '\n';
+            info += "Fltering Sensitivity: " + timeCost[3].ToString() + " ms";
+            info += '\n';
+            info += "Marking Elements: " + timeCost[4].ToString() + " ms";
+            info += '\n';
+            info += "Checking Convergence: " + timeCost[5].ToString() + " ms";
+            info += '\n';
+
+            return info;
         }
     }
 }
