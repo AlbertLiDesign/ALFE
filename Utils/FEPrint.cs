@@ -39,9 +39,9 @@ namespace ALFE
         }
         public static void PrintSystemInfo(FESystem sys)
         {
-            PrintModelInfo(sys);
-            PrintMatrixInfo(sys.GetKG());
-            PrintTimeCost(sys.TimeCost);
+            Console.Write(sys.Model.ModelInfo());
+            Console.Write(sys.MatrixInfo());
+            Console.Write(sys.SolvingInfo());
         }
         public static void PrintDeviceInfo()
         {

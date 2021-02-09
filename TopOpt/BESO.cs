@@ -10,6 +10,7 @@ namespace ALFE.TopOpt
 {
     public class BESO
     {
+        private bool ParallelComputing = true;
         public string solvingInfo;
         public FESystem System;
         public Model Model;
@@ -73,6 +74,7 @@ namespace ALFE.TopOpt
             FilterRadius = rmin;
             Dim = system.Model.DOF;
             Path = path;
+            ParallelComputing = system.ParallelComputing;
         }
 
         public void Initialize()
@@ -176,7 +178,6 @@ namespace ALFE.TopOpt
                 solvingInfo += BESOInfo(iter - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
                 WritePerformanceReport();
             }
-
         }
 
 
@@ -205,25 +206,48 @@ namespace ALFE.TopOpt
         private List<double> CalSensitivity()
         {
             double[] Sensitivities = new double[Model.Elements.Count];
-            Parallel.ForEach(Model.Elements, elem =>
+            if (ParallelComputing)
             {
-                elem.ComputeUe();
+                Parallel.ForEach(Model.Elements, elem =>
+                {
+                    elem.ComputeUe();
 
-                Matrix Ke = null;
-                if (elem.Exist == true)
-                    Ke = elem.Ke;
-                else
-                    Ke = (Matrix)elem.Ke.Multiply((double)Math.Pow(0.001, (double)PenaltyExponent));
+                    Matrix Ke = null;
+                    if (elem.Exist == true)
+                        Ke = elem.Ke;
+                    else
+                        Ke = (Matrix)elem.Ke.Multiply((double)Math.Pow(0.001, (double)PenaltyExponent));
 
-                var Ue = elem.Ue;
-                if (elem.Exist != true)
-                    Ke.Multiply((double)Math.Pow(0.001, PenaltyExponent));
+                    var Ue = elem.Ue;
+                    if (elem.Exist != true)
+                        Ke.Multiply((double)Math.Pow(0.001, PenaltyExponent));
 
-                elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+                    elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
-                Sensitivities[elem.ID] = elem.C / elem.Xe;
-            });
+                    Sensitivities[elem.ID] = elem.C / elem.Xe;
+                });
+            }
+            else
+            {
+                foreach (var elem in Model.Elements)
+                {
+                    elem.ComputeUe();
 
+                    Matrix Ke = null;
+                    if (elem.Exist == true)
+                        Ke = elem.Ke;
+                    else
+                        Ke = (Matrix)elem.Ke.Multiply((double)Math.Pow(0.001, (double)PenaltyExponent));
+
+                    var Ue = elem.Ue;
+                    if (elem.Exist != true)
+                        Ke.Multiply((double)Math.Pow(0.001, PenaltyExponent));
+
+                    elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+
+                    Sensitivities[elem.ID] = elem.C / elem.Xe;
+                }
+            }
             return Sensitivities.ToList();
         }
         private double CalGlobalCompliance()
@@ -269,6 +293,7 @@ namespace ALFE.TopOpt
             info += "################### Step: " + iter.ToString() + " #####################";
             info += '\n';
             info += "Compliance: " + gse.ToString();
+            info += '\n';
             info += "Volume: " + vf.ToString();
             info += '\n';
 

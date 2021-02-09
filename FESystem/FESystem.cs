@@ -12,6 +12,7 @@ namespace ALFE
 {
     public class FESystem
     {
+        public bool ParallelComputing = true;
         /// <summary>
         /// Time cost in each step: 0 = Computing Ke, 1 = Initializing KG, 2 = Assembling KG, 3 = Solving
         /// </summary>
@@ -71,11 +72,12 @@ namespace ALFE
         /// Initialize the finite element system.
         /// </summary>
         /// <param name="model"> A finite element model</param>
-        public FESystem(Model model, bool unify = false)
+        public FESystem(Model model, bool unify = false, bool parallel = true)
         {
             Model = model;
             Unify = unify;
             DOF = model.DOF;
+            ParallelComputing = parallel;
 
             ApplySupports();
             Dim = (Model.Nodes.Count - FixedID.Count) * DOF;
@@ -182,7 +184,12 @@ namespace ALFE
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
-            Solved = SolveFE(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+            if (ParallelComputing)
+                Solved = SolvePARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+            else
+                Solved = SolveSimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+
+            //Solved = SolveSXAMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -263,14 +270,26 @@ namespace ALFE
         /// </summary>
         private void GetAdjacentNodes()
         {
-            Parallel.ForEach(Model.Nodes, node =>
+            if (ParallelComputing)
             {
-                foreach (var item in node.ElementID)
-                    foreach (var neighbour in Model.Elements[item].Nodes)
-                        if (neighbour.Active)
-                            lock (node.Neighbours)
-                                node.Neighbours.Add(neighbour.ActiveID);
-            });
+                Parallel.ForEach(Model.Nodes, node =>
+                {
+                    foreach (var item in node.ElementID)
+                        foreach (var neighbour in Model.Elements[item].Nodes)
+                            if (neighbour.Active)
+                                lock (node.Neighbours)
+                                    node.Neighbours.Add(neighbour.ActiveID);
+                });
+            }
+            else
+            {
+                foreach (var node in Model.Nodes)
+                    foreach (var item in node.ElementID)
+                        foreach (var neighbour in Model.Elements[item].Nodes)
+                            if (neighbour.Active)
+                                lock (node.Neighbours)
+                                    node.Neighbours.Add(neighbour.ActiveID);
+            }
         }
 
         /// <summary>
@@ -330,11 +349,16 @@ namespace ALFE
                     item.ComputeKe();
             }
         }
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern int SolveSimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int SolveFE(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int SolvePARDISO(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
 
-        public string SolvingTime()
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern int SolveSXAMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+
+        public string SolvingInfo()
         {
             string info = "------------------- Time Cost -------------------";
             info += '\n';

@@ -315,6 +315,7 @@ namespace ALFE
             sw.WriteLine("Support Count: " + model.Supports.Count.ToString());
             sw.WriteLine("Young's Modulus: " + model.Elements[0].Material.E.ToString());
             sw.WriteLine("Possion Rate: " + model.Elements[0].Material.nu.ToString());
+            sw.WriteLine("Parallel Computing: " + beso.System.ParallelComputing.ToString());
 
             sw.WriteLine();
 
@@ -380,13 +381,15 @@ namespace ALFE
             double vf = 0.0;
             int p = 0;
             int maxIter = 0;
+            bool parallel = false;
 
             if (File.Exists(besoPath))
             {
                 StreamReader SR = new StreamReader(besoPath);
-
+                
                 #region Read FE parameters
                 bool readFEpara = false;
+                
                 while (readFEpara == false)
                 {
                     string line = SR.ReadLine();
@@ -446,6 +449,8 @@ namespace ALFE
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Possion Rate")
                             material.nu = double.Parse(value[1].Split(' ')[1]);
+                        if (value[0] == "Parallel Computing")
+                            parallel = bool.Parse(value[1].Split(' ')[1]);
 
                         readFEpara = true;
                     }
@@ -525,7 +530,7 @@ namespace ALFE
                 SR.Close();
                 SR.Dispose();
             }
-            BESO beso = new BESO(projectPath, new FESystem(model, unify), rmin, ert, p, vf, maxIter);
+            BESO beso = new BESO(projectPath, new FESystem(model, unify, parallel), rmin, ert, p, vf, maxIter);
             return beso;
         }
     }
