@@ -179,8 +179,6 @@ namespace ALFE.TopOpt
                 WritePerformanceReport();
             }
         }
-
-
         private void MarkElements(double curV, List<double> Ae)
         {
             double lowest = Ae.Min();

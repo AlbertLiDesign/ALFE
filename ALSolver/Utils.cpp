@@ -24,23 +24,6 @@ Eigen::VectorXd SetVector(double* matrix, int dim)
     return vec;
 }
 
-SX_MAT SetSXMatrix(int* row, int* col, double* val, int rows, int cols, int nnz)
-{
-    SX_MAT A;
-    SX_INT nz = 0;
-    SX_INT i, j;
-
-    A.num_rows = rows;
-    A.num_cols = cols;
-    A.num_nnzs = nnz;
-
-    A.Ap = row;
-    A.Aj = col;
-    A.Ax = val;
-
-    return A;
-}
-
 SX_VEC SetSXVector(double* matrix, int dim)
 {
     SX_VEC vec = sx_vec_create(dim);

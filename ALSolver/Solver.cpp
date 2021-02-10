@@ -1,7 +1,7 @@
 ﻿#include "Solver.h"
 #include <unsupported/Eigen/SparseExtra>
 
-int SolveSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+int Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
 {
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
@@ -21,7 +21,7 @@ int SolveSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int
     return 1;
 }
 
-int SolvePARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
 {
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
@@ -46,9 +46,38 @@ int SolvePARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, 
     return 1;
 }
 
-int SolveSXAMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
 {
-    SX_MAT A = SetSXMatrix(rows_offset, cols, vals, dim, dim, nnz);
+    SX_MAT A = sx_mat_create(dim, dim, rows_offset, cols, vals);
+
+    SX_VEC b = SetSXVector(F, dim);
+
+    SX_VEC x = sx_vec_create(dim);
+
+    SX_AMG_PARS pars;
+    SX_INT prob = 3;
+    SX_INT nglobal = 0;
+
+    sx_amg_pars_init(&pars);
+    pars.maxit = 20;
+    pars.verb = 2;
+
+    sx_solver_amg(&A, &x, &b, &pars);
+
+    for (int i = 0; i < dim; i++)
+        X[i] = sx_vec_get_entry(&x, i);
+
+    /* release memory */
+    //sx_mat_destroy(&A);
+    //sx_vec_destroy(&x);
+    //sx_vec_destroy(&b);
+
+    return 1;
+}
+
+int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+{
+    SX_MAT A = sx_mat_create(dim, dim, rows_offset, cols, vals);
     
     SX_VEC b = SetSXVector(F, dim);
 
@@ -84,10 +113,9 @@ int SolveSXAMG(int* rows_offset, int* cols, double* vals, double* F, int dim, in
         err0 = sx_blas_vec_norm2(&r);
 
         sx_printf("\nsx: solver: CG, preconditioner: AMG\n");
-        //sx_printf("Convergence settings: relative residual: %"fFMTe
-        //    ", maximal iterations: %"dFMT"\n\n", tol, maxits);
+        sx_printf("Convergence settings: relative residual: %f, maximal iterations: %d \n\n", tol, maxits);
 
-        //sx_printf("Initial residual: %"fFMTe"\n\n", err0);
+        sx_printf("Initial residual: %f \n\n", err0);
 
         int i;
         for (i = 0; i < maxits; i++) {
@@ -131,8 +159,8 @@ int SolveSXAMG(int* rows_offset, int* cols, double* vals, double* F, int dim, in
             /* check convergence */
             err = sx_blas_vec_norm2(&r);
 
-            //sx_printf("itr: %6"dFMT",     residual: %"fFMTe", relative error: %"fFMTe"\n",
-            //    i + 1, err, err / err0);
+            sx_printf("itr: %d,     residual: %f, relative error: %f \n",
+                i + 1, err, err / err0);
 
             if (err / err0 <= tol) break;
         }
@@ -147,9 +175,7 @@ int SolveSXAMG(int* rows_offset, int* cols, double* vals, double* F, int dim, in
     }
 
     for (int i = 0; i < dim; i++)
-    {
         X[i] = sx_vec_get_entry(&x, i);
-    }
 
     /* release memory */
     //sx_mat_destroy(&A);

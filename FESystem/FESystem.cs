@@ -185,11 +185,12 @@ namespace ALFE
 
             sw.Start();
             if (ParallelComputing)
-                Solved = SolvePARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                Solved = Solve_PARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
             else
-                Solved = SolveSimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
 
-            //Solved = SolveSXAMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+            //Solved = Solve_AMG_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -350,13 +351,16 @@ namespace ALFE
             }
         }
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int SolveSimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int Solve_SimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int SolvePARDISO(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int Solve_PARDISO(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int SolveSXAMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int Solve_AMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern int Solve_AMG_CG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
 
         public string SolvingInfo()
         {
