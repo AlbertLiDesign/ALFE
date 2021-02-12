@@ -145,8 +145,7 @@ namespace ALFE
 
                             if (nj.Active)
                             {
-                                // write the corresponding 2x2 fragment to CSR
-                                int idx1 = ni.PositionKG[nj.ActiveID]; // there is a room for optimization here
+                                int idx1 = ni.PositionKG[nj.ActiveID];
                                 for (int m = 0; m < DOF; m++)
                                 {
                                     for (int n = 0; n < DOF; n++)
@@ -388,6 +387,22 @@ namespace ALFE
             info += '\n';
             info += "NNZ: " + KG.NNZ.ToString();
             info += '\n';
+
+            return info;
+        }
+
+        public string DisplacementInfo()
+        {
+            string info = "------------------- Displacement Info -------------------";
+            info += '\n';
+
+            for (int i = 0; i < Model.Nodes.Count; i++)
+            {
+                info += Model.Nodes[i].Displacement.X;
+                info += '\t';
+                info += Model.Nodes[i].Displacement.Y;
+                info += '\n';
+            }
 
             return info;
         }

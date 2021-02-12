@@ -15,8 +15,8 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            //Test1001();
-            TestBESO();
+            Test1001();
+            //TestBESO();
 
             Console.ReadKey();
         }
@@ -29,10 +29,11 @@ namespace ALFE
         }
         public static void Test1001()
         {
-            Model model2d = new Cantilever2D(ElementType.PixelElement).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement, 12, 9).Model;
             FESystem sys = new FESystem(model2d, true);
             sys.Initialize();
             sys.Solve();
+            FEIO.WriteKG(sys.GetKG(), @"E:\ALCoding\ALFE\topoptTest\KG.mtx");
             FEPrint.PrintSystemInfo(sys);
             FEPrint.PrintDisplacement(sys);
         }

@@ -47,7 +47,7 @@ namespace ALFE
             {
                 for (int j = 0; j < ynum; j++)
                 {
-                    nodes.Add(new Node((double)i, (double)j));
+                    nodes.Add(new Node(i, j));
                     if (i == 0)
                         supports.Add(new Support(j, SupportType.Fixed));
                 }
