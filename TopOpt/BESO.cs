@@ -17,19 +17,19 @@ namespace ALFE.TopOpt
         public string Path;
 
         /// <summary>
-        /// Filter Radius
+        /// Filter radius
         /// </summary>
         public double FilterRadius;
 
         /// <summary>
-        /// .Volume fraction
+        /// Volume fraction
         /// </summary>
         public double VolumeFraction;     
 
         /// <summary>
         /// Penalty exponent
         /// </summary>
-        public int PenaltyExponent;
+        public double PenaltyExponent;
 
         /// <summary>
         /// Evolution rate
@@ -58,7 +58,7 @@ namespace ALFE.TopOpt
         /// </summary>
         private List<double> HistoryV = new List<double>();
 
-        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, int p=3,  double vf=0.5, int maxIter=100)
+        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p=3.0,  double vf=0.5, int maxIter=100)
         {
             if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
@@ -102,7 +102,7 @@ namespace ALFE.TopOpt
             double delta = 1.0;
             int iter = 0;
             List<double> Ae_old = new List<double>();
-            while (delta > 0.01f && iter < MaximumIteration)
+            while (delta > 0.001 && iter < MaximumIteration)
             {
                 List<double> timeCost = new List<double>();
                 Stopwatch sw = new Stopwatch();

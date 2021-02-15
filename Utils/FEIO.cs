@@ -379,7 +379,7 @@ namespace ALFE
             double ert = 0.0;
             double rmin = 0.0;
             double vf = 0.0;
-            int p = 0;
+            double p = 0;
             int maxIter = 0;
             bool parallel = false;
 
@@ -479,7 +479,7 @@ namespace ALFE
 
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Penalty Exponent")
-                            p = int.Parse(value[1].Split(' ')[1]);
+                            p = double.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Maximum Iteration")

@@ -15,8 +15,8 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            Test1001();
-            //TestBESO();
+            //Test1001();
+            TestBESO();
 
             Console.ReadKey();
         }
