@@ -1,5 +1,4 @@
 ﻿#include "Solver.h"
-#include <unsupported/Eigen/SparseExtra>
 
 int Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
 {
@@ -48,139 +47,142 @@ int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim,
 
 int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
 {
-    SX_MAT A = sx_mat_create(dim, dim, rows_offset, cols, vals);
-
-    SX_VEC b = SetSXVector(F, dim);
-
-    SX_VEC x = sx_vec_create(dim);
-
-    SX_AMG_PARS pars;
-    SX_INT prob = 3;
-    SX_INT nglobal = 0;
-
-    sx_amg_pars_init(&pars);
-    pars.maxit = 20;
-    pars.verb = 2;
-
-    sx_solver_amg(&A, &x, &b, &pars);
-
-    for (int i = 0; i < dim; i++)
-        X[i] = sx_vec_get_entry(&x, i);
-
-    /* release memory */
-    //sx_mat_destroy(&A);
-    //sx_vec_destroy(&x);
-    //sx_vec_destroy(&b);
-
+//    // Setup the solver:
+//    amgcl::profiler<> prof;
+//
+//    auto A = std::tie(dim, rows_offset, cols, vals);
+//
+//    // The RHS is filled with ones:
+//    std::vector<double> f(dim);
+//    for (int i = 0; i < dim; i++)
+//    {
+//        f.push_back(F[i]);
+//    }
+//    std::vector<double> x(dim, 0.0);
+//
+//    // Scale the matrix so that it has the unit diagonal.
+//// First, find the diagonal values:
+//    std::vector<double> D(dim, 1.0);
+//    for (ptrdiff_t i = 0; i < dim; ++i) {
+//        for (ptrdiff_t j = rows_offset[i], e = rows_offset[i + 1]; j < e; ++j) {
+//            if (cols[j] == i) {
+//                D[i] = 1 / sqrt(vals[j]);
+//                break;
+//            }
+//        }
+//    }
+//
+//    // Then, apply the scaling in-place:
+//    for (ptrdiff_t i = 0; i < dim; ++i) {
+//        for (ptrdiff_t j = rows_offset[i], e = rows_offset[i + 1]; j < e; ++j) {
+//            vals[j] *= D[i] * D[cols[j]];
+//        }
+//        f[i] *= D[i];
+//    }
+//
+//    // Compose the solver type
+//    typedef amgcl::static_matrix<double, 2, 2> dmat_type; // matrix value type in double precision
+//    typedef amgcl::static_matrix<double, 2, 1> dvec_type; // the corresponding vector value type
+//    typedef amgcl::static_matrix<float, 2, 2> smat_type; // matrix value type in single precision
+//
+//    typedef amgcl::backend::builtin<dmat_type> SBackend; // the solver backend
+//    typedef amgcl::backend::builtin<smat_type> PBackend; // the preconditioner backend
+//
+//    typedef amgcl::make_solver<
+//        amgcl::amg<
+//        PBackend,
+//        amgcl::coarsening::smoothed_aggregation,
+//        amgcl::relaxation::spai0
+//        >,
+//        amgcl::solver::cg<SBackend>
+//    > Solver;
+//
+//    // Solver parameters
+//    Solver::params prm;
+//    prm.solver.maxiter = 500;
+//    // Initialize the solver with the system matrix.
+//    // Use the block_matrix adapter to convert the matrix into
+//    // the block format on the fly:
+//    prof.tic("setup");
+//    auto Ab = amgcl::adapter::block_matrix<dmat_type>(A);
+//    Solver solve(Ab, prm);
+//    prof.toc("setup");
+//
+//    // Show the mini-report on the constructed solver:
+//    std::cout << solve << std::endl;
+//
+//    // Solve the system with the zero initial approximation:
+//    int iters;
+//    double error;
+//
+//    // Reinterpret both the RHS and the solution vectors as block-valued:
+//    auto f_ptr = reinterpret_cast<dvec_type*>(f.data());
+//    auto x_ptr = reinterpret_cast<dvec_type*>(x.data());
+//    auto vecF = amgcl::make_iterator_range(f_ptr, f_ptr + dim / 2);
+//    auto vecX = amgcl::make_iterator_range(x_ptr, x_ptr + dim / 2);
+//
+//    prof.tic("solve");
+//    std::tie(iters, error) = solve(Ab, vecF, vecX);
+//    prof.toc("solve");
+//
+//    // Output the number of iterations, the relative error,
+//    // and the profiling data:
+//    std::cout << "Iters: " << iters << std::endl
+//        << "Error: " << error << std::endl
+//        << prof << std::endl;
+//
+//    for (int i = 0; i < dim; i++)
+//        X[i] = x[i];
     return 1;
 }
 
 int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
 {
-    SX_MAT A = sx_mat_create(dim, dim, rows_offset, cols, vals);
-    
-    SX_VEC b = SetSXVector(F, dim);
+    amgcl::profiler<> prof;
 
-    SX_VEC x = sx_vec_create(dim);
+    // Read sparse matrix from MatrixMarket format.
+    // In general this should come pre-assembled.
+    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> map(dim, dim, nnz, rows_offset, cols, vals);
+  
+    Eigen::SparseMatrix<double, Eigen::RowMajor> A(map);
 
-    /* solve Ax = b using CG with AMG preconditioner */
-    {
-        SX_INT maxits = 2000;  /* maximal iterations */
-        SX_FLT tol = 1e-6;     /* stop tolerance */
-        SX_FLT err, err0;
-        SX_VEC r;     /* residual */
-        SX_VEC p;
-        SX_VEC z, q;
-        SX_FLT rho1, rho0 = 0., alpha, beta;
+    // Use vector of ones as RHS for simplicity:
+    auto B = SetVector(F, dim);
 
-        /* preconditioner */
-        SX_AMG mg;
-        SX_AMG_PARS pars;
+    // Zero initial approximation:
+    Eigen::VectorXd x = Eigen::VectorXd::Zero(dim);
 
-        /* pars */
-        sx_amg_pars_init(&pars);
-        pars.maxit = 1;
-        sx_amg_setup(&mg, &A, &pars);
+    // Setup the solver:
+    typedef amgcl::make_solver<
+        amgcl::amg<
+        amgcl::backend::builtin<double>,
+        amgcl::coarsening::smoothed_aggregation,
+        amgcl::relaxation::spai0
+        >,
+        amgcl::solver::cg<amgcl::backend::builtin<double> >
+    > Solver;
 
-        /* create vector */
-        r = sx_vec_create(dim);
-        z = sx_vec_create(dim);
-        q = sx_vec_create(dim);
-        p = sx_vec_create(dim);
+    // Solver parameters
+    Solver::params prm;
+    prm.solver.maxiter = 500;
 
-        /* initial residual */
-        sx_blas_mv_amxpbyz(-1., &A, &x, 1., &b, &r);
-        err0 = sx_blas_vec_norm2(&r);
+    prof.tic("setup");
+    Solver solve(A);
+    prof.toc("setup");
+    std::cout << solve << std::endl;
 
-        sx_printf("\nsx: solver: CG, preconditioner: AMG\n");
-        sx_printf("Convergence settings: relative residual: %f, maximal iterations: %d \n\n", tol, maxits);
+    // Solve the system for the given RHS:
+    int    iters;
+    double error;
+    prof.tic("solve");
+    std::tie(iters, error) = solve(B, x);
+    prof.toc("solve");
 
-        sx_printf("Initial residual: %f \n\n", err0);
-
-        int i;
-        for (i = 0; i < maxits; i++) {
-            /* supposed to solve preconditioning system Mz = r */
-#if 0       /* no pc */
-            sx_blas_vec_copy(&r, &z);
-#else       /* amg pc */
-            sx_blas_vec_set(&z, 0.);
-            sx_solver_amg_solve(&mg, &z, &r);
-#endif
-
-            /* rho = <r, z> */
-            rho1 = sx_blas_vec_dot(&r, &z);
-
-            if (i == 0) {
-                /* p = z */
-                sx_blas_vec_copy(&z, &p);
-            }
-            else {
-                beta = rho1 / rho0;
-
-                /* update p */
-                sx_blas_vec_axpby(1, &z, beta, &p);
-            }
-
-            /* save rho */
-            rho0 = rho1;
-
-            /* update q */
-            sx_blas_mv_mxy(&A, &p, &q);
-
-            /* compute alpha */
-            alpha = rho1 / sx_blas_vec_dot(&p, &q);
-
-            /* update x */
-            sx_blas_vec_axpy(alpha, &p, &x);
-
-            /* update r */
-            sx_blas_vec_axpy(-alpha, &q, &r);
-
-            /* check convergence */
-            err = sx_blas_vec_norm2(&r);
-
-            sx_printf("itr: %d,     residual: %f, relative error: %f \n",
-                i + 1, err, err / err0);
-
-            if (err / err0 <= tol) break;
-        }
-
-
-        sx_vec_destroy(&r);
-        sx_vec_destroy(&p);
-        sx_vec_destroy(&z);
-        sx_vec_destroy(&q);
-
-        sx_amg_data_destroy(&mg);
-    }
+    std::cout << iters << " " << error << std::endl
+       << prof << std::endl;
 
     for (int i = 0; i < dim; i++)
-        X[i] = sx_vec_get_entry(&x, i);
-
-    /* release memory */
-    //sx_mat_destroy(&A);
-    //sx_vec_destroy(&x);
-    //sx_vec_destroy(&b);
+        X[i] = x[i];
 
     return 1;
 }

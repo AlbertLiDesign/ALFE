@@ -23,13 +23,3 @@ Eigen::VectorXd SetVector(double* matrix, int dim)
     }
     return vec;
 }
-
-SX_VEC SetSXVector(double* matrix, int dim)
-{
-    SX_VEC vec = sx_vec_create(dim);
-    for (int i = 0; i < dim; i++)
-    {
-        sx_vec_set_entry(&vec, i, matrix[i]);
-    }
-    return vec;
-}

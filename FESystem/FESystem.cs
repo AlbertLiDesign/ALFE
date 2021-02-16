@@ -178,17 +178,30 @@ namespace ALFE
         /// <summary>
         /// Solve the finite element system. You can get the displacement vector after running this function.
         /// </summary>
-        public void Solve()
+        public void Solve(int solver = 0)
         {
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
-            if (ParallelComputing)
-                Solved = Solve_PARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
-            else
-                Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
 
-            //Solved = Solve_AMG_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+            switch (solver)
+            {
+                case 0:
+                    Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    break;
+                case 1:
+                    Solved = Solve_PARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    break;
+                case 2:
+                    Solved = Solve_AMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    break;
+                case 3:
+                    Solved = Solve_AMG_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    break;
+                default:
+                    Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    break;
+            }
 
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
