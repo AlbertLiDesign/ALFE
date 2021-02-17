@@ -31,7 +31,7 @@ namespace ALFE
             Model model2d = new Cantilever2D(ElementType.PixelElement).Model;
             FESystem sys = new FESystem(model2d, true, false);
             sys.Initialize();
-            sys.Solve();
+            sys.Solve(3);
             //FEIO.WriteKG(sys.GetKG(), @"E:\ALCoding\ALFE\topoptTest\KG.mtx");
             FEPrint.PrintSystemInfo(sys);
             FEPrint.PrintDisplacement(sys);
