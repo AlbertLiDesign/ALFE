@@ -16,7 +16,7 @@ Evolution Rate: 0.01
 Filter Radius: 1.5
 Penalty Exponent: 3
 Maximum Iteration: 200
-Solver: 1
+Solver: 0
 
 Model Info: 
 N,0,0,0
