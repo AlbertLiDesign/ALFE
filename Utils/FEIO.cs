@@ -325,6 +325,7 @@ namespace ALFE
             sw.WriteLine("Filter Radius: " + beso.FilterRadius.ToString());
             sw.WriteLine("Penalty Exponent: " + beso.PenaltyExponent.ToString());
             sw.WriteLine("Maximum Iteration: " + beso.MaximumIteration.ToString());
+            sw.WriteLine("Solver: " + beso.Solver.ToString());
 
             sw.WriteLine();
 
@@ -381,6 +382,7 @@ namespace ALFE
             double vf = 0.0;
             double p = 0;
             int maxIter = 0;
+            int solver = 0;
             bool parallel = false;
 
             if (File.Exists(besoPath))
@@ -485,6 +487,10 @@ namespace ALFE
                         if (value[0] == "Maximum Iteration")
                             maxIter = int.Parse(value[1].Split(' ')[1]);
 
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Solver")
+                            solver = int.Parse(value[1].Split(' ')[1]);
+
                         readBESOpara = true;
                     }
                 }
@@ -530,7 +536,7 @@ namespace ALFE
                 SR.Close();
                 SR.Dispose();
             }
-            BESO beso = new BESO(projectPath, new FESystem(model, unify, parallel), rmin, ert, p, vf, maxIter);
+            BESO beso = new BESO(projectPath, new FESystem(model, unify, parallel), rmin, ert, p, vf, maxIter, solver);
             return beso;
         }
     }

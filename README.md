@@ -57,3 +57,47 @@ Fltering Sensitivity: 881.3594 ms
 Marking Elements: 626.9642 ms
 Checking Convergence: 136.8982 ms
 ```
+```
+Solver
+======
+Type:             CG
+Unknowns:         999000
+Memory footprint: 60.97 M
+
+Preconditioner
+==============
+Number of levels:    4
+Operator complexity: 1.12
+Grid complexity:     1.13
+Memory footprint:    436.23 M
+
+level     unknowns       nonzeros      memory
+---------------------------------------------
+    0       999000        8979010    386.57 M (88.90%)
+    1       111222         997664     42.95 M ( 9.88%)
+    2        12432         110774      4.77 M ( 1.10%)
+    3         1406          12424      1.94 M ( 0.12%)
+
+54 7.9356e-09
+
+[Profile:    18.694 s] (100.00%)
+[ self:       0.503 s] (  2.69%)
+[  setup:     1.210 s] (  6.47%)
+[  solve:    16.981 s] ( 90.84%)
+
+
+------------------- Model Info -------------------
+Nodes: 1000000
+Degree-of-freedom: 2000000
+Elements: 998001
+Type: PixelElement
+------------------- Matrix Info -------------------
+Rows: 1998000
+Cols: 1998000
+NNZ: 35916040
+------------------- Time Cost -------------------
+Computing Ke: 21.4632 ms
+Initializing KG: 4538.7456 ms
+Assembling KG: 1016.7899 ms
+Solving: 18852.1698 ms
+```

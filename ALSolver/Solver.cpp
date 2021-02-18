@@ -73,10 +73,11 @@ int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int
 
     // Solver parameters
     Solver::params prm;
+    prm.solver.tol = 1e-8;
     prm.solver.maxiter = 500;
 
     prof.tic("setup");
-    Solver solve(A);
+    Solver solve(A, prm);
     prof.toc("setup");
     std::cout << solve << std::endl;
 
@@ -107,35 +108,53 @@ int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, 
     Eigen::SparseMatrix<double, Eigen::RowMajor> A(map);
 
     // Use vector of ones as RHS for simplicity:
-    auto B = SetVector(F, dim);
+    auto b = SetVector(F, dim);
 
     // Zero initial approximation:
     Eigen::VectorXd x = Eigen::VectorXd::Zero(dim);
 
+
+    // Compose the solver type
+    typedef amgcl::static_matrix<double, 2, 2> dmat_type; // matrix value type in double precision
+    typedef amgcl::static_matrix<double, 2, 1> dvec_type; // the corresponding vector value type
+    typedef amgcl::static_matrix<float, 2, 2> smat_type; // matrix value type in single precision
+
+    typedef amgcl::backend::builtin<dmat_type> SBackend; // the solver backend
+    typedef amgcl::backend::builtin<smat_type> PBackend; // the preconditioner backend
+
     // Setup the solver:
     typedef amgcl::make_solver<
         amgcl::amg<
-        amgcl::backend::builtin<double>,
+        PBackend,
         amgcl::coarsening::smoothed_aggregation,
         amgcl::relaxation::spai0
         >,
-        amgcl::solver::cg<amgcl::backend::builtin<double> >
+        amgcl::solver::cg<SBackend>
     > Solver;
 
     // Solver parameters
     Solver::params prm;
-    prm.solver.maxiter = 500;
+    prm.solver.tol = 1e-8;
+    prm.solver.maxiter = 2000;
 
     prof.tic("setup");
-    Solver solve(A);
+    auto Ab = amgcl::adapter::block_matrix<dmat_type>(A);
+    Solver solve(Ab, prm);
     prof.toc("setup");
     std::cout << solve << std::endl;
 
     // Solve the system for the given RHS:
     int    iters;
     double error;
+    
+    // Reinterpret both the RHS and the solution vectors as block-valued:
+    auto b_ptr = reinterpret_cast<dvec_type*>(b.data());
+    auto x_ptr = reinterpret_cast<dvec_type*>(x.data());
+    auto b_block = amgcl::make_iterator_range(b_ptr, b_ptr + dim / 2);
+    auto x_block = amgcl::make_iterator_range(x_ptr, x_ptr + dim / 2);
+
     prof.tic("solve");
-    std::tie(iters, error) = solve(B, x);
+    std::tie(iters, error) = solve(b_block, x_block);
     prof.toc("solve");
 
     std::cout << iters << " " << error << std::endl

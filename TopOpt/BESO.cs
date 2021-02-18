@@ -41,6 +41,8 @@ namespace ALFE.TopOpt
         /// </summary>
         public int MaximumIteration;
 
+        public int Solver;
+
         /// <summary>
         /// Dimension
         /// </summary>
@@ -58,7 +60,7 @@ namespace ALFE.TopOpt
         /// </summary>
         private List<double> HistoryV = new List<double>();
 
-        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p=3.0,  double vf=0.5, int maxIter=100)
+        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p=3.0,  double vf=0.5, int maxIter=100, int solver = 0)
         {
             if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
@@ -74,6 +76,7 @@ namespace ALFE.TopOpt
             FilterRadius = rmin;
             Dim = system.Model.DOF;
             Path = path;
+            Solver = solver;
             ParallelComputing = system.ParallelComputing;
         }
 
@@ -113,7 +116,7 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 sw.Restart();
-                System.Solve();
+                System.Solve(Solver);
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
