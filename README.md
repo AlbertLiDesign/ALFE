@@ -58,46 +58,94 @@ Marking Elements: 626.9642 ms
 Checking Convergence: 136.8982 ms
 ```
 ```
-Solver
-======
-Type:             CG
-Unknowns:         999000
-Memory footprint: 60.97 M
-
-Preconditioner
-==============
-Number of levels:    4
-Operator complexity: 1.12
-Grid complexity:     1.13
-Memory footprint:    436.23 M
-
-level     unknowns       nonzeros      memory
----------------------------------------------
-    0       999000        8979010    386.57 M (88.90%)
-    1       111222         997664     42.95 M ( 9.88%)
-    2        12432         110774      4.77 M ( 1.10%)
-    3         1406          12424      1.94 M ( 0.12%)
-
-54 7.9356e-09
-
-[Profile:    18.694 s] (100.00%)
-[ self:       0.503 s] (  2.69%)
-[  setup:     1.210 s] (  6.47%)
-[  solve:    16.981 s] ( 90.84%)
-
-
 ------------------- Model Info -------------------
-Nodes: 1000000
-Degree-of-freedom: 2000000
-Elements: 998001
+Nodes: 2500
+Degree-of-freedom: 5000
+Elements: 2401
 Type: PixelElement
 ------------------- Matrix Info -------------------
-Rows: 1998000
-Cols: 1998000
-NNZ: 35916040
+Rows: 4900
+Cols: 4900
+NNZ: 85840
 ------------------- Time Cost -------------------
-Computing Ke: 21.4632 ms
-Initializing KG: 4538.7456 ms
-Assembling KG: 1016.7899 ms
-Solving: 18852.1698 ms
+Solver: SimplicialLLT
+Solving: 28.1793 ms
+
+Solver: CholmodSimplicialLLT
+Solving: 47.6843 ms
+
+Solver: CholmodSuperNodalLLT
+Solving: 49.8226 ms
+
+Solver: PARDISO
+Solving: 115.6076 ms
+```
+```
+------------------- Model Info -------------------
+Nodes: 8800
+Degree-of-freedom: 17600
+Elements: 8611
+Type: PixelElement
+------------------- Matrix Info -------------------
+Rows: 17440
+Cols: 17440
+NNZ: 309400
+------------------- Time Cost -------------------
+Solver: SimplicialLLT
+Solving: 269.4793 ms
+
+Solver: CholmodSimplicialLLT
+Solving: 311.7806 ms
+
+Solver: CholmodSuperNodalLLT
+Solving: 152.5887 ms
+
+Solver: PARDISO
+Solving: 151.8107 ms
+```
+```
+------------------- Model Info -------------------
+Nodes: 40000
+Degree-of-freedom: 80000
+Elements: 39601
+Type: PixelElement
+------------------- Matrix Info -------------------
+Rows: 79600
+Cols: 79600
+NNZ: 1423240
+------------------- Time Cost -------------------
+Solver: SimplicialLLT
+Solving: 2007.5914 ms
+
+Solver: CholmodSimplicialLLT
+Solving: 839.5229 ms
+
+Solver: CholmodSuperNodalLLT
+Solving: 703.2 ms
+
+Solver: PARDISO
+Solving: 432.2006 ms
+```
+```
+------------------- Model Info -------------------
+Nodes: 250000
+Degree-of-freedom: 500000
+Elements: 249001
+Type: PixelElement
+------------------- Matrix Info -------------------
+Rows: 499000
+Cols: 499000
+NNZ: 8958040
+------------------- Time Cost -------------------
+Solver: SimplicialLLT
+Solving: 31814.1352 ms
+
+Solver: CholmodSimplicialLLT
+Solving: 5759.2955 ms
+
+Solver: CholmodSuperNodalLLT
+Solving: 5532.607 ms
+
+Solver: PARDISO
+Solving: 1935.2917 ms
 ```

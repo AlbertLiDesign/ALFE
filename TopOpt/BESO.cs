@@ -116,7 +116,7 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 sw.Restart();
-                System.Solve(Solver);
+                System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 

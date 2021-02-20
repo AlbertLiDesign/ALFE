@@ -20,6 +20,47 @@ int Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, in
     return 1;
 }
 
+int Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+{
+    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
+    auto B = SetVector(F, dim);
+
+    Eigen::VectorXd result;
+
+    Eigen::CholmodSupernodalLLT<Eigen::SparseMatrix<double>> llt(A);
+
+    llt.analyzePattern(A);
+    llt.factorize(A);
+
+    result = llt.solve(B);
+
+    for (int i = 0; i < dim; i++)
+        X[i] = result(i);
+
+    return 1;
+}
+
+int Solve_CholmodSuperNodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+{
+    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
+    auto B = SetVector(F, dim);
+
+    Eigen::VectorXd result;
+
+    Eigen::CholmodSupernodalLLT<Eigen::SparseMatrix<double>> llt(A);
+
+    llt.analyzePattern(A);
+    llt.factorize(A);
+
+    result = llt.solve(B);
+
+    for (int i = 0; i < dim; i++)
+        X[i] = result(i);
+
+    return 1;
+}
+
+
 int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
 {
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);

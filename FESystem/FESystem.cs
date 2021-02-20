@@ -10,8 +10,18 @@ using System.Threading;
 
 namespace ALFE
 {
+    public enum Solver
+    {
+        SimplicialLLT,
+        CholmodSimplicialLLT,
+        CholmodSuperNodalLLT,
+        PARDISO,
+        AMG,
+        AMG_CG
+    }
     public class FESystem
     {
+        public Solver _Solver;
         public bool ParallelComputing = true;
         /// <summary>
         /// Time cost in each step: 0 = Computing Ke, 1 = Initializing KG, 2 = Assembling KG, 3 = Solving
@@ -72,12 +82,13 @@ namespace ALFE
         /// Initialize the finite element system.
         /// </summary>
         /// <param name="model"> A finite element model</param>
-        public FESystem(Model model, bool unify = false, bool parallel = true)
+        public FESystem(Model model, bool unify = false, bool parallel = true, Solver solver = Solver.SimplicialLLT)
         {
             Model = model;
             Unify = unify;
             DOF = model.DOF;
             ParallelComputing = parallel;
+            _Solver = solver;
 
             ApplySupports();
             Dim = (Model.Nodes.Count - FixedID.Count) * DOF;
@@ -178,24 +189,30 @@ namespace ALFE
         /// <summary>
         /// Solve the finite element system. You can get the displacement vector after running this function.
         /// </summary>
-        public void Solve(int solver = 0)
+        public void Solve()
         {
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
 
-            switch (solver)
+            switch (_Solver)
             {
-                case 0:
+                case Solver.SimplicialLLT:
                     Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
                     break;
-                case 1:
+                case Solver.CholmodSimplicialLLT:
+                    Solved = Solve_CholmodSimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    break;
+                case Solver.CholmodSuperNodalLLT:
+                    Solved = Solve_CholmodSuperNodalLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    break;
+                case Solver.PARDISO:
                     Solved = Solve_PARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
                     break;
-                case 2:
+                case Solver.AMG:
                     Solved = Solve_AMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
                     break;
-                case 3:
+                case Solver.AMG_CG:
                     Solved = Solve_AMG_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
                     break;
                 default:
@@ -366,6 +383,12 @@ namespace ALFE
         private static extern int Solve_SimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern int Solve_CholmodSimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern int Solve_CholmodSuperNodalLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int Solve_PARDISO(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
@@ -377,6 +400,8 @@ namespace ALFE
         public string SolvingInfo()
         {
             string info = "------------------- Time Cost -------------------";
+            info += '\n';
+            info += "Solver: " + _Solver.ToString();
             info += '\n';
             info += "Computing Ke: " + TimeCost[0].ToString() + " ms";
             info += '\n';

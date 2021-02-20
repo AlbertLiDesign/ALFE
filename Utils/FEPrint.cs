@@ -42,6 +42,7 @@ namespace ALFE
             Console.Write(sys.Model.ModelInfo());
             Console.Write(sys.MatrixInfo());
             Console.Write(sys.SolvingInfo());
+            Console.WriteLine();
         }
         public static void PrintDeviceInfo()
         {
