@@ -14,7 +14,7 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            Test1001();
+            TestAllSolver();
 
             //TestBESO();
 
@@ -27,9 +27,23 @@ namespace ALFE
             beso.Initialize();
             beso.Optimize();
         }
-        public static void Test1001()
+        public static void TestSXAMG()
         {
-            Model model2d = new Cantilever2D(ElementType.PixelElement,11,80).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement, 110, 80).Model;
+
+            FESystem sys0 = new FESystem(model2d, true, false, Solver.SXAMG);
+            sys0.Initialize();
+            sys0.Solve();
+
+            Console.Write(sys0.Model.ModelInfo());
+            Console.Write(sys0.MatrixInfo());
+
+            Console.Write(sys0.SolvingInfo());
+            Console.WriteLine();
+        }
+        public static void TestAllSolver()
+        {
+            Model model2d = new Cantilever2D(ElementType.PixelElement,110,80).Model;
 
             FESystem sys0 = new FESystem(model2d, true, false, Solver.SimplicialLLT);
             sys0.Initialize();
@@ -62,12 +76,12 @@ namespace ALFE
             Console.Write(sys3.SolvingInfo());
             Console.WriteLine();
 
-            //FESystem sys4 = new FESystem(model2d, true, false, Solver.PARDISO);
-            //sys4.Initialize();
-            //sys4.Solve();
+            FESystem sys4 = new FESystem(model2d, true, false, Solver.SXAMG);
+            sys4.Initialize();
+            sys4.Solve();
 
-            //Console.Write(sys4.SolvingInfo());
-            //Console.WriteLine();
+            Console.Write(sys4.SolvingInfo());
+            Console.WriteLine();
 
             //FEIO.WriteKG(sys.GetKG(), @"E:\ALCoding\ALFE\topoptTest\KG.mtx");
             //FEPrint.PrintDisplacement(sys);

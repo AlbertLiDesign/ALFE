@@ -17,6 +17,7 @@ namespace ALFE
         CholmodSuperNodalLLT,
         PARDISO,
         AMG,
+        SXAMG,
         AMG_CG
     }
     public class FESystem
@@ -212,6 +213,9 @@ namespace ALFE
                 case Solver.AMG:
                     Solved = Solve_AMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
                     break;
+                case Solver.SXAMG:
+                    Solved = Solve_SXAMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    break;
                 case Solver.AMG_CG:
                     Solved = Solve_AMG_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
                     break;
@@ -393,6 +397,9 @@ namespace ALFE
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int Solve_AMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern int Solve_SXAMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int Solve_AMG_CG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);

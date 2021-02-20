@@ -138,6 +138,47 @@ int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int
     return 1;
 }
 
+
+int Solve_SXAMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+{
+    SX_MAT A;
+    SX_AMG_PARS pars;
+    SX_RTN rtn;
+    SX_VEC b, x;
+
+    A = sx_mat_create(dim, dim, rows_offset, cols, vals);
+    b = sx_vec_create(dim);
+    for (int i = 0; i < dim; i++)
+        sx_vec_set_entry(&b, i, F[i]);
+    x = sx_vec_create(dim * dof);
+
+    sx_amg_pars_init(&pars);
+    pars.verb = 3;
+    pars.maxit = 1000;
+    pars.cycle_itr = 1;
+    pars.tol = 1e-8;
+    pars.max_levels = 1;
+
+    //sx_printf("A: m = %d, n = %d, nnz = %d\n", A.num_rows, A.num_cols, A.num_nnzs);
+    //sx_amg_pars_print(&pars);
+
+    rtn = sx_solver_amg(&A, &x, &b, &pars);
+
+    //sx_printf("AMG residual: %f\n", rtn.ares); /* absolute residual */
+    //sx_printf("AMG relative residual: %f\n", rtn.rres); /* relative residual */
+    //sx_printf("AMG iterations: %f\n", rtn.nits);  /* number of iterations */
+
+    for (int i = 0; i < dim; i++)
+        X[i] = sx_vec_get_entry(&x, i);
+
+    sx_mat_destroy(&A);
+    sx_vec_destroy(&x);
+    sx_vec_destroy(&b);
+
+    return 1;
+}
+
+
 int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
 {
     amgcl::profiler<> prof;

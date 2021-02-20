@@ -143,14 +143,14 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>E:\Libraries\Eigen3\include\eigen3;E:\FEM\amgcl-master;E:\Compiling\boost_1_70_0;E:\FEM\solver\SP_ROOT\build\install\include\suitesparse</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Libraries\Eigen3\include\eigen3;E:\FEM\amgcl-master;E:\Compiling\boost_1_70_0;E:\FEM\solver\SP_ROOT\build\install\include\suitesparse;E:\Coding\sxamg\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>tbb_dll.lib;libcholmod.lib;libamd.lib;libbtf.lib;libcamd.lib;libccolamd.lib;metis.lib;libcolamd.lib;suitesparseconfig.lib;libamgcl.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Intel\oneAPI\tbb\2021.1.1\lib\intel64\vc14;E:\FEM\amgcl-master\build\lib\Release;E:\FEM\solver\SP_ROOT\build\install\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sxamg.lib;tbb_dll.lib;libcholmod.lib;libamd.lib;libbtf.lib;libcamd.lib;libccolamd.lib;metis.lib;libcolamd.lib;suitesparseconfig.lib;libamgcl.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\Intel\oneAPI\tbb\2021.1.1\lib\intel64\vc14;E:\FEM\amgcl-master\build\lib\Release;E:\FEM\solver\SP_ROOT\build\install\lib;E:\Coding\sxamg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -163,7 +163,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>E:\Libraries\Eigen3\include\eigen3;E:\FEM\amgcl-master;E:\Compiling\boost_1_70_0;E:\FEM\solver\SP_ROOT\build\install\include\suitesparse</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Libraries\Eigen3\include\eigen3;E:\FEM\amgcl-master;E:\Compiling\boost_1_70_0;E:\FEM\solver\SP_ROOT\build\install\include\suitesparse;E:\Coding\sxamg\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -171,8 +171,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Intel\oneAPI\tbb\2021.1.1\lib\intel64\vc14;E:\FEM\amgcl-master\build\lib\Release;E:\FEM\solver\SP_ROOT\build\install\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>tbb_dll.lib;libcholmod.lib;libamd.lib;metis.lib;libbtf.lib;libcamd.lib;libccolamd.lib;libcolamd.lib;suitesparseconfig.lib;libamgcl.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\Intel\oneAPI\tbb\2021.1.1\lib\intel64\vc14;E:\FEM\amgcl-master\build\lib\Release;E:\FEM\solver\SP_ROOT\build\install\lib;E:\Coding\sxamg\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sxamg.lib;tbb_dll.lib;libcholmod.lib;libamd.lib;metis.lib;libbtf.lib;libcamd.lib;libccolamd.lib;libcolamd.lib;suitesparseconfig.lib;libamgcl.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
