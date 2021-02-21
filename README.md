@@ -149,3 +149,33 @@ Solving: 5532.607 ms
 Solver: PARDISO
 Solving: 1935.2917 ms
 ```
+
+```
+------------------- Model Info -------------------
+Nodes: 90000
+Degree-of-freedom: 180000
+Elements: 89401
+Type: PixelElement
+------------------- Matrix Info -------------------
+Rows: 179400
+Cols: 179400
+NNZ: 3214840
+------------------- Time Cost -------------------
+Solver: SimplicialLLT
+Solving: 7435.2329 ms
+
+Solver: CholmodSimplicialLLT
+Solving: 1715.392 ms
+
+Solver: CholmodSuperNodalLLT
+Solving: 1787.637 ms
+
+Solver: PARDISO
+Solving: 678.029 ms
+
+Solver: SXAMG
+Solving: 24377.3846 ms
+
+Solver: AMG_CG
+Solving: 1325.4935 ms
+```

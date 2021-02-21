@@ -1,6 +1,6 @@
 ﻿#include "Solver.h"
 
-int Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+int Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
 {
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
@@ -20,7 +20,7 @@ int Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, in
     return 1;
 }
 
-int Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+int Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
 {
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
@@ -40,7 +40,7 @@ int Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double
     return 1;
 }
 
-int Solve_CholmodSuperNodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+int Solve_CholmodSuperNodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
 {
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
@@ -61,13 +61,10 @@ int Solve_CholmodSuperNodalLLT(int* rows_offset, int* cols, double* vals, double
 }
 
 
-int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
 {
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
-
-    //Eigen::saveMarket(A, "C:/Users/alber/Desktop/mat.mtx", Eigen::UpLoType::Symmetric);
-    //Eigen::saveMarket(B, "C:/Users/alber/Desktop/B.mtx");
 
     Eigen::VectorXd result;
 
@@ -86,60 +83,7 @@ int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim,
     return 1;
 }
 
-int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
-{
-    amgcl::profiler<> prof;
-
-    // Read sparse matrix from MatrixMarket format.
-    // In general this should come pre-assembled.
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> map(dim, dim, nnz, rows_offset, cols, vals);
-
-    Eigen::SparseMatrix<double, Eigen::RowMajor> A(map);
-
-    // Use vector of ones as RHS for simplicity:
-    auto B = SetVector(F, dim);
-
-    // Zero initial approximation:
-    Eigen::VectorXd x = Eigen::VectorXd::Zero(dim);
-
-    // Setup the solver:
-    typedef amgcl::make_solver<
-        amgcl::amg<
-        amgcl::backend::builtin<double>,
-        amgcl::coarsening::smoothed_aggregation,
-        amgcl::relaxation::spai0
-        >,
-        amgcl::solver::cg<amgcl::backend::builtin<double> >
-    > Solver;
-
-    // Solver parameters
-    Solver::params prm;
-    prm.solver.tol = 1e-8;
-    prm.solver.maxiter = 500;
-
-    prof.tic("setup");
-    Solver solve(A, prm);
-    prof.toc("setup");
-    std::cout << solve << std::endl;
-
-    // Solve the system for the given RHS:
-    int    iters;
-    double error;
-    prof.tic("solve");
-    std::tie(iters, error) = solve(B, x);
-    prof.toc("solve");
-
-    std::cout << iters << " " << error << std::endl
-        << prof << std::endl;
-
-    for (int i = 0; i < dim; i++)
-        X[i] = x[i];
-
-    return 1;
-}
-
-
-int Solve_SXAMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
 {
     SX_MAT A;
     SX_AMG_PARS pars;
@@ -150,23 +94,19 @@ int Solve_SXAMG(int* rows_offset, int* cols, double* vals, double* F, int dim, i
     b = sx_vec_create(dim);
     for (int i = 0; i < dim; i++)
         sx_vec_set_entry(&b, i, F[i]);
-    x = sx_vec_create(dim * dof);
+    x = sx_vec_create(dim);
 
     sx_amg_pars_init(&pars);
     pars.verb = 3;
-    pars.maxit = 1000;
-    pars.cycle_itr = 1;
-    pars.tol = 1e-8;
-    pars.max_levels = 1;
 
     //sx_printf("A: m = %d, n = %d, nnz = %d\n", A.num_rows, A.num_cols, A.num_nnzs);
     //sx_amg_pars_print(&pars);
 
     rtn = sx_solver_amg(&A, &x, &b, &pars);
 
-    //sx_printf("AMG residual: %f\n", rtn.ares); /* absolute residual */
-    //sx_printf("AMG relative residual: %f\n", rtn.rres); /* relative residual */
-    //sx_printf("AMG iterations: %f\n", rtn.nits);  /* number of iterations */
+    sx_printf("AMG residual: %f\n", rtn.ares); /* absolute residual */
+    sx_printf("AMG relative residual: %f\n", rtn.rres); /* relative residual */
+    sx_printf("AMG iterations: %f\n", rtn.nits);  /* number of iterations */
 
     for (int i = 0; i < dim; i++)
         X[i] = sx_vec_get_entry(&x, i);
@@ -179,7 +119,8 @@ int Solve_SXAMG(int* rows_offset, int* cols, double* vals, double* F, int dim, i
 }
 
 
-int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int dof, int nnz, double* X)
+
+int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
 {
     amgcl::profiler<> prof;
 
@@ -217,7 +158,10 @@ int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, 
     // Solver parameters
     Solver::params prm;
     prm.solver.tol = 1e-8;
-    prm.solver.maxiter = 2000;
+    prm.solver.maxiter = 100;
+    prm.precond.max_levels = 20;
+    prm.precond.pre_cycles = 1;
+    prm.precond.ncycle = 1;
 
     prof.tic("setup");
     auto Ab = amgcl::adapter::block_matrix<dmat_type>(A);

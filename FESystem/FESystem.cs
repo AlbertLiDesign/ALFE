@@ -17,7 +17,6 @@ namespace ALFE
         CholmodSuperNodalLLT,
         PARDISO,
         AMG,
-        SXAMG,
         AMG_CG
     }
     public class FESystem
@@ -199,28 +198,25 @@ namespace ALFE
             switch (_Solver)
             {
                 case Solver.SimplicialLLT:
-                    Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
                 case Solver.CholmodSimplicialLLT:
-                    Solved = Solve_CholmodSimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    Solved = Solve_CholmodSimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
                 case Solver.CholmodSuperNodalLLT:
-                    Solved = Solve_CholmodSuperNodalLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    Solved = Solve_CholmodSuperNodalLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
                 case Solver.PARDISO:
-                    Solved = Solve_PARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    Solved = Solve_PARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
                 case Solver.AMG:
-                    Solved = Solve_AMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
-                    break;
-                case Solver.SXAMG:
-                    Solved = Solve_SXAMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    Solved = Solve_AMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
                 case Solver.AMG_CG:
-                    Solved = Solve_AMG_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    Solved = Solve_AMG_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
                 default:
-                    Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, DOF, KG.NNZ, X) == 1 ? true : false;
+                    Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
             }
 
@@ -384,25 +380,22 @@ namespace ALFE
             }
         }
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_SimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int Solve_SimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_CholmodSimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int Solve_CholmodSimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_CholmodSuperNodalLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int Solve_CholmodSuperNodalLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_PARDISO(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int Solve_PARDISO(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_AMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int Solve_AMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim,  int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_SXAMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
-
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_AMG_CG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int dof, int nnz, double[] X);
+        private static extern int Solve_AMG_CG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim,  int nnz, double[] X);
 
         public string SolvingInfo()
         {
