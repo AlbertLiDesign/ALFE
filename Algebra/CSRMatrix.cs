@@ -44,7 +44,7 @@ namespace ALFE
             Vals = new double[NNZ];
         }
 
-        public COOMatrix ToCOO()
+        public COOMatrix ToCOO(bool symmetry = true)
         {
             List<Triplet> triplets = new List<Triplet>();
 
@@ -54,12 +54,17 @@ namespace ALFE
                 int dif = Rows[i + 1] - Rows[i];
                 for (int j = 0; j < dif; j++)
                 {
-                    if (Cols[id] >= i)
+
+                    if (symmetry)
+                    {
+                        if (Cols[id] >= i)
+                            triplets.Add(new Triplet(i, Cols[id], Vals[id]));
+                    }
+                    else
                         triplets.Add(new Triplet(i, Cols[id], Vals[id]));
                     id++;
                 }
             }
-
             return new COOMatrix(triplets, N, N);
         }
         public void Clear()

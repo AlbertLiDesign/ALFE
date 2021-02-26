@@ -34,6 +34,7 @@ AMGCL_USE_EIGEN_VECTORS_WITH_BUILTIN_BACKEND()
 Eigen::VectorXd SetVector(double* matrix, int dim);
 Eigen::SparseMatrix<double> SetCOOMatrix(int* row, int* col, double* val, int rows, int cols, int nnz);
 extern "C" __declspec(dllexport) int Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
+extern "C" __declspec(dllexport) int Solve_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_CholmodSuperNodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);

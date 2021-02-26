@@ -13,6 +13,7 @@ namespace ALFE
     public enum Solver
     {
         SimplicialLLT,
+        CG,
         CholmodSimplicialLLT,
         CholmodSuperNodalLLT,
         PARDISO,
@@ -193,12 +194,15 @@ namespace ALFE
         {
             Stopwatch sw = new Stopwatch();
 
-            sw.Start();
+            sw.Start();           
 
             switch (_Solver)
             {
                 case Solver.SimplicialLLT:
                     Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
+                    break;
+                case Solver.CG:
+                    Solved = Solve_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
                 case Solver.CholmodSimplicialLLT:
                     Solved = Solve_CholmodSimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
@@ -381,6 +385,9 @@ namespace ALFE
         }
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int Solve_SimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
+
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern int Solve_CG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int Solve_CholmodSimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);

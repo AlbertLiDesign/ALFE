@@ -1,10 +1,5 @@
-﻿using ALFE;
-using ALFE.TopOpt;
+﻿using ALFE.TopOpt;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ALFE
 {
@@ -27,11 +22,11 @@ namespace ALFE
             beso.Initialize();
             beso.Optimize();
         }
-        public static void TestAMGCL()
+        public static void TestAMG()
         {
-            Model model2d = new Cantilever2D(ElementType.PixelElement, 1000, 1000).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement).Model;
 
-            FESystem sys0 = new FESystem(model2d, true, false, Solver.PARDISO);
+            FESystem sys0 = new FESystem(model2d, true, false, Solver.SimplicialLLT);
             sys0.Initialize();
             sys0.Solve();
 
@@ -44,8 +39,8 @@ namespace ALFE
             Console.WriteLine();
         }
         public static void TestAllSolver()
-        {
-            Model model2d = new Cantilever2D(ElementType.PixelElement, 500, 500).Model;
+        { 
+            Model model2d = new Cantilever2D(ElementType.PixelElement, 80, 40).Model;
 
             FESystem sys0 = new FESystem(model2d, true, false, Solver.SimplicialLLT);
             sys0.Initialize();
@@ -84,13 +79,13 @@ namespace ALFE
             Console.WriteLine("Solving: " + sys3.TimeCost[3].ToString() + " ms");
             Console.WriteLine();
 
-            //FESystem sys4 = new FESystem(model2d, true, false, Solver.SXAMG);
-            //sys4.Initialize();
-            //sys4.Solve();
+            FESystem sys4 = new FESystem(model2d, true, false, Solver.CG);
+            sys4.Initialize();
+            sys4.Solve();
 
-            //Console.WriteLine("Solver: " + sys4._Solver.ToString());
-            //Console.WriteLine("Solving: " + sys4.TimeCost[3].ToString() + " ms");
-            //Console.WriteLine();
+            Console.WriteLine("Solver: " + sys4._Solver.ToString());
+            Console.WriteLine("Solving: " + sys4.TimeCost[3].ToString() + " ms");
+            Console.WriteLine();
 
             FESystem sys5 = new FESystem(model2d, true, false, Solver.AMG_CG);
             sys5.Initialize();

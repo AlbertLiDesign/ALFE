@@ -90,6 +90,10 @@ int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int
     SX_RTN rtn;
     SX_VEC b, x;
 
+    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> map(dim, dim, nnz, rows_offset, cols, vals);
+    Eigen::SparseMatrix<double, Eigen::RowMajor> CSR(map);
+    
+
     A = sx_mat_create(dim, dim, rows_offset, cols, vals);
     b = sx_vec_create(dim);
     for (int i = 0; i < dim; i++)
@@ -97,7 +101,6 @@ int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int
     x = sx_vec_create(dim);
 
     sx_amg_pars_init(&pars);
-    pars.verb = 3;
 
     //sx_printf("A: m = %d, n = %d, nnz = %d\n", A.num_rows, A.num_cols, A.num_nnzs);
     //sx_amg_pars_print(&pars);
@@ -110,7 +113,7 @@ int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int
 
     for (int i = 0; i < dim; i++)
         X[i] = sx_vec_get_entry(&x, i);
-
+    
     sx_mat_destroy(&A);
     sx_vec_destroy(&x);
     sx_vec_destroy(&b);
@@ -118,6 +121,22 @@ int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int
     return 1;
 }
 
+int Solve_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
+{
+    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
+    auto B = SetVector(F, dim);
+
+    Eigen::VectorXd result;
+
+    Eigen::ConjugateGradient<Eigen::SparseMatrix<double>> cg(A);
+
+    result = cg.solve(B);
+
+    for (int i = 0; i < dim; i++)
+        X[i] = result(i);
+
+    return 1;
+}
 
 
 int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
@@ -162,6 +181,7 @@ int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, 
     prm.precond.max_levels = 20;
     prm.precond.pre_cycles = 1;
     prm.precond.ncycle = 1;
+    prm.precond.coarsening.aggr.block_size = 2;
 
     prof.tic("setup");
     auto Ab = amgcl::adapter::block_matrix<dmat_type>(A);
