@@ -41,7 +41,7 @@ namespace ALFE.TopOpt
         /// </summary>
         public int MaximumIteration;
 
-        public int Solver;
+        public Solver _Solver;
 
         /// <summary>
         /// Dimension
@@ -76,7 +76,31 @@ namespace ALFE.TopOpt
             FilterRadius = rmin;
             Dim = system.Model.DOF;
             Path = path;
-            Solver = solver;
+            switch (solver)
+            {
+                case 0:
+                    _Solver = Solver.SimplicialLLT;
+                    break;
+                case 1:
+                    _Solver = Solver.CholmodSimplicialLLT;
+                    break;
+                case 2:
+                    _Solver = Solver.CholmodSuperNodalLLT;
+                    break;
+                case 3:
+                    _Solver = Solver.PARDISO;
+                    break;
+                case 4:
+                    _Solver = Solver.AMG;
+                    break;
+                case 5:
+                    _Solver = Solver.AMG_CG;
+                    break;
+                default:
+                    _Solver = Solver.SimplicialLLT;
+                    break;
+            }
+            System._Solver = this._Solver;
             ParallelComputing = system.ParallelComputing;
         }
 
@@ -181,6 +205,7 @@ namespace ALFE.TopOpt
                 solvingInfo += BESOInfo(iter - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
                 WritePerformanceReport();
             }
+            FEIO.WriteSensitivities(Path, Ae_old);
         }
         private void MarkElements(double curV, List<double> Ae)
         {

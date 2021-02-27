@@ -12,6 +12,16 @@ namespace ALFE
 {
     public class FEIO
     {
+        public static void WriteSensitivities(string path, List<double> Ae)
+        {
+            string output = path + '\\' + "sensitivities.txt";
+            StreamWriter sw = new StreamWriter(output);
+            foreach (var ae in Ae)
+                sw.WriteLine(ae.ToString());
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
         public static void WriteInvalidElements(int iter, string path, List<Element> elems)
         {
             string output = path + '\\' + iter.ToString() + ".txt";
@@ -299,7 +309,7 @@ namespace ALFE
         /// </summary>
         /// <param name="path">File path.</param>
         /// <param name="BESO">A finite element model for BESO topology optimization.</param>
-        public static void WriteBESO(string path, BESO beso)
+        public static void WriteBESO(string path, BESO beso, int solver)
         {
             string output = path + ".al";
             StreamWriter sw = new StreamWriter(output);
@@ -325,7 +335,7 @@ namespace ALFE
             sw.WriteLine("Filter Radius: " + beso.FilterRadius.ToString());
             sw.WriteLine("Penalty Exponent: " + beso.PenaltyExponent.ToString());
             sw.WriteLine("Maximum Iteration: " + beso.MaximumIteration.ToString());
-            sw.WriteLine("Solver: " + beso.Solver.ToString());
+            sw.WriteLine("Solver: " + solver.ToString());
 
             sw.WriteLine();
 
