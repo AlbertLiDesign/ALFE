@@ -83,6 +83,28 @@ int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim,
     return 1;
 }
 
+int Solve_PARDISO_Single(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
+{
+    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
+    auto B = SetVector(F, dim);
+
+    Eigen::VectorXd result;
+
+    Eigen::PardisoLLT<Eigen::SparseMatrix<double>, 1> pardiso;
+    pardiso.pardisoParameterArray()[59] = 0;
+    mkl_set_num_threads(1);
+
+    pardiso.analyzePattern(A);
+    pardiso.factorize(A);
+
+    result = pardiso.solve(B);
+
+    for (int i = 0; i < dim; i++)
+        X[i] = result(i);
+
+    return 1;
+}
+
 int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
 {
     SX_MAT A;

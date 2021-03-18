@@ -17,6 +17,7 @@ namespace ALFE
         CholmodSimplicialLLT,
         CholmodSuperNodalLLT,
         PARDISO,
+        PARDISO_Single,
         AMG,
         AMG_CG
     }
@@ -213,6 +214,9 @@ namespace ALFE
                 case Solver.PARDISO:
                     Solved = Solve_PARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
+                case Solver.PARDISO_Single:
+                    Solved = Solve_PARDISO_Single(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
+                    break;
                 case Solver.AMG:
                     Solved = Solve_AMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
@@ -397,6 +401,8 @@ namespace ALFE
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int Solve_PARDISO(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
+        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
+        private static extern int Solve_PARDISO_Single(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int Solve_AMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim,  int nnz, double[] X);

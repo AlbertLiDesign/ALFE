@@ -38,5 +38,6 @@ extern "C" __declspec(dllexport) int Solve_CG(int* rows_offset, int* cols, doubl
 extern "C" __declspec(dllexport) int Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_CholmodSuperNodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
+extern "C" __declspec(dllexport) int Solve_PARDISO_Single(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim,int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
