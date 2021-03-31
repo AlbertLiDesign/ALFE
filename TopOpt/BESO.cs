@@ -91,9 +91,6 @@ namespace ALFE.TopOpt
                     _Solver = Solver.PARDISO;
                     break;
                 case 4:
-                    _Solver = Solver.AMG;
-                    break;
-                case 5:
                     _Solver = Solver.AMG_CG;
                     break;
                 default:

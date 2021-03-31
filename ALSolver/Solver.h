@@ -27,7 +27,7 @@
 #include <amgcl/io/mm.hpp>
 #include <amgcl/profiler.hpp>
 
-#include <sxamg.h>
+#include<cholmod.h>
 
 AMGCL_USE_EIGEN_VECTORS_WITH_BUILTIN_BACKEND()
 
@@ -39,5 +39,4 @@ extern "C" __declspec(dllexport) int Solve_CholmodSimplicialLLT(int* rows_offset
 extern "C" __declspec(dllexport) int Solve_CholmodSuperNodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_PARDISO_Single(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
-extern "C" __declspec(dllexport) int Solve_AMG(int* rows_offset, int* cols, double* vals, double* F, int dim,int nnz, double* X);
 extern "C" __declspec(dllexport) int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);

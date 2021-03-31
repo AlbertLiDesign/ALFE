@@ -18,7 +18,6 @@ namespace ALFE
         CholmodSuperNodalLLT,
         PARDISO,
         PARDISO_Single,
-        AMG,
         AMG_CG
     }
     public class FESystem
@@ -217,9 +216,6 @@ namespace ALFE
                 case Solver.PARDISO_Single:
                     Solved = Solve_PARDISO_Single(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
-                case Solver.AMG:
-                    Solved = Solve_AMG(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
-                    break;
                 case Solver.AMG_CG:
                     Solved = Solve_AMG_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
                     break;
@@ -345,7 +341,7 @@ namespace ALFE
         /// Apply the boundary conditions to nodes.
         /// </summary>
         /// <returns></returns>
-        private void ApplySupports()
+        public void ApplySupports()
         {
             var nodes = Model.Nodes;
             var supports = Model.Supports;
@@ -403,9 +399,6 @@ namespace ALFE
         private static extern int Solve_PARDISO(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int Solve_PARDISO_Single(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
-
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_AMG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim,  int nnz, double[] X);
 
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int Solve_AMG_CG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim,  int nnz, double[] X);

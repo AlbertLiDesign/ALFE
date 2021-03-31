@@ -4,19 +4,19 @@ DOF: 2
 Element Type: PixelElement
 Node Count: 4131
 Element Count: 4000
-Load Count: 3
-Support Count: 51
-Young's Modulus: 10000
+Load Count: 1
+Support Count: 23
+Young's Modulus: 1
 Possion Rate: 0.300000011920929
-Parallel Computing: False
+Parallel Computing: True
 
 BESO Parameters: 
-Volume Fraction: 0.5
-Evolution Rate: 0.02
+Volume Fraction: 0.2
+Evolution Rate: 0.03
 Filter Radius: 3
 Penalty Exponent: 3
 Maximum Iteration: 200
-Solver: 0
+Solver: 3
 
 Model Info: 
 N,0,0,0
@@ -8150,57 +8150,27 @@ E,4075,4126,4127,4076
 E,4076,4127,4128,4077
 E,4077,4128,4129,4078
 E,4078,4129,4130,4079
-L,4104,0,-100,0
-L,4105,0,-100,0
-L,4106,0,-100,0
-S,0,Fixed
-S,1,Fixed
-S,2,Fixed
-S,3,Fixed
-S,4,Fixed
-S,5,Fixed
-S,6,Fixed
-S,7,Fixed
-S,8,Fixed
-S,9,Fixed
-S,10,Fixed
-S,11,Fixed
-S,12,Fixed
-S,13,Fixed
-S,14,Fixed
-S,15,Fixed
-S,16,Fixed
-S,17,Fixed
-S,18,Fixed
-S,19,Fixed
-S,20,Fixed
-S,21,Fixed
-S,22,Fixed
-S,23,Fixed
-S,24,Fixed
-S,25,Fixed
-S,26,Fixed
-S,27,Fixed
-S,28,Fixed
-S,29,Fixed
-S,30,Fixed
-S,31,Fixed
-S,32,Fixed
-S,33,Fixed
-S,34,Fixed
-S,35,Fixed
-S,36,Fixed
-S,37,Fixed
-S,38,Fixed
-S,39,Fixed
-S,40,Fixed
-S,41,Fixed
-S,42,Fixed
-S,43,Fixed
-S,44,Fixed
-S,45,Fixed
-S,46,Fixed
-S,47,Fixed
-S,48,Fixed
-S,49,Fixed
-S,50,Fixed
+L,4130,0,-100,0
+S,2448,Fixed
+S,2499,Fixed
+S,2550,Fixed
+S,2601,Fixed
+S,2652,Fixed
+S,2703,Fixed
+S,2754,Fixed
+S,2805,Fixed
+S,2856,Fixed
+S,2907,Fixed
+S,2958,Fixed
+S,3009,Fixed
+S,3060,Fixed
+S,3111,Fixed
+S,3162,Fixed
+S,3213,Fixed
+S,3264,Fixed
+S,3315,Fixed
+S,561,Fixed
+S,612,Fixed
+S,663,Fixed
+S,714,Fixed
+S,765,Fixed
