@@ -1,5 +1,5 @@
 # ALFE
-A simple Finite Element Library based on .NET (very young now)
+A lightweight Finite Element Library based on the .NET platform.
 
 ```
 ------------------- Device Info -------------------

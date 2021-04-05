@@ -136,7 +136,7 @@ namespace ALFE
         /// <param name="model">A finite element model.</param>
         public static void WriteFEModel(string path, Model model)
         {
-            string output = path + ".al";
+            string output = path + ".txt";
             StreamWriter sw = new StreamWriter(output);
             sw.WriteLine("%This file is created by ALFE.");
             sw.WriteLine("FEA Parameters: ");
@@ -311,7 +311,7 @@ namespace ALFE
         /// <param name="BESO">A finite element model for BESO topology optimization.</param>
         public static void WriteBESO(string path, BESO beso, int solver)
         {
-            string output = path + ".al";
+            string output = path + ".txt";
             StreamWriter sw = new StreamWriter(output);
             sw.WriteLine("%This file is created by ALFE.");
 

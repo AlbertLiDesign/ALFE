@@ -9,9 +9,9 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestAllSolver();
+           // TestAllSolver();
 
-            //TestBESO();
+            TestBESO();
 
             Console.ReadKey();
         }
