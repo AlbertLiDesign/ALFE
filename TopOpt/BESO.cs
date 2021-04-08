@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace ALFE.TopOpt
 {
@@ -235,7 +236,7 @@ namespace ALFE.TopOpt
                 {
                     elem.ComputeUe();
 
-                    Matrix Ke = null;
+                    Matrix<double> Ke = null;
                     if (elem.Exist == true)
                         Ke = elem.Ke;
                     else
@@ -256,7 +257,7 @@ namespace ALFE.TopOpt
                 {
                     elem.ComputeUe();
 
-                    Matrix Ke = null;
+                    Matrix<double> Ke = null;
                     if (elem.Exist == true)
                         Ke = elem.Ke;
                     else

@@ -189,7 +189,7 @@ namespace ALFE
             if (File.Exists(path))
             {
                 int dof = 0;
-                ElementType elementType = ElementType.PixelElement;
+                ElementType elementType = ElementType.SquareElement;
                 List<Node> nodes = new List<Node>();
                 List<Element> elements = new List<Element>();
                 List<Load> loads = new List<Load>();
@@ -215,7 +215,7 @@ namespace ALFE
                         {
                             string type = value[1].Split(' ')[1];
                             if (type == "PixelElement")
-                                elementType = ElementType.PixelElement;
+                                elementType = ElementType.SquareElement;
                             else if (type == "TriangleElement")
                                 elementType = ElementType.TriangleElement;
                             else if (type == "QuadElement")
@@ -278,8 +278,8 @@ namespace ALFE
                             int id = int.Parse(value[i]);
                             elemNodes.Add(nodes[id]);
                         }
-                        if (elementType == ElementType.PixelElement)
-                            elements.Add(new Pixel(elemNodes, material));
+                        if (elementType == ElementType.SquareElement)
+                            elements.Add(new Square(elemNodes, material));
                         else if (elementType == ElementType.TriangleElement)
                             elements.Add(new Triangle(elemNodes, material));
                         else
@@ -381,7 +381,7 @@ namespace ALFE
             Model model = new Model();
 
             int dof = 0;
-            ElementType elementType = ElementType.PixelElement;
+            ElementType elementType = ElementType.SquareElement;
             List<Node> nodes = new List<Node>();
             List<Element> elements = new List<Element>();
             List<Load> loads = new List<Load>();
@@ -418,7 +418,7 @@ namespace ALFE
                             string type = value[1].Split(' ')[1];
                             if (type == "PixelElement")
                             {
-                                elementType = ElementType.PixelElement;
+                                elementType = ElementType.SquareElement;
                                 unify = true;
                             }
                             else if (type == "TriangleElement")
@@ -524,8 +524,8 @@ namespace ALFE
                             int id = int.Parse(value[i]);
                             elemNodes.Add(nodes[id]);
                         }
-                        if (elementType == ElementType.PixelElement)
-                            elements.Add(new Pixel(elemNodes, material));
+                        if (elementType == ElementType.SquareElement)
+                            elements.Add(new Square(elemNodes, material));
                         else if (elementType == ElementType.TriangleElement)
                             elements.Add(new Triangle(elemNodes, material));
                         else

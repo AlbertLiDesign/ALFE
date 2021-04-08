@@ -1,5 +1,6 @@
 ﻿using ALFE.TopOpt;
 using System;
+using System.Collections.Generic;
 
 namespace ALFE
 {
@@ -9,9 +10,9 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-           // TestAllSolver();
+            // TestAllSolver();
 
-            TestBESO();
+            TestQuads();
 
             Console.ReadKey();
         }
@@ -24,7 +25,7 @@ namespace ALFE
         }
         public static void Test()
         {
-            Model model2d = new Cantilever2D(ElementType.PixelElement, 100, 100).Model;
+            Model model2d = new Cantilever2D(ElementType.SquareElement, 100, 100).Model;
 
             FESystem sys0 = new FESystem(model2d, true, false, Solver.PARDISO_Single);
             sys0.Initialize();
@@ -40,7 +41,7 @@ namespace ALFE
         }
         public static void TestAllSolver()
         { 
-            Model model2d = new Cantilever2D(ElementType.PixelElement, 100, 200).Model;
+            Model model2d = new Cantilever2D(ElementType.SquareElement, 100, 200).Model;
 
             FESystem sys0 = new FESystem(model2d, true, false, Solver.SimplicialLLT);
             sys0.Initialize();
@@ -115,10 +116,24 @@ namespace ALFE
             //FEIO.WriteKG(sys.GetKG(), @"E:\ALCoding\ALFE\topoptTest\KG.mtx");
             //FEPrint.PrintDisplacement(sys);
         }
-        public static void TestTet()
+        public static void TestQuads()
         {
-            //string path = "box.vtk";
-            //var model = FEIO.ReadVTK(path);
+            List<Node> nodes = new List<Node>()
+            {
+                new Node(6.0,2.0),
+                new Node(21.0,9.0),
+                new Node(27.0,-9.0),
+                new Node(10.0,-10.0),
+            };
+
+            var element = new Quadrilateral(nodes, new Material(10, 0.3));
+            element.ComputeKe();
+
+            Console.WriteLine(element.J);
+            Console.WriteLine(element.D);
+            Console.WriteLine(element.B);
+
+            Console.WriteLine(element.Ke);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace ALFE
@@ -11,7 +12,7 @@ namespace ALFE
     {
         TriangleElement,
         QuadElement,
-        PixelElement,
+        SquareElement,
         TetrahedronElement,
         HexahedronElement,
         VoxelElement
@@ -39,9 +40,9 @@ namespace ALFE
         /// <summary>
         /// Elementary stiffness matrix
         /// </summary>
-        public Matrix Ke;
-        public Matrix B;
-        public Matrix D;
+        public Matrix<double> Ke;
+        public Matrix<double> B;
+        public Matrix<double> D;
 
         /// <summary>
         /// Degree of freedom
@@ -51,7 +52,7 @@ namespace ALFE
         /// <summary>
         /// Elementary displacement vector
         /// </summary>
-        public Matrix Ue;
+        public Matrix<double> Ue;
 
         /// <summary>
         /// Compute elementary displacement vector

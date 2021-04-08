@@ -75,7 +75,7 @@ namespace ALFE
                 {c0, 0.0, a0, c1, 0.0, a1, c2, 0.0, a2, c3, 0.0, a3}
             });
 
-            Ke = (Matrix)(B.TransposeThisAndMultiply(D).Multiply(B).Multiply(J.Determinant()) / 6.0);
+            Ke = B.TransposeThisAndMultiply(D).Multiply(B).Multiply(J.Determinant()) / 6.0;
         }
     }
 }
