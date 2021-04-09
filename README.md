@@ -1,6 +1,10 @@
 # ALFE
 A lightweight Finite Element Library based on the .NET platform.
 
+
+
+# Performance
+
 ```
 ------------------- Device Info -------------------
 CPU: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
@@ -172,9 +176,6 @@ Solving: 1787.637 ms
 
 Solver: PARDISO
 Solving: 678.029 ms
-
-Solver: SXAMG
-Solving: 24377.3846 ms
 
 Solver: AMG_CG
 Solving: 1325.4935 ms

@@ -12,7 +12,7 @@ namespace ALFE
 
             // TestAllSolver();
 
-            TestQuads();
+            TestHexahedron();
 
             Console.ReadKey();
         }
@@ -130,6 +130,31 @@ namespace ALFE
             element.ComputeKe();
 
             Console.WriteLine(element.J);
+            Console.WriteLine(element.D);
+            Console.WriteLine(element.B);
+
+            Console.WriteLine(element.Ke);
+        }
+
+        public static void TestHexahedron()
+        {
+            List<Node> nodes = new List<Node>()
+            {
+                new Node(0.0,0.0,0.0),
+                new Node(7.0,13.0,0.0),
+                new Node(8.0, 22.0, 7.0),
+                new Node(3.0, 5.0, 10.0),
+
+                new Node(11.0,0.0,0.0),
+                new Node(16.0,13.0,0.0),
+                new Node(17.0, 16.0, 8.0),
+                new Node(12.0, 5.0, 14.0)
+            };
+
+            var element = new Hexahedron(nodes, new Material(10, 0.3));
+            element.ComputeKe();
+
+            Console.WriteLine(element.J.Determinant());
             Console.WriteLine(element.D);
             Console.WriteLine(element.B);
 
