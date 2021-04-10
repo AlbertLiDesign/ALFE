@@ -10,9 +10,7 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            // TestAllSolver();
-
-            TestHexahedron();
+            TestBESO();
 
             Console.ReadKey();
         }
@@ -25,7 +23,7 @@ namespace ALFE
         }
         public static void Test()
         {
-            Model model2d = new Cantilever2D(ElementType.SquareElement, 100, 100).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement).Model;
 
             FESystem sys0 = new FESystem(model2d, true, false, Solver.PARDISO_Single);
             sys0.Initialize();
@@ -37,11 +35,12 @@ namespace ALFE
             Console.Write(sys0.MatrixInfo());
 
             Console.Write(sys0.SolvingInfo());
+            FEIO.WriteKG(sys0.GetKG(), "E:\\ALCoding\\ALFE\\topoptTest");
             Console.WriteLine();
         }
         public static void TestAllSolver()
         { 
-            Model model2d = new Cantilever2D(ElementType.SquareElement, 100, 200).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement, 100, 200).Model;
 
             FESystem sys0 = new FESystem(model2d, true, false, Solver.SimplicialLLT);
             sys0.Initialize();
@@ -141,24 +140,54 @@ namespace ALFE
             List<Node> nodes = new List<Node>()
             {
                 new Node(0.0,0.0,0.0),
-                new Node(7.0,13.0,0.0),
-                new Node(8.0, 22.0, 7.0),
-                new Node(3.0, 5.0, 10.0),
+                new Node(0.0,0.0,0.25),
+                new Node(0.0,0.25,0.25),
+                new Node(0.0,0.25,0.0),
+                
+                new Node(0.25,0.0,0.0),
+                new Node(0.25,0.0,0.25),
+                new Node(0.25,0.25,0.25),
+                new Node(0.25,0.25,0.0),
 
-                new Node(11.0,0.0,0.0),
-                new Node(16.0,13.0,0.0),
-                new Node(17.0, 16.0, 8.0),
-                new Node(12.0, 5.0, 14.0)
+                new Node(0.5,0.0,0.0),
+                new Node(0.5,0.0,0.25),
+                new Node(0.5,0.25,0.25),
+                new Node(0.5,0.25,0.0)
             };
 
-            var element = new Hexahedron(nodes, new Material(10, 0.3));
-            element.ComputeKe();
+            var element0 = new Hexahedron(new List<Node>(8){ nodes[0], nodes[1], nodes[2], nodes[3], nodes[4], nodes[5], nodes[6], nodes[7]}, new Material(210, 0.3));
+            var element1 = new Hexahedron(new List<Node>(8) { nodes[4], nodes[5], nodes[6], nodes[7], nodes[8], nodes[9], nodes[10], nodes[11] }, new Material(210, 0.3));
 
-            Console.WriteLine(element.J.Determinant());
-            Console.WriteLine(element.D);
-            Console.WriteLine(element.B);
+            var elements = new List<Element>(2) { element0, element1 };
 
-            Console.WriteLine(element.Ke);
+            var loads = new List<Load>(4)
+            {
+                new Load(8, 4.6875, 0.0,0.0),
+                new Load(9, 4.6875, 0.0,0.0),
+                new Load(10,4.6875, 0.0,0.0),
+                new Load(11, 4.6875, 0.0,0.0)
+            };
+
+            var supports = new List<Support>(4)
+            {
+                new Support(0, SupportType.Fixed),
+                new Support(1, SupportType.Fixed),
+                new Support(2, SupportType.Fixed),
+                new Support(3, SupportType.Fixed)
+            };
+
+            var model = new Model(3, nodes, elements, loads, supports);
+
+            FESystem sys = new FESystem(model, false, true, Solver.SimplicialLLT);
+            sys.Initialize();
+            sys.Solve();
+            Console.Write(sys.Model.ModelInfo());
+            Console.Write(sys.MatrixInfo());
+            Console.WriteLine("Solver: " + sys._Solver.ToString());
+            Console.WriteLine("Solving: " + sys.TimeCost[3].ToString() + " ms");
+            Console.WriteLine(sys.DisplacementInfo());
+            FEIO.WriteKG(sys.GetKG(), "E:\\ALCoding\\ALFE\\topoptTest");
+            Console.WriteLine();
         }
     }
 }

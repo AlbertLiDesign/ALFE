@@ -48,7 +48,9 @@ namespace ALFE
         }
         public static void WriteKG(CSRMatrix csr, string path)
         {
+            path += "/KG.mtx";
             StreamWriter sw = new StreamWriter(path);
+            
             sw.WriteLine("%%MatrixMarket matrix coordinate real symmetric");
             var mat = csr.ToCOO();
             sw.WriteLine(mat.Rows.ToString() + ' ' + mat.Cols.ToString() + ' ' + mat.NNZ.ToString());
@@ -189,7 +191,7 @@ namespace ALFE
             if (File.Exists(path))
             {
                 int dof = 0;
-                ElementType elementType = ElementType.SquareElement;
+                ElementType elementType = ElementType.PixelElement;
                 List<Node> nodes = new List<Node>();
                 List<Element> elements = new List<Element>();
                 List<Load> loads = new List<Load>();
@@ -215,7 +217,7 @@ namespace ALFE
                         {
                             string type = value[1].Split(' ')[1];
                             if (type == "PixelElement")
-                                elementType = ElementType.SquareElement;
+                                elementType = ElementType.PixelElement;
                             else if (type == "TriangleElement")
                                 elementType = ElementType.TriangleElement;
                             else if (type == "QuadElement")
@@ -278,8 +280,8 @@ namespace ALFE
                             int id = int.Parse(value[i]);
                             elemNodes.Add(nodes[id]);
                         }
-                        if (elementType == ElementType.SquareElement)
-                            elements.Add(new Square(elemNodes, material));
+                        if (elementType == ElementType.PixelElement)
+                            elements.Add(new Pixel(elemNodes, material));
                         else if (elementType == ElementType.TriangleElement)
                             elements.Add(new Triangle(elemNodes, material));
                         else
@@ -374,14 +376,14 @@ namespace ALFE
         /// <returns>Return a finite element model.</returns>
         public static BESO ReadBESO(string path)
         {
-            string besoPath = path + "\\beso.al";
+            string besoPath = path + "\\beso.txt";
             string projectPath = path + "\\solution";
 
             bool unify = false;
             Model model = new Model();
 
             int dof = 0;
-            ElementType elementType = ElementType.SquareElement;
+            ElementType elementType = ElementType.PixelElement;
             List<Node> nodes = new List<Node>();
             List<Element> elements = new List<Element>();
             List<Load> loads = new List<Load>();
@@ -418,7 +420,7 @@ namespace ALFE
                             string type = value[1].Split(' ')[1];
                             if (type == "PixelElement")
                             {
-                                elementType = ElementType.SquareElement;
+                                elementType = ElementType.PixelElement;
                                 unify = true;
                             }
                             else if (type == "TriangleElement")
@@ -524,12 +526,27 @@ namespace ALFE
                             int id = int.Parse(value[i]);
                             elemNodes.Add(nodes[id]);
                         }
-                        if (elementType == ElementType.SquareElement)
-                            elements.Add(new Square(elemNodes, material));
-                        else if (elementType == ElementType.TriangleElement)
-                            elements.Add(new Triangle(elemNodes, material));
-                        else
-                            throw new Exception("Unknown element type.");
+
+                        switch (elementType)
+                        {
+                            case ElementType.PixelElement:
+                                elements.Add(new Pixel(elemNodes, material));
+                                break;
+                            case ElementType.TriangleElement:
+                                elements.Add(new Triangle(elemNodes, material));
+                                break;
+                            case ElementType.QuadElement:
+                                elements.Add(new Quadrilateral(elemNodes, material));
+                                break;
+                            case ElementType.TetrahedronElement:
+                                elements.Add(new Tetrahedron(elemNodes, material));
+                                break;
+                            case ElementType.HexahedronElement:
+                                elements.Add(new Hexahedron(elemNodes, material));
+                                break;
+                            default:
+                                throw new Exception("Unknown element type.");
+                        }
                     }
 
                     if (value[0] == "L")
@@ -541,7 +558,10 @@ namespace ALFE
                 }
                 #endregion
 
-                model = new Model(2, nodes, elements, loads, supports);
+                if (elementType == ElementType.PixelElement || elementType == ElementType.QuadElement || elementType == ElementType.TriangleElement)
+                    model = new Model(2, nodes, elements, loads, supports);
+                else
+                    model = new Model(3, nodes, elements, loads, supports);
 
                 SR.Close();
                 SR.Dispose();

@@ -12,7 +12,7 @@ namespace ALFE
     {
         TriangleElement,
         QuadElement,
-        SquareElement,
+        PixelElement,
         TetrahedronElement,
         HexahedronElement,
         VoxelElement

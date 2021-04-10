@@ -15,7 +15,7 @@ namespace ALFE
         public Cantilever2D(ElementType type, int xnum = 7, int ynum = 5)
         {
             // Create a cantilever with unit quads
-            if (type == ElementType.SquareElement)
+            if (type == ElementType.PixelElement)
                 PixelType(xnum, ynum);
             else if (type == ElementType.TriangleElement)
                 TriangleType(xnum, ynum);
@@ -65,7 +65,7 @@ namespace ALFE
                         nodes[(i+1) * ynum+ (j+1)],
                         nodes[i * ynum + (j+1)]
                     };
-                    elems.Add(new Square(nodesElem, new Material(1.0, 0.3f)));
+                    elems.Add(new Pixel(nodesElem, new Material(1.0, 0.3f)));
                 }
             }
 

@@ -27,7 +27,7 @@ namespace ALFE
         }
         public static void TestPixels(int x = 7, int y = 5)
         {
-            Model model2d = new Cantilever2D(ElementType.SquareElement, x, y).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement, x, y).Model;
             FESystem sys = new FESystem(model2d, true);
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);

@@ -135,6 +135,7 @@ namespace ALFE
                 var id = Model.Nodes[item.NodeID].ActiveID * DOF;
                 F[id + 0] = item.ForceVector.X;
                 F[id + 1] = item.ForceVector.Y;
+                if (DOF == 3) F[id + 2] = item.ForceVector.Z;
             }
         }
 
@@ -234,7 +235,8 @@ namespace ALFE
                 {
                     if (item.Active == true)
                     {
-                        item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0);
+                        if (DOF == 2) item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0);
+                        if (DOF == 3) item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], X[id * DOF + 2]);
                         id++;
                     }
                 }
@@ -262,6 +264,7 @@ namespace ALFE
             {
                 displacement[i, 0] = Model.Nodes[i].Displacement.X;
                 displacement[i, 1] = Model.Nodes[i].Displacement.Y;
+                if (DOF == 3) displacement[i, 2] = Model.Nodes[i].Displacement.Z;
             }
             return displacement;
         }
@@ -295,6 +298,7 @@ namespace ALFE
                 int row_nnz = nd.ComputePositionInKG(count, KG.Cols);
                 KG.Rows[nd.ActiveID * DOF + 0] = count;
                 KG.Rows[nd.ActiveID * DOF + 1] = count + row_nnz;
+                if(DOF == 3) KG.Rows[nd.ActiveID * DOF + 2] = count + row_nnz * 2;
                 count += row_nnz * DOF;
             }
         }

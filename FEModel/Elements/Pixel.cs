@@ -7,9 +7,9 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace ALFE
 {
-    public class Square : Element
+    public class Pixel : Element
     {
-        public Square(List<Node> nodes, Material material, bool exist = true)
+        public Pixel(List<Node> nodes, Material material, bool exist = true)
         {
             foreach (var item in nodes)
             {
@@ -21,7 +21,7 @@ namespace ALFE
             Nodes = nodes;
             Material = material;
             Exist = exist;
-            Type = ElementType.SquareElement;
+            Type = ElementType.PixelElement;
             DOF = 2;
         }
 
