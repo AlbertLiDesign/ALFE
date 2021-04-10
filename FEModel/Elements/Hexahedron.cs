@@ -158,7 +158,7 @@ namespace ALFE
             J = ComputeJ();
             B = ComputeB(J);
 
-            GaussLegendreQuadrature glq = new GaussLegendreQuadrature(1);
+            GaussLegendreQuadrature glq = new GaussLegendreQuadrature(2);
 
             for (int i = 0; i < glq.Xi.Count; i++)
             {
@@ -168,7 +168,7 @@ namespace ALFE
                     {
                         var quad_J = ComputeJ(glq.Xi[i], glq.Xi[j], glq.Xi[k]);
                         var quad_B = ComputeB(quad_J, glq.Xi[i], glq.Xi[j], glq.Xi[k]);
-                        Ke += glq.Weights[i] * quad_B.TransposeThisAndMultiply(D).Multiply(quad_B).Multiply(quad_J.Determinant());
+                        Ke += glq.Weights[i] * glq.Weights[j] * glq.Weights[k] * quad_B.TransposeThisAndMultiply(D).Multiply(quad_B).Multiply(quad_J.Determinant());
                     }
                 }
             }
