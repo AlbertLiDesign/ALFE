@@ -12,6 +12,47 @@ namespace ALFE
 {
     public class FEIO
     {
+        public static void WriteVerts(string path, Model model)
+        {
+            string output = path + '\\' + "ndoes.txt";
+            StreamWriter sw = new StreamWriter(output);
+            for (int i = 0; i < model.Nodes.Count; i++)
+            {
+                sw.Write(model.Nodes[i].Position.X.ToString() + ',' + model.Nodes[i].Position.Y.ToString() + ',' + model.Nodes[i].Position.Z.ToString());
+                sw.Write("\n");
+            }
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
+        public static void WriteElemVerts(string path, Model model)
+        {
+            string output = path + '\\' + "elmverts.txt";
+            StreamWriter sw = new StreamWriter(output);
+            for (int i = 0; i < model.Elements.Count; i++)
+            {
+                var v_list = model.Elements[i].Nodes;
+                for (int j = 0; j < v_list.Count; j++)
+                {
+                    sw.Write(v_list[j].ID.ToString());
+                    if (j != v_list.Count - 1) sw.Write(',');
+                }
+                sw.Write("\n");
+            }
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
+        public static void WriteVertSensitivities(string path, List<double> Ae, Model model)
+        {
+            string output = path + '\\' + "sensitivities.txt";
+            StreamWriter sw = new StreamWriter(output);
+            foreach (var ae in Ae)
+                sw.WriteLine(ae.ToString());
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
         public static void WriteSensitivities(string path, List<double> Ae)
         {
             string output = path + '\\' + "sensitivities.txt";
@@ -327,7 +368,6 @@ namespace ALFE
             sw.WriteLine("Support Count: " + model.Supports.Count.ToString());
             sw.WriteLine("Young's Modulus: " + model.Elements[0].Material.E.ToString());
             sw.WriteLine("Possion Rate: " + model.Elements[0].Material.nu.ToString());
-            sw.WriteLine("Parallel Computing: " + beso.System.ParallelComputing.ToString());
 
             sw.WriteLine();
 
@@ -379,7 +419,6 @@ namespace ALFE
             string besoPath = path + "\\beso.txt";
             string projectPath = path + "\\solution";
 
-            bool unify = false;
             Model model = new Model();
 
             int dof = 0;
@@ -418,26 +457,29 @@ namespace ALFE
                         if (value[0] == "Element Type")
                         {
                             string type = value[1].Split(' ')[1];
-                            if (type == "PixelElement")
+                            switch (type)
                             {
-                                elementType = ElementType.PixelElement;
-                                unify = true;
+                                case "PixelElement":
+                                    elementType = ElementType.PixelElement;
+                                    break;
+                                case "TriangleElement":
+                                    elementType = ElementType.TriangleElement;
+                                    break;
+                                case "QuadElement":
+                                    elementType = ElementType.QuadElement;
+                                    break;
+                                case "TetrahedronElement":
+                                    elementType = ElementType.TetrahedronElement;
+                                    break;
+                                case "VoxelElement":
+                                    elementType = ElementType.VoxelElement;
+                                    break;
+                                case "HexahedronElement":
+                                    elementType = ElementType.HexahedronElement;
+                                    break;
+                                default:
+                                    throw new Exception("Unknown element type.");
                             }
-                            else if (type == "TriangleElement")
-                                elementType = ElementType.TriangleElement;
-                            else if (type == "QuadElement")
-                                elementType = ElementType.QuadElement;
-                            else if (type == "TetrahedronElement")
-                                elementType = ElementType.TetrahedronElement;
-                            else if (type == "VoxelElement")
-                            {
-                                elementType = ElementType.VoxelElement;
-                                unify = true;
-                            }
-                            else if (type == "HexahedronElement")
-                                elementType = ElementType.HexahedronElement;
-                            else
-                                throw new Exception("Unknown element type.");
                         }
 
                         value = SR.ReadLine().Split(':');
@@ -566,7 +608,7 @@ namespace ALFE
                 SR.Close();
                 SR.Dispose();
             }
-            BESO beso = new BESO(projectPath, new FESystem(model, unify, parallel), rmin, ert, p, vf, maxIter, solver);
+            BESO beso = new BESO(projectPath, new FESystem(model), rmin, ert, p, vf, maxIter, (Solver)solver);
             return beso;
         }
     }

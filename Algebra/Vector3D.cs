@@ -7,14 +7,43 @@ namespace ALFE
         /// <summary>
         /// Represents a vector in Euclidean space.
         /// </summary>
-        internal double _x;
-        internal double _y;
-        internal double _z;
-
-        public Vector3D() { }
+        internal double _x = 0.0;
+        internal double _y = 0.0;
+        internal double _z = 0.0;
 
         /// <summary>
-        /// Constructs a new vector from 3 Double precision numbers.
+        /// Get the length of a vector
+        /// </summary>        
+        /// <returns>The length</returns>
+        public double Length
+        {
+            get { return (double)Math.Sqrt(this._x * this._x + this._y * this._y + this._z * this._z); }
+        }
+
+        /// <summary>
+        /// Get the square length of a vector
+        /// </summary>        
+        /// <returns>The length</returns>
+        public double SqrLength
+        {
+            get { return this._x * this._x + this._y * this._y + this._z * this._z; }
+        }
+
+        /// <summary>
+        /// Get a origin vector.
+        /// </summary>        
+        /// <returns>Return a origin vector.</returns>
+        public static Vector3D Origin = new Vector3D(0.0f, 0.0f, 0.0f);
+
+        public Vector3D()
+        {
+            _x = 0.0f;
+            _y = 0.0f;
+            _z = 0.0f;
+        }
+
+        /// <summary>
+        /// Constructs a new vector from 3 double precision numbers.
         /// </summary>
         /// <param name="x">X component of vector.</param>
         /// <param name="y">Y component of vector.</param>
@@ -85,6 +114,17 @@ namespace ALFE
         }
 
         /// <summary>
+        /// Multiplies a vector by a number, having the effect of scaling it.
+        /// </summary>
+        /// <param name="t">A number.</param>
+        /// <param name="vector">A vector.</param>
+        /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
+        public static Vector3D operator *(double t, Vector3D vector)
+        {
+            return new Vector3D(vector._x * t, vector._y * t, vector._z * t);
+        }
+
+        /// <summary>
         /// Computes the dot product of two vectors.
         /// </summary>
         /// <param name="vector">A vector.</param>
@@ -102,6 +142,16 @@ namespace ALFE
         /// <param name="t">A number.</param>
         /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
         public static Vector3D operator /(Vector3D vector, double t)
+        {
+            return new Vector3D(vector._x / t, vector._y / t, vector._z / t);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t">A number.</param>
+        /// <param name="vector">A vector.</param>
+        /// <returns>A new vector that is the original vector coordinatewise multiplied by t.</returns>
+        public static Vector3D operator /(double t, Vector3D vector)
         {
             return new Vector3D(vector._x / t, vector._y / t, vector._z / t);
         }
@@ -130,25 +180,6 @@ namespace ALFE
         {
             return new Vector3D(_y * other._z - other._y * _z, _z * other._x - other._z * _x, _x * other._y - other._x * _y);
         }
-
-        /// <summary>
-        /// Get the length of a vector
-        /// </summary>        
-        /// <returns>The length</returns>
-        public double Length
-        {
-            get { return (double)Math.Sqrt(this._x * this._x + this._y * this._y + this._z * this._z); }
-        }
-
-        /// <summary>
-        /// Get the square length of a vector
-        /// </summary>        
-        /// <returns>The length</returns>
-        public double SqrLength
-        {
-            get { return this._x * this._x + this._y * this._y + this._z * this._z; }
-        }
-
 
         public override string ToString()
         {
@@ -205,6 +236,20 @@ namespace ALFE
         public double DistanceTo(Vector3D vector)
         {
             return (this - vector).Length;
+        }
+
+        /// <summary>
+        /// Get the reversed vector.
+        /// </summary>
+        /// <returns>Return the reversed vector.</returns>
+        public Vector3D Reverse()
+        {
+            return new Vector3D(X * -1.0f, Y * -1.0f, Z * -1.0f);
+        }
+
+        public Vector3D Unitize()
+        {
+            return this / Length;
         }
     }
 }

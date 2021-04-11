@@ -1,126 +1,62 @@
 ﻿#include "Solver.h"
 
-int Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
+int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
 {
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
 
     Eigen::VectorXd result;
-
     Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> llt(A);
-
-    llt.analyzePattern(A);
-    llt.factorize(A);
-
-    result = llt.solve(B);
-
-    for (int i = 0; i < dim; i++)
-        X[i] = result(i);
-
-    return 1;
-}
-
-int Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
-{
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
-    auto B = SetVector(F, dim);
-
-    Eigen::VectorXd result;
-
-    Eigen::CholmodSupernodalLLT<Eigen::SparseMatrix<double>> llt(A);
-
-    llt.analyzePattern(A);
-    llt.factorize(A);
-
-    result = llt.solve(B);
-
-    for (int i = 0; i < dim; i++)
-        X[i] = result(i);
-
-    return 1;
-}
-
-int Solve_CholmodSuperNodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
-{
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
-    auto B = SetVector(F, dim);
-
-    Eigen::VectorXd result;
-
-    Eigen::CholmodSupernodalLLT<Eigen::SparseMatrix<double>> llt(A);
-
-    llt.analyzePattern(A);
-    llt.factorize(A);
-
-    result = llt.solve(B);
-
-    for (int i = 0; i < dim; i++)
-        X[i] = result(i);
-
-    return 1;
-}
-
-
-int Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
-{
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
-    auto B = SetVector(F, dim);
-
-    Eigen::VectorXd result;
-
+    Eigen::CholmodSupernodalLLT<Eigen::SparseMatrix<double>> cholmodSupernodal(A);
+    Eigen::CholmodSimplicialLLT<Eigen::SparseMatrix<double>> cholmodLLT(A);
     Eigen::PardisoLLT<Eigen::SparseMatrix<double>, 1> pardiso;
-    pardiso.pardisoParameterArray()[59] = 0;
-    pardiso.pardisoParameterArray()[1] = 3; // 	The parallel (OpenMP) version of the nested dissection algorithm.
-
-    pardiso.analyzePattern(A);
-    pardiso.factorize(A);
-
-    result = pardiso.solve(B);
-
-    for (int i = 0; i < dim; i++)
-        X[i] = result(i);
-
-    return 1;
-}
-
-int Solve_PARDISO_Single(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
-{
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
-    auto B = SetVector(F, dim);
-
-    Eigen::VectorXd result;
-
-    Eigen::PardisoLLT<Eigen::SparseMatrix<double>, 1> pardiso;
-    pardiso.pardisoParameterArray()[59] = 0;
-    mkl_set_num_threads(1);
-
-    pardiso.analyzePattern(A);
-    pardiso.factorize(A);
-
-    result = pardiso.solve(B);
-
-    for (int i = 0; i < dim; i++)
-        X[i] = result(i);
-
-    return 1;
-}
-
-int Solve_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
-{
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
-    auto B = SetVector(F, dim);
-
-    Eigen::VectorXd result;
-
     Eigen::ConjugateGradient<Eigen::SparseMatrix<double>> cg(A);
+    switch (solver)
+    {
+    case 0:
+        llt.analyzePattern(A);
+        llt.factorize(A);
+        result = llt.solve(B);
+        break;
+    case 1:
+        cholmodLLT.analyzePattern(A);
+        cholmodLLT.factorize(A);
+        result = cholmodLLT.solve(B);
+        break;
+    case 2:
+        pardiso.pardisoParameterArray()[59] = 0;
+        mkl_set_num_threads(1);
+        pardiso.analyzePattern(A);
+        pardiso.factorize(A);
+        result = pardiso.solve(B);
+        break;
+    case 3:
+        result = cg.solve(B);
+        break;
+    case 4:
+        pardiso.pardisoParameterArray()[59] = 0;
+        pardiso.pardisoParameterArray()[1] = 3; // 	The parallel (OpenMP) version of the nested dissection algorithm.
 
-    result = cg.solve(B);
+        pardiso.analyzePattern(A);
+        pardiso.factorize(A);
+        result = pardiso.solve(B);
+        break;
+    case 5:
+        cholmodSupernodal.analyzePattern(A);
+        cholmodSupernodal.factorize(A);
+        result = cholmodSupernodal.solve(B);
+        break;
+    default:
+        break;
+    }
+
 
     for (int i = 0; i < dim; i++)
         X[i] = result(i);
 
     return 1;
 }
+
 
 
 int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)

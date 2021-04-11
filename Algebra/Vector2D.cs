@@ -7,8 +7,8 @@ namespace ALFE
         /// <summary>
         /// Represents a vector in Euclidean space.
         /// </summary>
-        internal double _x;
-        internal double _y;
+        internal double _x = 0.0;
+        internal double _y = 0.0;
 
         public Vector2D() { }
 

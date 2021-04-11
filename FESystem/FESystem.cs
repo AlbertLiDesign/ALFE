@@ -12,18 +12,16 @@ namespace ALFE
 {
     public enum Solver
     {
-        SimplicialLLT,
-        CG,
-        CholmodSimplicialLLT,
-        CholmodSuperNodalLLT,
-        PARDISO,
-        PARDISO_Single,
-        AMG_CG
+        SimplicialLLT = 0,
+        CholmodSimplicialLLT = 1,
+        PARDISOSingle = 2,
+        CG = 3,
+        PARDISO = 4,
+        CholmodSuperNodalLLT = 5,
     }
     public class FESystem
     {
         public Solver _Solver;
-        public bool ParallelComputing = true;
         /// <summary>
         /// Time cost in each step: 0 = Computing Ke, 1 = Initializing KG, 2 = Assembling KG, 3 = Solving
         /// </summary>
@@ -48,11 +46,6 @@ namespace ALFE
         /// Degree of freedom
         /// </summary>
         public int DOF;
-
-        /// <summary>
-        /// If all elements are the same, It should be set True for reducing workload.
-        /// </summary>
-        public bool Unify = false;
 
         /// <summary>
         /// If the system has been solved.
@@ -83,12 +76,10 @@ namespace ALFE
         /// Initialize the finite element system.
         /// </summary>
         /// <param name="model"> A finite element model</param>
-        public FESystem(Model model, bool unify = false, bool parallel = true, Solver solver = Solver.SimplicialLLT)
+        public FESystem(Model model, Solver solver = Solver.SimplicialLLT)
         {
             Model = model;
-            Unify = unify;
             DOF = model.DOF;
-            ParallelComputing = parallel;
             _Solver = solver;
 
             ApplySupports();
@@ -195,36 +186,8 @@ namespace ALFE
         {
             Stopwatch sw = new Stopwatch();
 
-            sw.Start();           
-
-            switch (_Solver)
-            {
-                case Solver.SimplicialLLT:
-                    Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
-                    break;
-                case Solver.CG:
-                    Solved = Solve_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
-                    break;
-                case Solver.CholmodSimplicialLLT:
-                    Solved = Solve_CholmodSimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
-                    break;
-                case Solver.CholmodSuperNodalLLT:
-                    Solved = Solve_CholmodSuperNodalLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
-                    break;
-                case Solver.PARDISO:
-                    Solved = Solve_PARDISO(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
-                    break;
-                case Solver.PARDISO_Single:
-                    Solved = Solve_PARDISO_Single(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
-                    break;
-                case Solver.AMG_CG:
-                    Solved = Solve_AMG_CG(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
-                    break;
-                default:
-                    Solved = Solve_SimplicialLLT(KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
-                    break;
-            }
-
+            sw.Start();          
+            Solved = SolveSystem((int)_Solver, KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -308,26 +271,11 @@ namespace ALFE
         /// </summary>
         private void GetAdjacentNodes()
         {
-            if (ParallelComputing)
-            {
-                Parallel.ForEach(Model.Nodes, node =>
-                {
-                    foreach (var item in node.ElementID)
-                        foreach (var neighbour in Model.Elements[item].Nodes)
-                            if (neighbour.Active)
-                                lock (node.Neighbours)
-                                    node.Neighbours.Add(neighbour.ActiveID);
-                });
-            }
-            else
-            {
-                foreach (var node in Model.Nodes)
-                    foreach (var item in node.ElementID)
-                        foreach (var neighbour in Model.Elements[item].Nodes)
-                            if (neighbour.Active)
-                                lock (node.Neighbours)
-                                    node.Neighbours.Add(neighbour.ActiveID);
-            }
+            foreach (var node in Model.Nodes)
+                foreach (var item in node.ElementID)
+                    foreach (var neighbour in Model.Elements[item].Nodes)
+                        if (neighbour.Active)
+                                node.Neighbours.Add(neighbour.ActiveID);
         }
 
         /// <summary>
@@ -371,7 +319,7 @@ namespace ALFE
         /// </summary>
         private void ComputeAllKe()
         {
-            if (Unify == true)
+            if (Model.Elements[0].Type == ElementType.PixelElement || Model.Elements[0].Type == ElementType.VoxelElement)
             {
                 var elem0 = Model.Elements[0];
                 elem0.ComputeKe();
@@ -388,24 +336,8 @@ namespace ALFE
             }
         }
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_SimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
+        private static extern int SolveSystem(int solver, int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
 
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_CG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
-
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_CholmodSimplicialLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
-
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_CholmodSuperNodalLLT(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
-
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_PARDISO(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_PARDISO_Single(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
-
-        [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
-        private static extern int Solve_AMG_CG(int[] rows_offset, int[] cols, double[] vals, double[] F, int dim,  int nnz, double[] X);
 
         public string SolvingInfo()
         {

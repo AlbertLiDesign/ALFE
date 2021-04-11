@@ -42,7 +42,7 @@ namespace ALFE.TopOpt
         /// </summary>
         public int MaximumIteration;
 
-        public Solver _Solver;
+        public List<double> Sensitivities = new List<double>();
 
         /// <summary>
         /// Dimension
@@ -61,7 +61,8 @@ namespace ALFE.TopOpt
         /// </summary>
         private List<double> HistoryV = new List<double>();
 
-        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p=3.0,  double vf=0.5, int maxIter=100, int solver = 0)
+        public BESO() { }
+        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p=3.0,  double vf=0.5, int maxIter=100, Solver solver = 0)
         {
             if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
@@ -77,29 +78,7 @@ namespace ALFE.TopOpt
             FilterRadius = rmin;
             Dim = system.Model.DOF;
             Path = path;
-            switch (solver)
-            {
-                case 0:
-                    _Solver = Solver.SimplicialLLT;
-                    break;
-                case 1:
-                    _Solver = Solver.CholmodSimplicialLLT;
-                    break;
-                case 2:
-                    _Solver = Solver.CholmodSuperNodalLLT;
-                    break;
-                case 3:
-                    _Solver = Solver.PARDISO;
-                    break;
-                case 4:
-                    _Solver = Solver.AMG_CG;
-                    break;
-                default:
-                    _Solver = Solver.SimplicialLLT;
-                    break;
-            }
-            System._Solver = this._Solver;
-            ParallelComputing = system.ParallelComputing;
+            System._Solver = solver;
         }
 
         public void Initialize()
@@ -147,7 +126,7 @@ namespace ALFE.TopOpt
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
-                List<double> Ae = CalSensitivity();
+                List<double> Ae = CalSensitivities();
                 HistoryC.Add(CalGlobalCompliance());
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
@@ -183,6 +162,7 @@ namespace ALFE.TopOpt
                 iter += 1;
                 FEIO.WriteInvalidElements(iter, Path, Model.Elements);
 
+                Sensitivities = Ae_old;
                 System.Update();
 
                 // Check convergence 
@@ -201,9 +181,10 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 solvingInfo += BESOInfo(iter - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
-                WritePerformanceReport();
+                WritePerformanceReport();   
             }
-            FEIO.WriteSensitivities(Path, Ae_old);
+            
+            //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivies(Sensitivities), Model);
         }
         private void MarkElements(double curV, List<double> Ae)
         {
@@ -227,9 +208,9 @@ namespace ALFE.TopOpt
                 else highest = th;
             }
         }
-        private List<double> CalSensitivity()
+        private List<double> CalSensitivities()
         {
-            double[] Sensitivities = new double[Model.Elements.Count];
+            double[] values = new double[Model.Elements.Count];
             if (ParallelComputing)
             {
                 Parallel.ForEach(Model.Elements, elem =>
@@ -248,7 +229,7 @@ namespace ALFE.TopOpt
 
                     elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
-                    Sensitivities[elem.ID] = elem.C / elem.Xe;
+                    values[elem.ID] = elem.C / elem.Xe;
                 });
             }
             else
@@ -269,10 +250,10 @@ namespace ALFE.TopOpt
 
                     elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
-                    Sensitivities[elem.ID] = elem.C / elem.Xe;
+                    values[elem.ID] = elem.C / elem.Xe;
                 }
             }
-            return Sensitivities.ToList();
+            return values.ToList();
         }
         private double CalGlobalCompliance()
         {
@@ -292,6 +273,30 @@ namespace ALFE.TopOpt
                     raw[elem.ID] += Ae[filter.FME[elem][i].ID] * filter.FMW[elem][i];
             }
             return raw.ToList();
+        }
+
+        public List<double> ComputeVertSensitivities(List<double> elemSensitivities)
+        {
+            var Vert_Value = new List<double>();
+            var nodes = Model.Nodes;
+            foreach (var item in nodes)
+            {
+                double sensitivity = 0.0;
+                for (int i = 0; i < item.ElementID.Count; i++)
+                {
+                    sensitivity += elemSensitivities[item.ElementID[i]] * 0.125;
+                }
+                Vert_Value.Add(sensitivity);
+            }
+
+            // 映射到0-1
+            double max = Vert_Value.Max();
+            double min = Vert_Value.Min();
+            for (int i = 0; i < Vert_Value.Count; i++)
+            {
+                Vert_Value[i] = (Vert_Value[i] - min) / (max - min);
+            }
+            return Vert_Value;
         }
 
         public string PreprocessingInfo()
