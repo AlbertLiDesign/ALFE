@@ -34,7 +34,6 @@ namespace ALFE.Postprocessing
     {1.0, 0.0, 0.0},{0.0, 1.0, 0.0},{-1.0, 0.0, 0.0},{0.0, -1.0, 0.0},
     {0.0, 0.0, 1.0},{0.0, 0.0, 1.0},{ 0.0, 0.0, 1.0},{0.0, 0.0, 1.0}
           };
-
         public List<Vector3D> ExtractTopOptIsosurface(Model model, List<double> vertSensitivities, double isovalue, Vector3D voxelSize, bool interpolation)
         {
             List<Vector3D> allVerts = new List<Vector3D>();
@@ -69,10 +68,9 @@ namespace ALFE.Postprocessing
                     localSensitivities[j] = vertSensitivities[voxels[i][j]];
                 }
 
-                var verts = Run(voxelCorners, localSensitivities, isovalue, voxelSize, interpolation);
+                var verts = ExtractIsosurface(voxelCorners, localSensitivities, isovalue, voxelSize, interpolation);
                 foreach (var item in verts)
                     allVerts.Add(item);
-
             }
             return allVerts;
         }
@@ -111,12 +109,28 @@ namespace ALFE.Postprocessing
                     localSensitivites[j] = vertSensitivites[voxels[i][j]];
                 }
 
-                var verts = Run(voxelCorners, localSensitivites, isovalue, voxelSize, interpolation);
+                var verts = ExtractIsosurface(voxelCorners, localSensitivites, isovalue, voxelSize, interpolation);
                 foreach (var item in verts)
                     allVerts.Add(item);
 
             }
             return allVerts;
+        }
+
+
+        public int ComputeCase(double[] values, double isovalue)
+        {
+            int flag = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                // check the state of each vertice.
+                if (values[i] > isovalue)
+                {
+                    flag |= 1 << i;
+                }
+            }
+            Cases.Add(flag);
+            return flag;
         }
 
         /// <summary>
@@ -128,21 +142,10 @@ namespace ALFE.Postprocessing
         /// <param name="voxelSize"> The size of the voxel. </param>
         /// <param name="interpolation"> Whether to use linear interpolation. </param>
         /// <returns> Return the vertices of the triangles. </returns>
-        public List<Vector3D> Run(Vector3D[] voxelCorners, double[] values, double isovalue, Vector3D voxelSize, bool interpolation)
+        public List<Vector3D> ExtractIsosurface(Vector3D[] voxelCorners, double[] values, double isovalue, Vector3D voxelSize, bool interpolation)
         {
-
             List<Vector3D> pts = new List<Vector3D>();
-            int flag = 0;
-            for (int i = 0; i < 8; i++)
-            {
-                // check the state of each vertice.
-                if (values[i] < isovalue)
-                {
-                    flag |= 1 << i;
-                }
-            }
-            Cases.Add(flag);
-
+            int flag = ComputeCase(values, isovalue);
             // To find edges which intersect with the boundary
             int EdgeFlag = CubeEdgeFlags[flag];
 

@@ -184,7 +184,7 @@ namespace ALFE.TopOpt
                 WritePerformanceReport();   
             }
             
-            //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivies(Sensitivities), Model);
+            FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
         }
         private void MarkElements(double curV, List<double> Ae)
         {

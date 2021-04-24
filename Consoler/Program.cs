@@ -10,7 +10,7 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            Test();
+            TestAllSolver();
 
             Console.ReadKey();
         }
@@ -40,7 +40,7 @@ namespace ALFE
         }
         public static void TestAllSolver()
         { 
-            Model model2d = new Cantilever2D(ElementType.PixelElement, 100, 200).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement, 100, 100).Model;
 
             FESystem sys0 = new FESystem(model2d, Solver.SimplicialLLT);
             sys0.Initialize();
@@ -55,13 +55,13 @@ namespace ALFE
             Console.WriteLine("Solving: " + sys0.TimeCost[3].ToString() + " ms");
             Console.WriteLine();
 
-            FESystem sys1 = new FESystem(model2d, Solver.PARDISO);
-            sys1.Initialize();
-            sys1.Solve();
+            //FESystem sys1 = new FESystem(model2d, Solver.SimplicialLLT);
+            //sys1.Initialize();
+            //sys1.Solve();
 
-            Console.WriteLine("Solver: " + sys1._Solver.ToString());
-            Console.WriteLine("Solving: " + sys1.TimeCost[3].ToString() + " ms");
-            Console.WriteLine();
+            //Console.WriteLine("Solver: " + sys1._Solver.ToString());
+            //Console.WriteLine("Solving: " + sys1.TimeCost[3].ToString() + " ms");
+            //Console.WriteLine();
 
             FESystem sys2 = new FESystem(model2d, Solver.PARDISOSingle);
             sys2.Initialize();
@@ -71,7 +71,7 @@ namespace ALFE
             Console.WriteLine("Solving: " + sys2.TimeCost[3].ToString() + " ms");
             Console.WriteLine();
 
-            FESystem sys3 = new FESystem(model2d, Solver.CholmodSimplicialLLT);
+            FESystem sys3 = new FESystem(model2d, Solver.CG);
             sys3.Initialize();
             sys3.Solve();
 
@@ -79,13 +79,13 @@ namespace ALFE
             Console.WriteLine("Solving: " + sys3.TimeCost[3].ToString() + " ms");
             Console.WriteLine();
 
-            FESystem sys4 = new FESystem(model2d, Solver.CholmodSuperNodalLLT);
-            sys4.Initialize();
-            sys4.Solve();
+            //FESystem sys4 = new FESystem(model2d, Solver
+            //sys4.Initialize();
+            //sys4.Solve();
 
-            Console.WriteLine("Solver: " + sys4._Solver.ToString());
-            Console.WriteLine("Solving: " + sys4.TimeCost[3].ToString() + " ms");
-            Console.WriteLine();
+            //Console.WriteLine("Solver: " + sys4._Solver.ToString());
+            //Console.WriteLine("Solving: " + sys4.TimeCost[3].ToString() + " ms");
+            //Console.WriteLine();
 
             //FESystem sys5 = new FESystem(model2d, false, Solver.CG);
             //sys5.Initialize();
