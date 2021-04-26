@@ -89,7 +89,7 @@ namespace ALFE
         }
         public static void WriteKG(CSRMatrix csr, string path)
         {
-            path += "/KG.mtx";
+            //path += "/KG.mtx";
             StreamWriter sw = new StreamWriter(path);
             
             sw.WriteLine("%%MatrixMarket matrix coordinate real symmetric");
@@ -608,7 +608,7 @@ namespace ALFE
                 SR.Close();
                 SR.Dispose();
             }
-            BESO beso = new BESO(projectPath, new FESystem(model), rmin, ert, p, vf, maxIter, (Solver)solver);
+            BESO beso = new BESO(projectPath, new FESystem(model), rmin, ert, p, vf, maxIter, false, (Solver)solver);
             return beso;
         }
     }

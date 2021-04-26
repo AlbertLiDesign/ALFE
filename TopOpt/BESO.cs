@@ -18,6 +18,11 @@ namespace ALFE.TopOpt
         public string Path;
 
         /// <summary>
+        /// The isovalue for extracting isosurface.
+        /// </summary>
+        public double isovalue = 0.0;
+
+        /// <summary>
         /// Filter radius
         /// </summary>
         public double FilterRadius;
@@ -61,8 +66,10 @@ namespace ALFE.TopOpt
         /// </summary>
         private List<double> HistoryV = new List<double>();
 
+        public bool HardKill = false;
+
         public BESO() { }
-        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p=3.0,  double vf=0.5, int maxIter=100, Solver solver = 0)
+        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p=3.0,  double vf=0.5, int maxIter=100, bool hardKill = false, Solver solver = 0)
         {
             if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
@@ -70,6 +77,8 @@ namespace ALFE.TopOpt
                 throw new Exception("Vt must be large than 0 and be less than 1.");
 
             System = system;
+            HardKill = hardKill;
+            System.HardKill = hardKill;
             Model = system.Model;
             VolumeFraction = vf;
             PenaltyExponent = p;
@@ -154,7 +163,7 @@ namespace ALFE.TopOpt
 
                 HistoryV.Add(sum / Model.Elements.Count);
                 double curV = Math.Max(VolumeFraction, HistoryV.Last() * (1.0 - EvolutionRate));
-                MarkElements(curV, Ae);
+                BESO_Core(curV, Ae);
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -186,16 +195,16 @@ namespace ALFE.TopOpt
             
             FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
         }
-        private void MarkElements(double curV, List<double> Ae)
+        private void BESO_Core(double curV, List<double> Ae)
         {
             double lowest = Ae.Min();
             double highest = Ae.Max();
-
+            double th = 0.0;
             double tv = curV * Model.Elements.Count;
 
             while (((highest - lowest) / highest) > 1.0e-5f)
             {
-                double th = (highest + lowest) * 0.5;
+                th = (highest + lowest) * 0.5;
                 double sum = 0.0;
                 foreach (var elem in Model.Elements)
                 {
@@ -207,6 +216,7 @@ namespace ALFE.TopOpt
                 if (sum - tv > 0.0) lowest = th;
                 else highest = th;
             }
+            isovalue = th;
         }
         private List<double> CalSensitivities()
         {

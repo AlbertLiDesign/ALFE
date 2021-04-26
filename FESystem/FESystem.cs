@@ -72,15 +72,18 @@ namespace ALFE
         /// </summary>
         private double[] X;
 
+        public bool HardKill = false;
+
         /// <summary>
         /// Initialize the finite element system.
         /// </summary>
         /// <param name="model"> A finite element model</param>
-        public FESystem(Model model, Solver solver = Solver.SimplicialLLT)
+        public FESystem(Model model, Solver solver = Solver.SimplicialLLT, bool hardKill = false)
         {
             Model = model;
             DOF = model.DOF;
             _Solver = solver;
+            this.HardKill = hardKill;
 
             ApplySupports();
             Dim = (Model.Nodes.Count - FixedID.Count) * DOF;
@@ -123,17 +126,20 @@ namespace ALFE
         {
             foreach (var item in Model.Loads)
             {
-                var id = Model.Nodes[item.NodeID].ActiveID * DOF;
-                F[id + 0] = item.ForceVector.X;
-                F[id + 1] = item.ForceVector.Y;
-                if (DOF == 3) F[id + 2] = item.ForceVector.Z;
+                if (!HardKill)
+                {
+                    var id = Model.Nodes[item.NodeID].ActiveID * DOF;
+                    F[id + 0] = item.ForceVector.X;
+                    F[id + 1] = item.ForceVector.Y;
+                    if (DOF == 3) F[id + 2] = item.ForceVector.Z;
+                }
             }
         }
 
         /// <summary>
         /// Assemble the global stiffness matrix
         /// </summary>
-        private void AssembleKG(int P=3)
+        private void AssembleKG(int P = 3)
         {
             KG.Clear();
             foreach (var elem in Model.Elements)
@@ -154,10 +160,21 @@ namespace ALFE
                                 {
                                     for (int n = 0; n < DOF; n++)
                                     {
-                                        if (elem.Exist == true)
-                                            KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
+                                        if (HardKill == false)
+                                        {
+                                            if (elem.Exist == true)
+                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
+                                            else
+                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * (double)Math.Pow(0.001, P);
+                                        }
                                         else
-                                            KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * (double)Math.Pow(0.001,P);
+                                        {
+                                            if (elem.Exist == true)
+                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
+                                            else
+                                                KG.Vals[idx1 + ni.row_nnz * n + m] /= KG.Vals[idx1 + ni.row_nnz * n + m];
+                                        }
+
                                     }
                                 }
                             }
