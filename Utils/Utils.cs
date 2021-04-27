@@ -1,9 +1,4 @@
-﻿using ALFE;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ALFE
 {
@@ -26,7 +21,7 @@ namespace ALFE
             {
                 for (int j = 0; j < fixedNodesID.Count - v; j++)
                 {
-                    if (i>= fixedNodesID[j + v])
+                    if (i >= fixedNodesID[j + v])
                     {
                         t = j + v;
                         v += 1;

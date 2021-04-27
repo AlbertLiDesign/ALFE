@@ -1,9 +1,6 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra.Double;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace ALFE
 {
@@ -36,7 +33,7 @@ namespace ALFE
         {
             D = new DenseMatrix(3, 3);
 
-            double coeff1 = Material.E / (1.0 - Material.nu* Material.nu);
+            double coeff1 = Material.E / (1.0 - Material.nu * Material.nu);
 
             D[0, 0] = D[1, 1] = coeff1;
             D[0, 1] = D[1, 0] = Material.nu * coeff1;
@@ -55,7 +52,7 @@ namespace ALFE
             var gama1 = (Nodes[0].Position.X - Nodes[2].Position.X) * val;
             var gama2 = (Nodes[1].Position.X - Nodes[0].Position.X) * val;
 
-            B = DenseMatrix.OfArray(new double[3,6]
+            B = DenseMatrix.OfArray(new double[3, 6]
                {
                     { belta0, 0.0, belta1, 0.0, belta2, 0.0 },
                     { 0.0, gama0, 0.0, gama1, 0.0, gama2 },
@@ -77,7 +74,7 @@ namespace ALFE
         public void ComputeArea()
         {
             Area = Math.Abs(Nodes[0].Position.X * (Nodes[1].Position.Y - Nodes[2].Position.Y) +
-                Nodes[1].Position.X * (Nodes[2].Position.Y - Nodes[0].Position.Y) + 
+                Nodes[1].Position.X * (Nodes[2].Position.Y - Nodes[0].Position.Y) +
                 Nodes[2].Position.X * (Nodes[0].Position.Y - Nodes[1].Position.Y)) * 0.5;
         }
     }

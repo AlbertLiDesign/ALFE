@@ -1,11 +1,9 @@
-﻿using System;
+﻿using KDTree;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using ALFE;
-using System.Collections.Concurrent;
-using KDTree;
 
 namespace ALFE.TopOpt
 {
@@ -30,7 +28,7 @@ namespace ALFE.TopOpt
         /// A mapping dictionary storing the relevant weight factors 
         /// </summary>
         public Dictionary<Element, List<double>> FMW;
-        
+
         /// <summary>
         /// The neighbour elements of each element.
         /// </summary>

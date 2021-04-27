@@ -183,7 +183,7 @@ namespace ALFE
                 {
                     cols[startIndex + i] =
                     cols[startIndex + i + row_nnz] = _altId * DOF + i;
-                    if (DOF == 3)  cols[startIndex + i + row_nnz * 2] = _altId * DOF + i;
+                    if (DOF == 3) cols[startIndex + i + row_nnz * 2] = _altId * DOF + i;
                 }
                 startIndex += DOF;
             }

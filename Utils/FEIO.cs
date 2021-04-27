@@ -1,12 +1,7 @@
-﻿using ALFE;
-using ALFE.TopOpt;
+﻿using ALFE.TopOpt;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Management;
 
 namespace ALFE
 {
@@ -91,7 +86,7 @@ namespace ALFE
         {
             //path += "/KG.mtx";
             StreamWriter sw = new StreamWriter(path);
-            
+
             sw.WriteLine("%%MatrixMarket matrix coordinate real symmetric");
             var mat = csr.ToCOO();
             sw.WriteLine(mat.Rows.ToString() + ' ' + mat.Cols.ToString() + ' ' + mat.NNZ.ToString());
@@ -328,7 +323,7 @@ namespace ALFE
                         else
                             throw new Exception("Unknown element type.");
                     }
-                        
+
                     if (value[0] == "L")
                         loads.Add(new Load(dof, int.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3]), double.Parse(value[4])));
 
@@ -338,7 +333,7 @@ namespace ALFE
                 }
                 #endregion
 
-               model = new Model(2, nodes, elements, loads, supports);
+                model = new Model(2, nodes, elements, loads, supports);
 
                 SR.Close();
                 SR.Dispose();
@@ -439,10 +434,10 @@ namespace ALFE
             if (File.Exists(besoPath))
             {
                 StreamReader SR = new StreamReader(besoPath);
-                
+
                 #region Read FE parameters
                 bool readFEpara = false;
-                
+
                 while (readFEpara == false)
                 {
                     string line = SR.ReadLine();
@@ -585,6 +580,9 @@ namespace ALFE
                                 break;
                             case ElementType.HexahedronElement:
                                 elements.Add(new Hexahedron(elemNodes, material));
+                                break;
+                            case ElementType.VoxelElement:
+                                elements.Add(new Voxel(elemNodes, material));
                                 break;
                             default:
                                 throw new Exception("Unknown element type.");

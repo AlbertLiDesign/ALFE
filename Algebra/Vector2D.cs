@@ -102,7 +102,7 @@ namespace ALFE
         /// <returns>The length</returns>
         public double SqrLength
         {
-            get { return this._x * this._x + this._y * this._y ; }
+            get { return this._x * this._x + this._y * this._y; }
         }
 
         public override string ToString()

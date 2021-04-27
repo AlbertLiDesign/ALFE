@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ALFE
 {
@@ -35,7 +32,7 @@ namespace ALFE
 
         public CSRMatrix(int n, int nnz)
         {
-            N = n; 
+            N = n;
             NNZ = nnz;
             Rows = new int[n + 1];
             Rows[n] = nnz;

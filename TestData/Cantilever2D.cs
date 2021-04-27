@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ALFE;
 
 namespace ALFE
 {
@@ -23,20 +19,20 @@ namespace ALFE
                 QuadType(xnum, ynum);
 
         }
-       private void PixelType(int xnum, int ynum)
+        private void PixelType(int xnum, int ynum)
         {
-             /*
-                > #-----#-----#-----#-----#-----#-----#
-                ^ |           |           |          |           |          |          |
-                > #-----#-----#-----#-----#-----#-----#
-                ^ |           |           |          |           |          |          |
-                > #-----#-----#-----#-----#-----#-----# | F (node 32)
-                ^ |           |           |          |           |          |          |  V
-                > #-----#-----#-----#-----#-----#-----#
-                ^ |           |           |          |           |          |          |
-                > #-----#-----#-----#-----#-----#-----#
-                ^
-             */
+            /*
+               > #-----#-----#-----#-----#-----#-----#
+               ^ |           |           |          |           |          |          |
+               > #-----#-----#-----#-----#-----#-----#
+               ^ |           |           |          |           |          |          |
+               > #-----#-----#-----#-----#-----#-----# | F (node 32)
+               ^ |           |           |          |           |          |          |  V
+               > #-----#-----#-----#-----#-----#-----#
+               ^ |           |           |          |           |          |          |
+               > #-----#-----#-----#-----#-----#-----#
+               ^
+            */
             List<Node> nodes = new List<Node>(xnum * ynum);
             List<Element> elems = new List<Element>((xnum - 1) * (ynum - 1));
             List<Load> loads = new List<Load>(1);
@@ -141,7 +137,7 @@ namespace ALFE
             */
 
             List<Node> nodes = new List<Node>(xnum * ynum);
-            List<Element> elems = new List<Element>((xnum - 1) * (ynum - 1)*2);
+            List<Element> elems = new List<Element>((xnum - 1) * (ynum - 1) * 2);
             List<Load> loads = new List<Load>(1);
             List<Support> supports = new List<Support>(ynum);
 
@@ -150,7 +146,7 @@ namespace ALFE
             {
                 for (int j = 0; j < ynum; j++)
                 {
-                    nodes.Add(new Node(i,j));
+                    nodes.Add(new Node(i, j));
                     if (i == 0)
                         supports.Add(new Support(j, SupportType.Fixed));
                 }

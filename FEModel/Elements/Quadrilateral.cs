@@ -1,10 +1,6 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra.Double;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathNet.Numerics.Integration;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace ALFE
 {
@@ -45,7 +41,7 @@ namespace ALFE
             D[2, 2] = (1.0 - Material.nu) * 0.5 * coeff1;
         }
 
-        public DenseMatrix ComputeB(double s=0.0, double t = 0.0)
+        public DenseMatrix ComputeB(double s = 0.0, double t = 0.0)
         {
             var x0 = Nodes[0].Position.X;
             var x1 = Nodes[1].Position.X;
@@ -125,8 +121,8 @@ namespace ALFE
         {
             ComputeD();
             J = ComputeJ();
-            B = ComputeB()/J;
-            
+            B = ComputeB() / J;
+
             GaussLegendreQuadrature glq = new GaussLegendreQuadrature(2);
 
             for (int i = 0; i < glq.Xi.Count; i++)

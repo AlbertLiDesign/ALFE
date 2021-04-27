@@ -11,7 +11,7 @@
         /// Poisson ratio
         /// </summary>
         public double nu { get; set; }
-        public Material() 
+        public Material()
         {
             this.E = 1.0;
             this.nu = 0.3f;

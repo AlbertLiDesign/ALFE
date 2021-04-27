@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace ALFE
 {
-    public class Hexahedron : Element
+    public class Voxel : Element
     {
         private double[] Ns;
         private double[] Nt;
         private double[] Nu;
         public Matrix<double> J;
-        public Hexahedron(List<Node> nodes, Material material, bool exist = true)
+        public Voxel(List<Node> nodes, Material material, bool exist = true)
         {
             if (nodes.Count != 8)
                 throw new Exception("The number of nodes must be 8.");
@@ -25,7 +25,7 @@ namespace ALFE
 
             Material = material;
             Exist = exist;
-            Type = ElementType.HexahedronElement;
+            Type = ElementType.VoxelElement;
             DOF = 3;
 
             J = new DenseMatrix(3, 3);

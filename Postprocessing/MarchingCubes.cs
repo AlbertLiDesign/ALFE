@@ -1,9 +1,5 @@
 ﻿using ALFE.TopOpt;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ALFE.Postprocessing
 {
@@ -156,7 +152,7 @@ namespace ALFE.Postprocessing
             Vector3D[] EdgeVertex = new Vector3D[12];
             for (int i = 0; i < 12; i++)
             {
-                if ((EdgeFlag & (1 << i)) != 0) 
+                if ((EdgeFlag & (1 << i)) != 0)
                 {
                     var Offset = GetOffset(values[EdgeConnection[i, 0]], values[EdgeConnection[i, 1]], isovalue, interpolation);
                     EdgeVertex[i] = new Vector3D(

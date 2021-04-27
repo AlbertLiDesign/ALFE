@@ -1,10 +1,6 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra.Double;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathNet.Numerics.Integration;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace ALFE
 {
@@ -21,7 +17,7 @@ namespace ALFE
                     throw new Exception("The dof of all nodes in the element must be 3");
                 Nodes.Add(item);
             }
-                
+
             Material = material;
             Exist = exist;
             Type = ElementType.TetrahedronElement;

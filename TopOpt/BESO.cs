@@ -1,11 +1,11 @@
-﻿using MathNet.Numerics.LinearAlgebra.Double;
+﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
-using MathNet.Numerics.LinearAlgebra;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ALFE.TopOpt
 {
@@ -29,7 +29,7 @@ namespace ALFE.TopOpt
         /// <summary>
         /// Volume fraction
         /// </summary>
-        public double VolumeFraction;     
+        public double VolumeFraction;
 
         /// <summary>
         /// Penalty exponent
@@ -68,11 +68,11 @@ namespace ALFE.TopOpt
         public bool HardKill = false;
 
         public BESO() { }
-        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p=3.0,  double vf=0.5, int maxIter=100, bool hardKill = false, Solver solver = 0)
+        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, bool hardKill = false, Solver solver = 0)
         {
             if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
-            if (!(vf> 0.0 && vf< 1.0))
+            if (!(vf > 0.0 && vf < 1.0))
                 throw new Exception("Vt must be large than 0 and be less than 1.");
 
             System = system;
@@ -106,7 +106,7 @@ namespace ALFE.TopOpt
 
             solvingInfo += "Prefiltering: " + sw.Elapsed.TotalMilliseconds.ToString() + " ms";
             solvingInfo += '\n';
-            
+
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
         public void Optimize()
@@ -124,13 +124,15 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
+                Console.WriteLine("Prepare to solve the system");
                 sw.Restart();
+                //FEIO.WriteKG(System.GetKG(), "E:\\KG" + iter.ToString() + ".mtx");
                 System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 //FEPrint.PrintDisplacement(System);
-                //FEIO.WriteKG(System.GetKG(), "E:\\KG" + iter.ToString() + ".mtx");
+
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
@@ -189,9 +191,9 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 solvingInfo += BESOInfo(iter - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
-                WritePerformanceReport();   
+                WritePerformanceReport();
             }
-            
+
             FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
         }
         private void BESO_Core(double curV, List<double> Ae)

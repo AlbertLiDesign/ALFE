@@ -10,7 +10,7 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestAllSolver();
+            TestBESO();
 
             Console.ReadKey();
         }
@@ -18,15 +18,15 @@ namespace ALFE
         {
             string path = @"E:\ALCoding\ALFE\topoptTest";
             BESO beso = FEIO.ReadBESO(path);
-            beso.HardKill = true;
+            beso.HardKill = false;
             beso.Initialize();
             beso.Optimize();
         }
         public static void Test()
         {
-            Model model2d = new Cantilever2D(ElementType.PixelElement).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement, 200, 200).Model;
 
-            FESystem sys0 = new FESystem(model2d, Solver.PARDISO);
+            FESystem sys0 = new FESystem(model2d, Solver.SimplicialLLT);
             sys0.Initialize();
             sys0.Solve();
 
@@ -36,11 +36,12 @@ namespace ALFE
             Console.Write(sys0.MatrixInfo());
 
             Console.Write(sys0.SolvingInfo());
+            //Console.Write(sys0.DisplacementInfo());
             //FEIO.WriteKG(sys0.GetKG(), "E:\\ALCoding\\ALFE\\topoptTest");
             Console.WriteLine();
         }
         public static void TestAllSolver()
-        { 
+        {
             Model model2d = new Cantilever2D(ElementType.PixelElement, 300, 200).Model;
 
             FESystem sys0 = new FESystem(model2d, Solver.PARDISO);
@@ -50,7 +51,7 @@ namespace ALFE
 
             Console.Write(sys0.Model.ModelInfo());
             Console.Write(sys0.MatrixInfo());
-            
+
 
 
             Console.WriteLine("------------------- Time Cost -------------------");
@@ -147,7 +148,7 @@ namespace ALFE
                 new Node(0.0,0.0,0.25),
                 new Node(0.0,0.25,0.25),
                 new Node(0.0,0.25,0.0),
-                
+
                 new Node(0.25,0.0,0.0),
                 new Node(0.25,0.0,0.25),
                 new Node(0.25,0.25,0.25),
@@ -159,7 +160,7 @@ namespace ALFE
                 new Node(0.5,0.25,0.0)
             };
 
-            var element0 = new Hexahedron(new List<Node>(8){ nodes[0], nodes[1], nodes[2], nodes[3], nodes[4], nodes[5], nodes[6], nodes[7]}, new Material(210, 0.3));
+            var element0 = new Hexahedron(new List<Node>(8) { nodes[0], nodes[1], nodes[2], nodes[3], nodes[4], nodes[5], nodes[6], nodes[7] }, new Material(210, 0.3));
             var element1 = new Hexahedron(new List<Node>(8) { nodes[4], nodes[5], nodes[6], nodes[7], nodes[8], nodes[9], nodes[10], nodes[11] }, new Material(210, 0.3));
 
             var elements = new List<Element>(2) { element0, element1 };

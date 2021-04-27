@@ -97,6 +97,7 @@
     <Compile Include="FEModel\Elements\Tetrahedron.cs" />
     <Compile Include="FEModel\Elements\Pixel.cs" />
     <Compile Include="FEModel\Elements\Triangle.cs" />
+    <Compile Include="FEModel\Elements\Voxel.cs" />
     <Compile Include="FEModel\Load.cs" />
     <Compile Include="FEModel\Material.cs" />
     <Compile Include="FEModel\Model.cs" />

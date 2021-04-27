@@ -1,11 +1,7 @@
-﻿using ALFE;
+﻿using ALFE.TopOpt;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Management;
-using ALFE.TopOpt;
 
 namespace ALFE
 {
@@ -79,7 +75,7 @@ namespace ALFE
             Console.WriteLine("Cols: " + csr.N.ToString());
             Console.WriteLine("NNZ: " + csr.NNZ.ToString());
         }
-            public static void PrintMatrixInfo(COOMatrix coo)
+        public static void PrintMatrixInfo(COOMatrix coo)
         {
             Console.WriteLine("------------------- Matrix Info -------------------");
             Console.WriteLine("Rows: " + coo.Rows.ToString());

@@ -1,12 +1,8 @@
-﻿using ALFE;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra.Double;
-using System.Threading;
 
 namespace ALFE
 {
@@ -207,7 +203,7 @@ namespace ALFE
         {
             Stopwatch sw = new Stopwatch();
 
-            sw.Start();          
+            sw.Start();
             Solved = SolveSystem((int)_Solver, KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
@@ -282,7 +278,7 @@ namespace ALFE
                 int row_nnz = nd.ComputePositionInKG(count, KG.Cols);
                 KG.Rows[nd.ActiveID * DOF + 0] = count;
                 KG.Rows[nd.ActiveID * DOF + 1] = count + row_nnz;
-                if(DOF == 3) KG.Rows[nd.ActiveID * DOF + 2] = count + row_nnz * 2;
+                if (DOF == 3) KG.Rows[nd.ActiveID * DOF + 2] = count + row_nnz * 2;
                 count += row_nnz * DOF;
             }
         }

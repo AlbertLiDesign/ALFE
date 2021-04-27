@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra;
+﻿using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
+using System.Collections.Generic;
 
 namespace ALFE
 {
@@ -69,7 +65,7 @@ namespace ALFE
                 if (DOF == 3)
                     Ue[i * DOF + 2, 0] = node.Displacement.Z;
 
-                i++;                
+                i++;
             }
         }
 
