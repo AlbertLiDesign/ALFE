@@ -13,6 +13,8 @@
 
 #include <amgcl/backend/builtin.hpp>
 #include <amgcl/adapter/crs_tuple.hpp>
+#include <vector>
+#include <iostream>
 
 #include <amgcl/make_solver.hpp>
 #include <amgcl/amg.hpp>
@@ -23,6 +25,13 @@
 #include <amgcl/value_type/static_matrix.hpp>
 #include <amgcl/adapter/block_matrix.hpp>
 #include <amgcl/adapter/eigen.hpp>
+//
+//#include <amgcl/mpi/distributed_matrix.hpp>
+//#include <amgcl/mpi/make_solver.hpp>
+//#include <amgcl/mpi/amg.hpp>
+//#include <amgcl/mpi/coarsening/smoothed_aggregation.hpp>
+//#include <amgcl/mpi/relaxation/spai0.hpp>
+//#include <amgcl/mpi/solver/bicgstab.hpp>
 
 #include <amgcl/io/mm.hpp>
 #include <amgcl/profiler.hpp>
@@ -30,8 +39,8 @@
 #include<cholmod.h>
 
 AMGCL_USE_EIGEN_VECTORS_WITH_BUILTIN_BACKEND()
+extern "C" __declspec(dllexport) int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 
 Eigen::VectorXd SetVector(double* matrix, int dim);
 Eigen::SparseMatrix<double> SetCOOMatrix(int* row, int* col, double* val, int rows, int cols, int nnz);
-extern "C" __declspec(dllexport) int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
-extern "C" __declspec(dllexport) int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
+Eigen::VectorXd Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);

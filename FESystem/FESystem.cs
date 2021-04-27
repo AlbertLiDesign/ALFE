@@ -18,6 +18,7 @@ namespace ALFE
         CG = 3,
         PARDISO = 4,
         CholmodSuperNodalLLT = 5,
+        AMGCL = 6
     }
     public class FESystem
     {

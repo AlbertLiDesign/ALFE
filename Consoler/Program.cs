@@ -10,7 +10,7 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestBESO();
+            TestAllSolver();
 
             Console.ReadKey();
         }
@@ -26,7 +26,7 @@ namespace ALFE
         {
             Model model2d = new Cantilever2D(ElementType.PixelElement).Model;
 
-            FESystem sys0 = new FESystem(model2d, Solver.CholmodSimplicialLLT);
+            FESystem sys0 = new FESystem(model2d, Solver.PARDISO);
             sys0.Initialize();
             sys0.Solve();
 
@@ -43,12 +43,14 @@ namespace ALFE
         { 
             Model model2d = new Cantilever2D(ElementType.PixelElement, 100, 100).Model;
 
-            FESystem sys0 = new FESystem(model2d, Solver.SimplicialLLT);
+            FESystem sys0 = new FESystem(model2d, Solver.AMGCL);
             sys0.Initialize();
+            FEIO.WriteKG(sys0.GetKG(), "E:\\KG" + ".mtx");
             sys0.Solve();
 
             Console.Write(sys0.Model.ModelInfo());
             Console.Write(sys0.MatrixInfo());
+            
 
 
             Console.WriteLine("------------------- Time Cost -------------------");
@@ -64,7 +66,7 @@ namespace ALFE
             //Console.WriteLine("Solving: " + sys1.TimeCost[3].ToString() + " ms");
             //Console.WriteLine();
 
-            FESystem sys2 = new FESystem(model2d, Solver.PARDISOSingle);
+            FESystem sys2 = new FESystem(model2d, Solver.PARDISO);
             sys2.Initialize();
             sys2.Solve();
 
@@ -72,13 +74,13 @@ namespace ALFE
             Console.WriteLine("Solving: " + sys2.TimeCost[3].ToString() + " ms");
             Console.WriteLine();
 
-            FESystem sys3 = new FESystem(model2d, Solver.CG);
-            sys3.Initialize();
-            sys3.Solve();
+            //FESystem sys3 = new FESystem(model2d, Solver.CG);
+            //sys3.Initialize();
+            //sys3.Solve();
 
-            Console.WriteLine("Solver: " + sys3._Solver.ToString());
-            Console.WriteLine("Solving: " + sys3.TimeCost[3].ToString() + " ms");
-            Console.WriteLine();
+            //Console.WriteLine("Solver: " + sys3._Solver.ToString());
+            //Console.WriteLine("Solving: " + sys3.TimeCost[3].ToString() + " ms");
+            //Console.WriteLine();
 
             //FESystem sys4 = new FESystem(model2d, Solver
             //sys4.Initialize();

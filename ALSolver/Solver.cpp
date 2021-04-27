@@ -46,6 +46,9 @@ int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F
         cholmodSupernodal.factorize(A);
         result = cholmodSupernodal.solve(B);
         break;
+    case 6:
+        result = Solve_AMG_CG(rows_offset, cols, vals, F, dim, nnz);
+            break;
     default:
         break;
     }
@@ -59,7 +62,7 @@ int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F
 
 
 
-int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X)
+Eigen::VectorXd Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz)
 {
     amgcl::profiler<> prof;
 
@@ -126,8 +129,5 @@ int Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, 
     std::cout << iters << " " << error << std::endl
        << prof << std::endl;
 
-    for (int i = 0; i < dim; i++)
-        X[i] = x[i];
-
-    return 1;
+    return x;
 }
