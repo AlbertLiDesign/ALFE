@@ -58,57 +58,98 @@ namespace ALFE.TopOpt
         /// <summary>
         /// Function of preparing filter map.
         /// </summary>
-        public void PreFlt()
+        public void PreFlt(bool kdtree = true)
         {
-            // Calculate element centre coordinates
-            List<Vector3D> centres = new List<Vector3D>(Elements.Count);
-
-            // Construct KDTree
-            var tree = new KDTree<int>(3);
-
-            // Get centres
-            int id = 0;
-            foreach (var elem in Elements)
+            if (kdtree)
             {
-                Vector3D centre = new Vector3D();
-                foreach (var node in elem.Nodes)
-                    centre += node.Position;
+                // Calculate element centre coordinates
+                List<Vector3D> centres = new List<Vector3D>(Elements.Count);
 
-                centre /= elem.Nodes.Count;
+                // Construct KDTree
+                var tree = new KDTree<int>(3);
 
-                centres.Add(centre);
-                tree.AddPoint(new double[3] { centre.X, centre.Y, centre.Z }, id);
-                id++;
-            }
-
-            // Searching
-            var result = KDTreeMultiSearch(centres, tree, FilterRadius, 32);
-
-            foreach (var elem in Elements)
-            {
-                List<Element> adjacentElems = new List<Element>(result[elem.ID].Count);
-                List<double> weights = new List<double>(result[elem.ID].Count);
-                double sum = 0.0;
-
-                Vector3D curCentre = centres[elem.ID];
-
-                foreach (var item in result[elem.ID])
+                // Get centres
+                int id = 0;
+                foreach (var elem in Elements)
                 {
-                    Vector3D adjCentre = new Vector3D(centres[item].X, centres[item].Y, centres[item].Z);
+                    Vector3D centre = new Vector3D();
+                    foreach (var node in elem.Nodes)
+                        centre += node.Position;
 
-                    adjacentElems.Add(Elements[item]);
-                    var weight = FilterRadius - curCentre.DistanceTo(adjCentre);
-                    weights.Add(weight);
-                    sum += weight;
+                    centre /= elem.Nodes.Count;
+
+                    centres.Add(centre);
+                    tree.AddPoint(new double[3] { centre.X, centre.Y, centre.Z }, id);
+                    id++;
                 }
 
-                // Compute weights
-                for (int i = 0; i < weights.Count; i++)
-                    weights[i] /= sum;
+                // Searching
+                var result = KDTreeMultiSearch(centres, tree, FilterRadius, 32);
 
-                FME.Add(elem, adjacentElems);
-                FMW.Add(elem, weights);
+                foreach (var elem in Elements)
+                {
+                    List<Element> adjacentElems = new List<Element>(result[elem.ID].Count);
+                    List<double> weights = new List<double>(result[elem.ID].Count);
+                    double sum = 0.0;
+
+                    Vector3D curCentre = centres[elem.ID];
+
+                    foreach (var item in result[elem.ID])
+                    {
+                        Vector3D adjCentre = new Vector3D(centres[item].X, centres[item].Y, centres[item].Z);
+
+                        adjacentElems.Add(Elements[item]);
+                        var weight = FilterRadius - curCentre.DistanceTo(adjCentre);
+                        weights.Add(weight);
+                        sum += weight;
+                    }
+
+                    // Compute weights
+                    for (int i = 0; i < weights.Count; i++)
+                        weights[i] /= sum;
+
+                    FME.Add(elem, adjacentElems);
+                    FMW.Add(elem, weights);
+                }
             }
+            else
+            {
+                foreach (var elem in Elements)
+                {
+                    List<Element> elems = new List<Element>();
+                    List<double> weights = new List<double>();
+
+                    var oneRingElems = GetNeighborElements(elem);
+                    foreach (var oneElem in oneRingElems)
+                    {
+                        var twoRingElems = GetNeighborElements(oneElem);
+                        foreach (var twoElem in twoRingElems)
+                        {
+                            elems.Add(twoElem);
+                            weights.Add(1);
+                        }
+                        elems.Add(oneElem);
+                        weights.Add(2);
+                    }
+
+                    FME.Add(elem, elems);
+                    FMW.Add(elem, weights);
+                }
+            }
+        }
+
+        private List<Element> GetNeighborElements(Element elem)
+        {
+            List<Element> elems = new List<Element>();
+            foreach (var node in elem.Nodes)
+            {
+                foreach (var elemID in node.ElementID)
+                {
+                    if (elemID != elem.ID)
+                        elems.Add(Elements[elemID]);
+                }
+            }
+            return elems;
         }
 
         private static List<int>[] KDTreeMultiSearch(List<Vector3D> pts, KDTree<int> tree, double radius, int maxReturned)

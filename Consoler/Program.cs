@@ -41,9 +41,9 @@ namespace ALFE
         }
         public static void TestAllSolver()
         { 
-            Model model2d = new Cantilever2D(ElementType.PixelElement, 100, 100).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement, 300, 200).Model;
 
-            FESystem sys0 = new FESystem(model2d, Solver.AMGCL);
+            FESystem sys0 = new FESystem(model2d, Solver.PARDISO);
             sys0.Initialize();
             FEIO.WriteKG(sys0.GetKG(), "E:\\KG" + ".mtx");
             sys0.Solve();
@@ -66,13 +66,14 @@ namespace ALFE
             //Console.WriteLine("Solving: " + sys1.TimeCost[3].ToString() + " ms");
             //Console.WriteLine();
 
-            FESystem sys2 = new FESystem(model2d, Solver.PARDISO);
-            sys2.Initialize();
-            sys2.Solve();
+            //FESystem sys2 = new FESystem(model2d, Solver.PARDISO);
+            //sys2.Initialize();
+            //sys2.Solve();
 
-            Console.WriteLine("Solver: " + sys2._Solver.ToString());
-            Console.WriteLine("Solving: " + sys2.TimeCost[3].ToString() + " ms");
-            Console.WriteLine();
+
+            //Console.WriteLine("Solver: " + sys2._Solver.ToString());
+            //Console.WriteLine("Solving: " + sys2.TimeCost[3].ToString() + " ms");
+            //Console.WriteLine();
 
             //FESystem sys3 = new FESystem(model2d, Solver.CG);
             //sys3.Initialize();

@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ToDoList.txt = ToDoList.txt
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALSolver_GPU", "ALSolver_GPU\ALSolver_GPU.vcxproj", "{759842E9-8448-47D2-96E5-45E54482C9B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,16 @@ Global
 		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Release|x64.Build.0 = Release|Any CPU
 		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Release|x86.ActiveCfg = Release|Any CPU
 		{B07B1755-1373-46F1-B4FB-6A71442C9686}.Release|x86.Build.0 = Release|Any CPU
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Debug|x64.ActiveCfg = Debug|x64
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Debug|x64.Build.0 = Debug|x64
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Debug|x86.ActiveCfg = Debug|Win32
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Debug|x86.Build.0 = Debug|Win32
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Release|Any CPU.ActiveCfg = Release|Win32
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Release|x64.ActiveCfg = Release|x64
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Release|x64.Build.0 = Release|x64
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Release|x86.ActiveCfg = Release|Win32
+		{759842E9-8448-47D2-96E5-45E54482C9B8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -78,7 +78,6 @@ Eigen::VectorXd Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* 
     // Zero initial approximation:
     Eigen::VectorXd x = Eigen::VectorXd::Zero(dim);
 
-
     // Compose the solver type
     typedef amgcl::static_matrix<double, 2, 2> dmat_type; // matrix value type in double precision
     typedef amgcl::static_matrix<double, 2, 1> dvec_type; // the corresponding vector value type

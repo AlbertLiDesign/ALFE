@@ -25,13 +25,6 @@
 #include <amgcl/value_type/static_matrix.hpp>
 #include <amgcl/adapter/block_matrix.hpp>
 #include <amgcl/adapter/eigen.hpp>
-//
-//#include <amgcl/mpi/distributed_matrix.hpp>
-//#include <amgcl/mpi/make_solver.hpp>
-//#include <amgcl/mpi/amg.hpp>
-//#include <amgcl/mpi/coarsening/smoothed_aggregation.hpp>
-//#include <amgcl/mpi/relaxation/spai0.hpp>
-//#include <amgcl/mpi/solver/bicgstab.hpp>
 
 #include <amgcl/io/mm.hpp>
 #include <amgcl/profiler.hpp>

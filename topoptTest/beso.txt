@@ -12,7 +12,7 @@ Possion Rate: 0.300000011920929
 BESO Parameters: 
 Volume Fraction: 0.3
 Evolution Rate: 0.01
-Filter Radius: 3
+Filter Radius: 2.5
 Penalty Exponent: 3
 Maximum Iteration: 200
 Solver: 3

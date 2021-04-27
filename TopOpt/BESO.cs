@@ -11,7 +11,6 @@ namespace ALFE.TopOpt
 {
     public class BESO
     {
-        private bool ParallelComputing = true;
         public string solvingInfo;
         public FESystem System;
         public Model Model;
@@ -221,7 +220,7 @@ namespace ALFE.TopOpt
         private List<double> CalSensitivities()
         {
             double[] values = new double[Model.Elements.Count];
-            if (ParallelComputing)
+            if (System.ParallelComputing)
             {
                 Parallel.ForEach(Model.Elements, elem =>
                 {
