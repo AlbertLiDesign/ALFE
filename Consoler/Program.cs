@@ -10,7 +10,7 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestBESO();
+            TestQuads();
 
             Console.ReadKey();
         }
@@ -124,20 +124,29 @@ namespace ALFE
         {
             List<Node> nodes = new List<Node>()
             {
-                new Node(6.0,2.0),
-                new Node(21.0,9.0),
-                new Node(27.0,-9.0),
-                new Node(10.0,-10.0),
+                new Node(0.0,4.0),
+                new Node(10.0,7.0),
+                new Node(10.0,0.0),
+                new Node(5.0,-3.0),
             };
 
             var element = new Quadrilateral(nodes, new Material(10, 0.3));
             element.ComputeKe();
 
-            Console.WriteLine(element.J);
-            Console.WriteLine(element.D);
-            Console.WriteLine(element.B);
-
             Console.WriteLine(element.Ke);
+
+            List<Node> nodes2 = new List<Node>()
+            {
+                new Node(-17.916667,9.166667),
+                new Node(22.083333,21.166667),
+                new Node(22.083333,-6.833333),
+                new Node(2.083333,-18.833333),
+            };
+
+            var element2 = new Quadrilateral(nodes2, new Material(10, 0.3));
+            element2.ComputeKe();
+
+            Console.WriteLine(element2.Ke);
         }
 
         public static void TestHexahedron()

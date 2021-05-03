@@ -11,7 +11,8 @@ namespace ALFE
         PixelElement,
         TetrahedronElement,
         HexahedronElement,
-        VoxelElement
+        VoxelElement,
+        QuadTreeElement,
     }
     public abstract class Element
     {

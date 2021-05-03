@@ -120,14 +120,8 @@ namespace ALFE.TopOpt
                     var oneRingElems = GetNeighborElements(elem);
                     foreach (var oneElem in oneRingElems)
                     {
-                        var twoRingElems = GetNeighborElements(oneElem);
-                        foreach (var twoElem in twoRingElems)
-                        {
-                            elems.Add(twoElem);
-                            weights.Add(1);
-                        }
                         elems.Add(oneElem);
-                        weights.Add(2);
+                        weights.Add(1);
                     }
 
                     FME.Add(elem, elems);

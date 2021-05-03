@@ -57,9 +57,9 @@ namespace ALFE
                     List<Node> nodesElem = new List<Node>(4)
                     {
                         nodes[i * ynum + j],
-                        nodes[(i + 1) * ynum + j],
+                        nodes[i * ynum + (j+1)],
                         nodes[(i+1) * ynum+ (j+1)],
-                        nodes[i * ynum + (j+1)]
+                        nodes[(i + 1) * ynum + j],
                     };
                     elems.Add(new Pixel(nodesElem, new Material(1.0, 0.3f)));
                 }
