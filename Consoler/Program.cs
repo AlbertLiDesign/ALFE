@@ -10,7 +10,7 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestQuads();
+            TestBESO();
 
             Console.ReadKey();
         }
@@ -21,6 +21,7 @@ namespace ALFE
             beso.HardKill = false;
             beso.Initialize();
             beso.Optimize();
+            FEIO.WriteIsovalues(path, beso);
         }
         public static void Test()
         {

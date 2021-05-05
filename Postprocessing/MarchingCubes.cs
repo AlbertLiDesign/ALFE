@@ -114,7 +114,7 @@ namespace ALFE.Postprocessing
         }
 
 
-        public int ComputeCase(double[] values, double isovalue)
+        public int ComputeFlag(double[] values, double isovalue)
         {
             int flag = 0;
             for (int i = 0; i < 8; i++)
@@ -141,7 +141,7 @@ namespace ALFE.Postprocessing
         public List<Vector3D> ExtractIsosurface(Vector3D[] voxelCorners, double[] values, double isovalue, Vector3D voxelSize, bool interpolation)
         {
             List<Vector3D> pts = new List<Vector3D>();
-            int flag = ComputeCase(values, isovalue);
+            int flag = ComputeFlag(values, isovalue);
             // To find edges which intersect with the boundary
             int EdgeFlag = CubeEdgeFlags[flag];
 

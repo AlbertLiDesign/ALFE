@@ -19,7 +19,7 @@ namespace ALFE.TopOpt
         /// <summary>
         /// The isovalue for extracting isosurface.
         /// </summary>
-        public double isovalue = 0.0;
+        public List<double> isovalues = new List<double>();
 
         /// <summary>
         /// Filter radius
@@ -214,10 +214,11 @@ namespace ALFE.TopOpt
                     elem.Exist = elem.Xe == 1.0 ? true : false;
                     sum += v;
                 }
+
                 if (sum - tv > 0.0) lowest = th;
                 else highest = th;
             }
-            isovalue = th;
+            isovalues.Add(th);
         }
         private List<double> CalSensitivities()
         {

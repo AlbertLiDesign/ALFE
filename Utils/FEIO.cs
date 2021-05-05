@@ -7,6 +7,18 @@ namespace ALFE
 {
     public class FEIO
     {
+        public static void WriteIsovalues(string path, BESO beso)
+        {
+            string output = path + '\\' + "isovalues.txt";
+            StreamWriter sw = new StreamWriter(output);
+            for (int i = 0; i < beso.isovalues.Count; i++)
+            {
+                sw.WriteLine(beso.isovalues[i].ToString());
+            }
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
         public static void WriteVerts(string path, Model model)
         {
             string output = path + '\\' + "ndoes.txt";

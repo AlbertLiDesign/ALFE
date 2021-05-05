@@ -31,8 +31,9 @@ namespace ALFE
         public double Value { get; set; }
 
         #region Constructive Methods
-        public QuadTree(double x, double y, double edgeLength, double value, int layerLevel, Material material, bool exist = true)
+        public QuadTree(List<Node> nodes, double x, double y, double edgeLength, double value, int layerLevel, Material material, bool exist = true)
         {
+            Nodes = nodes;
             Position = new Vector3D(x, y, 0.0);
             EdgeLength = edgeLength;
             LayerLevel = layerLevel;
@@ -45,8 +46,9 @@ namespace ALFE
             DOF = 2;
         }
 
-        public QuadTree(Vector3D position, double edgeLength, double value, int layerLevel, Material material, bool exist = true)
+        public QuadTree(List<Node> nodes, Vector3D position, double edgeLength, double value, int layerLevel, Material material, bool exist = true)
         {
+            Nodes = nodes;
             Position = position;
             EdgeLength = edgeLength;
             LayerLevel = layerLevel;

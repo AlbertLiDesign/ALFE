@@ -19,10 +19,10 @@ namespace ALFE
         /// </summary>
         public List<Node> ActiveNodes = new List<Node>();
 
-        public List<QuadTree> Elements = new List<QuadTree>();
-        public List<Node> Nodes = new List<Node>();
-        public List<Load> Loads = new List<Load>();
-        public List<Support> Supports = new List<Support>();
+        /// <summary>
+        /// Finite element model
+        /// </summary>
+        public Model Model;
 
         /// <summary>
         /// Dimensions of the global stiffness matrix
@@ -59,7 +59,8 @@ namespace ALFE
         /// </summary>
         private double[] X;
 
-        public bool HardKill = false;
+        public List<double> Weights = new List<double>();
+
 
         public bool ParallelComputing = true;
 
@@ -67,19 +68,16 @@ namespace ALFE
         /// Initialize the finite element system.
         /// </summary>
         /// <param name="model"> A finite element model</param>
-        public FESystem_AMR(List<Node> nodes, List<QuadTree> elements, List<Load> loads, List<Support> supports, Solver solver = Solver.SimplicialLLT, bool parallel = true)
+        public FESystem_AMR(List<double> weights, Model model, Solver solver = Solver.SimplicialLLT, bool parallel = true)
         {
-            Nodes = nodes;
-            Elements = elements;
-            Loads = loads;
-            Supports = supports;
-
-            DOF = 2;
+            Weights = weights;
+            Model = model;
+            DOF = model.DOF;
             _Solver = solver;
             ParallelComputing = parallel;
 
             ApplySupports();
-            Dim = (Nodes.Count - FixedID.Count) * DOF;
+            Dim = (Model.Nodes.Count - FixedID.Count) * DOF;
 
             F = new double[Dim];
             X = new double[Dim];
@@ -117,15 +115,14 @@ namespace ALFE
         /// </summary>
         private void AssembleF()
         {
-            foreach (var item in Loads)
+            foreach (var item in Model.Loads)
             {
-                if (!HardKill)
-                {
-                    var id = Nodes[item.NodeID].ActiveID * DOF;
+
+                    var id = Model.Nodes[item.NodeID].ActiveID * DOF;
                     F[id + 0] = item.ForceVector.X;
                     F[id + 1] = item.ForceVector.Y;
                     if (DOF == 3) F[id + 2] = item.ForceVector.Z;
-                }
+                
             }
         }
 
@@ -135,7 +132,7 @@ namespace ALFE
         private void AssembleKG(int P = 3)
         {
             KG.Clear();
-            foreach (var elem in Elements)
+            foreach (var elem in Model.Elements)
             {
                 for (int i = 0; i < elem.Nodes.Count; i++)
                 {
@@ -153,21 +150,11 @@ namespace ALFE
                                 {
                                     for (int n = 0; n < DOF; n++)
                                     {
-                                        if (HardKill == false)
-                                        {
-                                            if (elem.Exist == true)
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * (1-1/elem.LayerLevel);
-                                            else
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * (double)Math.Pow(0.001, P);
-                                        }
+                                        if (elem.Exist == true)
+                                            KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * Weights[elem.ID];
                                         else
-                                        {
-                                            if (elem.Exist == true)
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
-                                            else
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] /= KG.Vals[idx1 + ni.row_nnz * n + m];
-                                        }
-
+                                            KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] *
+                                                (double) Math.Pow(0.001, P);
                                     }
                                 }
                             }
@@ -204,7 +191,7 @@ namespace ALFE
             int id = 0;
             if (Solved)
             {
-                foreach (var item in Nodes)
+                foreach (var item in Model.Nodes)
                 {
                     if (item.Active == true)
                     {
@@ -232,12 +219,12 @@ namespace ALFE
         /// <returns> Return the displacement vector.</returns>
         public double[,] GetDisplacement()
         {
-            double[,] displacement = new double[Nodes.Count, DOF];
-            for (int i = 0; i < Nodes.Count; i++)
+            double[,] displacement = new double[Model.Nodes.Count, DOF];
+            for (int i = 0; i < Model.Nodes.Count; i++)
             {
-                displacement[i, 0] = Nodes[i].Displacement.X;
-                displacement[i, 1] = Nodes[i].Displacement.Y;
-                if (DOF == 3) displacement[i, 2] = Nodes[i].Displacement.Z;
+                displacement[i, 0] = Model.Nodes[i].Displacement.X;
+                displacement[i, 1] = Model.Nodes[i].Displacement.Y;
+                if (DOF == 3) displacement[i, 2] = Model.Nodes[i].Displacement.Z;
             }
             return displacement;
         }
@@ -248,7 +235,7 @@ namespace ALFE
         private void InitialzeKG()
         {
             // list non-anchored nodes and give them sequential ids
-            ActiveNodes = Nodes.FindAll(nd => nd.Active);
+            ActiveNodes = Model.Nodes.FindAll(nd => nd.Active);
             int id = 0;
             foreach (Node nd in ActiveNodes) { nd.ActiveID = id++; }
 
@@ -283,10 +270,10 @@ namespace ALFE
         {
             if (ParallelComputing)
             {
-                Parallel.ForEach(Nodes, node =>
+                Parallel.ForEach(Model.Nodes, node =>
                 {
                     foreach (var item in node.ElementID)
-                        foreach (var neighbour in Elements[item].Nodes)
+                        foreach (var neighbour in Model.Elements[item].Nodes)
                             if (neighbour.Active)
                                 lock (node.Neighbours)
                                     node.Neighbours.Add(neighbour.ActiveID);
@@ -294,9 +281,9 @@ namespace ALFE
             }
             else
             {
-                foreach (var node in Nodes)
+                foreach (var node in Model.Nodes)
                     foreach (var item in node.ElementID)
-                        foreach (var neighbour in Elements[item].Nodes)
+                        foreach (var neighbour in Model.Elements[item].Nodes)
                             if (neighbour.Active)
                                 lock (node.Neighbours)
                                     node.Neighbours.Add(neighbour.ActiveID);
@@ -309,7 +296,7 @@ namespace ALFE
         private void GetConnectedElements()
         {
             // in each node make a list of elements to which it belongs
-            foreach (var elem in Elements)
+            foreach (var elem in Model.Elements)
                 foreach (var node in elem.Nodes)
                     node.ElementID.Add(elem.ID);
         }
@@ -320,8 +307,8 @@ namespace ALFE
         /// <returns></returns>
         public void ApplySupports()
         {
-            var nodes = Nodes;
-            var supports = Supports;
+            var nodes = Model.Nodes;
+            var supports = Model.Supports;
 
             List<int> ids = new List<int>(supports.Count);
             for (int i = 0; i < supports.Count; i++)
@@ -344,19 +331,19 @@ namespace ALFE
         /// </summary>
         private void ComputeAllKe()
         {
-            if (Elements[0].Type == ElementType.PixelElement || Elements[0].Type == ElementType.VoxelElement)
+            if (Model.Elements[0].Type == ElementType.PixelElement || Model.Elements[0].Type == ElementType.VoxelElement)
             {
-                var elem0 = Elements[0];
+                var elem0 = Model.Elements[0];
                 elem0.ComputeKe();
                 var K = elem0.Ke;
-                foreach (var elem in Elements)
+                foreach (var elem in Model.Elements)
                 {
                     elem.Ke = K;
                 }
             }
             else
             {
-                foreach (var item in Elements)
+                foreach (var item in Model.Elements)
                     item.ComputeKe();
             }
         }
@@ -401,11 +388,11 @@ namespace ALFE
             string info = "------------------- Displacement Info -------------------";
             info += '\n';
 
-            for (int i = 0; i < Nodes.Count; i++)
+            for (int i = 0; i < Model.Nodes.Count; i++)
             {
-                info += Nodes[i].Displacement.X;
+                info += Model.Nodes[i].Displacement.X;
                 info += '\t';
-                info += Nodes[i].Displacement.Y;
+                info += Model.Nodes[i].Displacement.Y;
                 info += '\n';
             }
 
