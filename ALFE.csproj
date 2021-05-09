@@ -108,7 +108,6 @@
     <Compile Include="Algebra\Vector3D.cs" />
     <Compile Include="FEModel\Support.cs" />
     <Compile Include="FESystem\FESystem_AMR.cs" />
-    <Compile Include="Postprocessing\MarchingCubes.cs" />
     <Compile Include="TestData\TestMethods.cs" />
     <Compile Include="TopOpt\BESO.cs" />
     <Compile Include="TopOpt\Filter.cs" />

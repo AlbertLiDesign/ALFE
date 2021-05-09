@@ -193,7 +193,7 @@ namespace ALFE.TopOpt
                 solvingInfo += BESOInfo(iter - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
                 WritePerformanceReport();
             }
-
+            FEIO.WriteSensitivities(Path, Sensitivities);
             FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
         }
         private void BESO_Core(double curV, List<double> Ae)
@@ -239,7 +239,7 @@ namespace ALFE.TopOpt
                     if (elem.Exist != true)
                         Ke.Multiply((double)Math.Pow(0.001, PenaltyExponent));
 
-                    elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+                    elem.C = Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
                     values[elem.ID] = elem.C / elem.Xe;
                 });

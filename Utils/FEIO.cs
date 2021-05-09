@@ -52,7 +52,7 @@ namespace ALFE
         }
         public static void WriteVertSensitivities(string path, List<double> Ae, Model model)
         {
-            string output = path + '\\' + "sensitivities.txt";
+            string output = path + '\\' + "VertSensitivities.txt";
             StreamWriter sw = new StreamWriter(output);
             foreach (var ae in Ae)
                 sw.WriteLine(ae.ToString());
@@ -62,7 +62,7 @@ namespace ALFE
         }
         public static void WriteSensitivities(string path, List<double> Ae)
         {
-            string output = path + '\\' + "sensitivities.txt";
+            string output = path + '\\' + "ElemSensitivities.txt";
             StreamWriter sw = new StreamWriter(output);
             foreach (var ae in Ae)
                 sw.WriteLine(ae.ToString());
@@ -423,7 +423,7 @@ namespace ALFE
         /// <returns>Return a finite element model.</returns>
         public static BESO ReadBESO(string path)
         {
-            string besoPath = path + "\\beso.txt";
+            string besoPath = path + "\\beso2.txt";
             string projectPath = path + "\\solution";
 
             Model model = new Model();

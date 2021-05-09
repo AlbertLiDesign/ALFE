@@ -82,7 +82,7 @@ namespace ALFE.TopOpt
                 }
 
                 // Searching
-                var result = KDTreeMultiSearch(centres, tree, FilterRadius, 32);
+                var result = KDTreeMultiSearch(centres, tree, FilterRadius, 1024);
 
                 foreach (var elem in Elements)
                 {
