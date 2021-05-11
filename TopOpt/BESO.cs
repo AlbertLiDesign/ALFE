@@ -211,7 +211,7 @@ namespace ALFE.TopOpt
                 {
                     var v = Ae[elem.ID] > th ? 1.0 : 0.001f;
                     elem.Xe = v;
-                    elem.Exist = elem.Xe == 1.0 ? true : false;
+                    elem.Exist = elem.Xe == 1.0;
                     sum += v;
                 }
 
@@ -229,16 +229,17 @@ namespace ALFE.TopOpt
                 {
                     elem.ComputeUe();
 
-                    Matrix<double> Ke = null;
-                    if (elem.Exist == true)
+                    Matrix<double> Ke;
+                    if (elem.Exist)
                         Ke = elem.Ke;
                     else
-                        Ke = (Matrix)elem.Ke.Multiply((double)Math.Pow(0.001, (double)PenaltyExponent));
+                        Ke = (Matrix)elem.Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
 
                     var Ue = elem.Ue;
                     if (elem.Exist != true)
-                        Ke.Multiply((double)Math.Pow(0.001, PenaltyExponent));
+                        Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
 
+                    //elem.C = 0.5* Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
                     elem.C = Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
                     values[elem.ID] = elem.C / elem.Xe;
@@ -250,16 +251,17 @@ namespace ALFE.TopOpt
                 {
                     elem.ComputeUe();
 
-                    Matrix<double> Ke = null;
-                    if (elem.Exist == true)
+                    Matrix<double> Ke;
+                    if (elem.Exist)
                         Ke = elem.Ke;
                     else
-                        Ke = (Matrix)elem.Ke.Multiply((double)Math.Pow(0.001, (double)PenaltyExponent));
+                        Ke = (Matrix)elem.Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
 
                     var Ue = elem.Ue;
                     if (elem.Exist != true)
-                        Ke.Multiply((double)Math.Pow(0.001, PenaltyExponent));
+                        Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
 
+                    //elem.C = 0.5* Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
                     elem.C = Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
                     values[elem.ID] = elem.C / elem.Xe;

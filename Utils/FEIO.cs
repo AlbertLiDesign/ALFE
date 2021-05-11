@@ -420,10 +420,10 @@ namespace ALFE
                 if (item.FixedX) x = 1;
                 if (item.FixedY) y = 1;
                 if (item.FixedZ) z = 1;
-                sw.WriteLine("S," + item.NodeID.ToString() + ',' + x.ToString(), +',' + y.ToString(), +',' + z.ToString());
+                sw.WriteLine("S," + item.NodeID.ToString() + ',' + x.ToString() +',' + y.ToString() +',' + z.ToString());
             }
 
-                sw.Flush();
+            sw.Flush();
             sw.Close();
             sw.Dispose();
         }
@@ -618,8 +618,13 @@ namespace ALFE
                         loads.Add(new Load(dof, int.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3]), double.Parse(value[4])));
 
                     if (value[0] == "S")
-                        if (value[2] == "Fixed")
-                            supports.Add(new Support(int.Parse(value[1]), true, true, true));
+                    {
+                        bool x = false, y = false, z = false;
+                        if (int.Parse(value[2]) == 1) x = true;
+                        if (int.Parse(value[3]) == 1) y = true;
+                        if (int.Parse(value[4]) == 1) z = true;
+                        supports.Add(new Support(int.Parse(value[1]), x, y, z));
+                    }
                 }
                 #endregion
 
