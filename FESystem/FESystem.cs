@@ -336,12 +336,10 @@ namespace ALFE
                 int id = supports[i].NodeID;
                 ids.Add(id);
                 nodes[id].Active = false;
-                if (supports[i].Type == SupportType.Fixed)
-                {
-                    nodes[id].Displacement.X = 0.0;
-                    nodes[id].Displacement.Y = 0.0;
-                    nodes[id].Displacement.Z = 0.0;
-                }
+
+                if(supports[i].FixedX) nodes[id].Displacement.X = 0.0;
+                if (supports[i].FixedY) nodes[id].Displacement.Y = 0.0;
+                if (supports[i].FixedZ) nodes[id].Displacement.Z = 0.0;
             }
             FixedID = ids;
         }

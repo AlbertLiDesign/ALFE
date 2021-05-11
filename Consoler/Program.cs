@@ -16,7 +16,7 @@ namespace ALFE
         }
         public static void TestBESO()
         {
-            string path = @"E:\ALCoding\ALFE\topoptTest\2DCases";
+            string path = @"E:\ALCoding\ALFE\topoptTest\Example2";
             BESO beso = FEIO.ReadBESO(path);
             beso.HardKill = false;
             beso.Initialize();
@@ -183,10 +183,10 @@ namespace ALFE
 
             var supports = new List<Support>(4)
             {
-                new Support(0, SupportType.Fixed),
-                new Support(1, SupportType.Fixed),
-                new Support(2, SupportType.Fixed),
-                new Support(3, SupportType.Fixed)
+                new Support(0, true, true, true),
+                new Support(1, true, true, true),
+                new Support(2, true, true, true),
+                new Support(3, true, true, true)
             };
 
             var model = new Model(3, nodes, elements, loads, supports);

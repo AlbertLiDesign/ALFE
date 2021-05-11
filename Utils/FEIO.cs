@@ -221,7 +221,14 @@ namespace ALFE
                 sw.WriteLine("L," + item.NodeID.ToString() + ',' +
                     item.ForceVector.X.ToString() + ',' + item.ForceVector.Y.ToString() + ',' + item.ForceVector.Z.ToString());
             foreach (var item in model.Supports)
-                sw.WriteLine("S," + item.NodeID.ToString() + ',' + item.Type.ToString());
+            {
+                int x = 0, y = 0, z = 0;
+                if (item.FixedX) x = 1;
+                if (item.FixedY) y = 1;
+                if (item.FixedZ) z = 1;
+                sw.WriteLine("S," + item.NodeID.ToString() + ',' + x.ToString(), +',' + y.ToString(), + ',' + z.ToString());
+            }
+               
 
             sw.Flush();
             sw.Close();
@@ -341,7 +348,7 @@ namespace ALFE
 
                     if (value[0] == "S")
                         if (value[2] == "Fixed")
-                            supports.Add(new Support(int.Parse(value[1]), SupportType.Fixed));
+                            supports.Add(new Support(int.Parse(value[1]), true, true, true));
                 }
                 #endregion
 
@@ -408,9 +415,15 @@ namespace ALFE
                 sw.WriteLine("L," + item.NodeID.ToString() + ',' +
                     item.ForceVector.X.ToString() + ',' + item.ForceVector.Y.ToString() + ',' + item.ForceVector.Z.ToString());
             foreach (var item in model.Supports)
-                sw.WriteLine("S," + item.NodeID.ToString() + ',' + item.Type.ToString());
+            {
+                int x = 0, y = 0, z = 0;
+                if (item.FixedX) x = 1;
+                if (item.FixedY) y = 1;
+                if (item.FixedZ) z = 1;
+                sw.WriteLine("S," + item.NodeID.ToString() + ',' + x.ToString(), +',' + y.ToString(), +',' + z.ToString());
+            }
 
-            sw.Flush();
+                sw.Flush();
             sw.Close();
             sw.Dispose();
         }
@@ -606,7 +619,7 @@ namespace ALFE
 
                     if (value[0] == "S")
                         if (value[2] == "Fixed")
-                            supports.Add(new Support(int.Parse(value[1]), SupportType.Fixed));
+                            supports.Add(new Support(int.Parse(value[1]), true, true, true));
                 }
                 #endregion
 

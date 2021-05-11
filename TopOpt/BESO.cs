@@ -260,7 +260,7 @@ namespace ALFE.TopOpt
                     if (elem.Exist != true)
                         Ke.Multiply((double)Math.Pow(0.001, PenaltyExponent));
 
-                    elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+                    elem.C = Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
 
                     values[elem.ID] = elem.C / elem.Xe;
                 }
