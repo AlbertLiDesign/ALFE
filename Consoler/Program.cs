@@ -10,13 +10,49 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestBESO();
+            TestRollerSupport();
 
             Console.ReadKey();
         }
+
+        public static void TestRollerSupport()
+        {
+            List<Node> nds = new List<Node>();
+            List<Element> elems = new List<Element>();
+
+            nds.Add(new Node(3, 1));
+            nds.Add(new Node(3, 0));
+            nds.Add(new Node(2, 1));
+            nds.Add(new Node(2, 0));
+            nds.Add(new Node(0, 1));
+            nds.Add(new Node(1, 1));
+            nds.Add(new Node(1, 0));
+            nds.Add(new Node(0, 0));
+            nds.Add(new Node(3, 2));
+            nds.Add(new Node(2, 2));
+            nds.Add(new Node(0, 2));
+            nds.Add(new Node(1, 2));
+
+            elems.Add(new Quadrilateral(new List<Node>(4) {nds[2], nds[0], nds[1], nds[3]}, new Material(1.0, 0.3)));
+            elems.Add(new Quadrilateral(new List<Node>(4) {nds[5], nds[2], nds[3], nds[6]}, new Material(1.0, 0.3)));
+            elems.Add(new Quadrilateral(new List<Node>(4) {nds[4], nds[5], nds[6], nds[7]}, new Material(1.0, 0.3)));
+            elems.Add(new Quadrilateral(new List<Node>(4) {nds[9], nds[8], nds[0], nds[2]}, new Material(1.0, 0.3)));
+            elems.Add(new Quadrilateral(new List<Node>(4) {nds[11], nds[9], nds[2], nds[5]}, new Material(1.0, 0.3)));
+            elems.Add(new Quadrilateral(new List<Node>(4) {nds[10], nds[11], nds[5], nds[4]}, new Material(1.0, 0.3)));
+
+            Model model = new Model(2, nds, elems,
+                new List<Load>(1) {new Load(11, new Vector2D(0.0, -1.0))},
+                new List<Support>(2) {new Support(7, false, true, true), new Support(1, true, true, true)});
+            FESystem sys = new FESystem(model, Solver.SimplicialLLT, false, false);
+            Console.Write(sys.Model.ModelInfo());
+            sys.Initialize();
+            Console.Write(sys.MatrixInfo());
+            sys.Solve();
+            Console.Write(sys.SolvingInfo());
+        }
         public static void TestBESO()
         {
-            string path = @"E:\ALCoding\ALFE\topoptTest\Example2";
+            string path = @"E:\ALCoding\ALFE\topoptTest\2DCases";
             BESO beso = FEIO.ReadBESO(path);
             beso.HardKill = false;
             beso.Initialize();

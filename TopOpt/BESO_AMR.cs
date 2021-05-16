@@ -51,7 +51,7 @@
 //        /// <summary>
 //        /// Dimension
 //        /// </summary>
-//        public int Dim;
+//        public int KG_Dim;
 
 //        /// <summary>
 //        /// The iterative history of the global compliance
@@ -93,7 +93,7 @@
 //            EvolutionRate = ert;
 //            MaxLevel = maxLevel;
 //            MaximumIteration = maxIter;
-//            Dim = system.Model.DOF;
+//            KG_Dim = system.Model.KG_Dim;
 //            Path = path;
 //            System._Solver = solver;
 //        }
@@ -143,7 +143,7 @@
 //            // Filtering
 //            Stopwatch sw = new Stopwatch();
 //            sw.Start();
-//            _Filter = new Filter(Model.Elements, FilterRadius, Dim);
+//            _Filter = new Filter(Model.Elements, FilterRadius, KG_Dim);
 //            _Filter.PreFlt();
 //            sw.Stop();
 

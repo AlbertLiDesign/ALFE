@@ -190,7 +190,7 @@ namespace ALFE
             StreamWriter sw = new StreamWriter(output);
             sw.WriteLine("%This file is created by ALFE.");
             sw.WriteLine("FEA Parameters: ");
-            sw.WriteLine("DOF: " + model.DOF.ToString());
+            sw.WriteLine("KG_Dim: " + model.DOF.ToString());
             sw.WriteLine("Element Type: " + model.Elements[0].Type.ToString());
             sw.WriteLine("Node Count: " + model.Nodes.Count.ToString());
             sw.WriteLine("Element Count: " + model.Elements.Count.ToString());
@@ -264,7 +264,7 @@ namespace ALFE
                     if (line == "FEA Parameters: ")
                     {
                         string[] value = SR.ReadLine().Split(':');
-                        if (value[0] == "DOF")
+                        if (value[0] == "KG_Dim")
                             dof = int.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');
@@ -374,7 +374,7 @@ namespace ALFE
 
             Model model = beso.Model;
             sw.WriteLine("FEA Parameters: ");
-            sw.WriteLine("DOF: " + model.DOF.ToString());
+            sw.WriteLine("KG_Dim: " + model.DOF.ToString());
             sw.WriteLine("Element Type: " + model.Elements[0].Type.ToString());
             sw.WriteLine("Node Count: " + model.Nodes.Count.ToString());
             sw.WriteLine("Element Count: " + model.Elements.Count.ToString());
@@ -470,7 +470,7 @@ namespace ALFE
                     if (line == "FEA Parameters: ")
                     {
                         string[] value = SR.ReadLine().Split(':');
-                        if (value[0] == "DOF")
+                        if (value[0] == "KG_Dim")
                             dof = int.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');

@@ -16,7 +16,7 @@ namespace ALFE
 
             foreach (var item in nodes)
             {
-                if (item.DOF != 2)
+                if (item.Dim != 2)
                     throw new Exception("The dof of all nodes in the element must be 2");
                 Nodes.Add(item);
             }
@@ -25,7 +25,7 @@ namespace ALFE
             Thickness = thickness;
             Exist = exist;
             Type = ElementType.TriangleElement;
-            DOF = 2;
+            Dim = 2;
             ComputeArea();
         }
 

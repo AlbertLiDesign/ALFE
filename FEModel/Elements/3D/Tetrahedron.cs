@@ -13,7 +13,7 @@ namespace ALFE
 
             foreach (var item in nodes)
             {
-                if (item.DOF != 3)
+                if (item.Dim != 3)
                     throw new Exception("The dof of all nodes in the element must be 3");
                 Nodes.Add(item);
             }
@@ -21,7 +21,7 @@ namespace ALFE
             Material = material;
             Exist = exist;
             Type = ElementType.TetrahedronElement;
-            DOF = 3;
+            Dim = 3;
         }
 
         public override void ComputeD()

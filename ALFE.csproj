@@ -91,6 +91,7 @@
     <Compile Include="Algebra\CSRMatrix.cs" />
     <Compile Include="Algebra\GaussLegendreQuadrature.cs" />
     <Compile Include="Algebra\Triplet.cs" />
+    <Compile Include="FEModel\DOF.cs" />
     <Compile Include="FEModel\Elements\Element.cs" />
     <Compile Include="FEModel\Elements\3D\Hexahedron.cs" />
     <Compile Include="FEModel\Elements\2D\Quadrilateral.cs" />
@@ -107,7 +108,6 @@
     <Compile Include="Algebra\Vector2D.cs" />
     <Compile Include="Algebra\Vector3D.cs" />
     <Compile Include="FEModel\Support.cs" />
-    <Compile Include="FESystem\FESystem_AMR.cs" />
     <Compile Include="TestData\TestMethods.cs" />
     <Compile Include="TopOpt\BESO.cs" />
     <Compile Include="TopOpt\Filter.cs" />

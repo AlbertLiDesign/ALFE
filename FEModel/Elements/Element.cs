@@ -41,10 +41,7 @@ namespace ALFE
         public Matrix<double> B;
         public Matrix<double> D;
 
-        /// <summary>
-        /// Degree of freedom
-        /// </summary>
-        public int DOF;
+        public int Dim;
 
         /// <summary>
         /// Elementary displacement vector
@@ -56,15 +53,15 @@ namespace ALFE
         /// </summary>
         public void ComputeUe()
         {
-            Ue = new DenseMatrix(Nodes.Count * DOF, 1);
+            Ue = new DenseMatrix(Nodes.Count * Dim, 1);
 
             int i = 0;
             foreach (var node in Nodes)
             {
-                Ue[i * DOF, 0] = node.Displacement.X;
-                Ue[i * DOF + 1, 0] = node.Displacement.Y;
-                if (DOF == 3)
-                    Ue[i * DOF + 2, 0] = node.Displacement.Z;
+                Ue[i * Dim, 0] = node.Displacement.X;
+                Ue[i * Dim + 1, 0] = node.Displacement.Y;
+                if (Dim == 3)
+                    Ue[i * Dim + 2, 0] = node.Displacement.Z;
 
                 i++;
             }

@@ -16,7 +16,7 @@ namespace ALFE
 
             foreach (var item in nodes)
             {
-                if (item.DOF != 2)
+                if (item.Dim != 2)
                     throw new Exception("The dof of all nodes in the element must be 2");
                 Nodes.Add(item);
             }
@@ -25,7 +25,7 @@ namespace ALFE
             Thickness = thichness;
             Exist = exist;
             Type = ElementType.QuadElement;
-            DOF = 2;
+            Dim = 2;
 
             D = new DenseMatrix(3, 3);
             B = new DenseMatrix(3, 8);

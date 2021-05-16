@@ -40,8 +40,8 @@ namespace ALFE
 
             foreach (var item in nodes)
             {
-                if (item.DOF != DOF)
-                    throw new Exception("The DOF of the model fails to match the DOF of the nodes.");
+                if (item.Dim != DOF)
+                    throw new Exception("The KG_Dim of the model fails to match the KG_Dim of the nodes.");
 
                 if (item.hasID == false)
                     item.SetID(id);
@@ -54,8 +54,8 @@ namespace ALFE
 
             foreach (var elem in elements)
             {
-                if (elem.DOF != DOF)
-                    throw new Exception("The DOF of the model fails to match the DOF of the elements.");
+                if (elem.Dim != DOF)
+                    throw new Exception("The KG_Dim of the model fails to match the KG_Dim of the elements.");
 
                 elem.ID = e;
                 e++;
@@ -68,8 +68,8 @@ namespace ALFE
             int id = 0;
             foreach (var item in nodes)
             {
-                if (item.DOF != DOF)
-                    throw new Exception("The DOF of the model fails to match the DOF of the nodes.");
+                if (item.Dim != DOF)
+                    throw new Exception("The KG_Dim of the model fails to match the KG_Dim of the nodes.");
 
                 if (item.hasID == false)
                     item.SetID(id);
@@ -81,7 +81,7 @@ namespace ALFE
             foreach (var item in loads)
             {
                 if (item.DOF != DOF)
-                    throw new Exception("The DOF of the model fails to match the DOF of the loads.");
+                    throw new Exception("The KG_Dim of the model fails to match the KG_Dim of the loads.");
                 Loads.Add(item);
             }
 
@@ -101,7 +101,7 @@ namespace ALFE
             foreach (var item in loads)
             {
                 if (item.DOF != DOF)
-                    throw new Exception("The DOF of the model fails to match the DOF of the loads.");
+                    throw new Exception("The KG_Dim of the model fails to match the KG_Dim of the loads.");
                 Loads.Add(item);
             }
         }

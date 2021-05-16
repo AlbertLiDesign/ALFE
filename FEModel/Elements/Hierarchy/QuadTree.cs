@@ -43,7 +43,7 @@ namespace ALFE
             Material = material;
             Exist = exist;
             Type = ElementType.QuadTreeElement;
-            DOF = 2;
+            Dim = 2;
         }
 
         public QuadTree(List<Node> nodes, Vector3D position, double edgeLength, double value, int layerLevel, Material material, bool exist = true)
@@ -58,7 +58,7 @@ namespace ALFE
             Material = material;
             Exist = exist;
             Type = ElementType.QuadTreeElement;
-            DOF = 2;
+            Dim = 2;
         }
         #endregion
 
