@@ -13,6 +13,10 @@ namespace ALFE
         public int NodeID;
         public bool isFixed = false;
 
+        public int RowNNZ;
+        public SortedList<int, int> PositionKG = new SortedList<int, int>();
+
+        public DOF(){}
         public DOF(int nodeID)
         {
             NodeID = nodeID;

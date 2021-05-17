@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -82,10 +84,12 @@ namespace ALFE
             ParallelComputing = parallel;
 
             ApplySupports();
-            KG_Dim = (Model.Nodes.Count - FixedID.Count) * Dim;
 
-            F = new double[KG_Dim];
-            X = new double[KG_Dim];
+            GetConnectedElements();
+            GetAdjacentNodes();
+            SetDOFs();
+            ComputeElementDOFs();
+            AllocateKG();
 
             Stopwatch sw = new Stopwatch();
 
@@ -122,13 +126,9 @@ namespace ALFE
         {
             foreach (var item in Model.Loads)
             {
-                if (!HardKill)
-                {
-                    var id = Model.Nodes[item.NodeID].ID * Dim;
-                    F[id + 0] = item.ForceVector.X;
-                    F[id + 1] = item.ForceVector.Y;
-                    if (Dim == 3) F[id + 2] = item.ForceVector.Z;
-                }
+                F[Model.Nodes[item.NodeID].DofX.ActiveID] = item.ForceVector.X;
+                F[Model.Nodes[item.NodeID].DofY.ActiveID] = item.ForceVector.Y;
+                if (Dim == 3) F[Model.Nodes[item.NodeID].DofZ.ActiveID] = item.ForceVector.Z;
             }
         }
 
@@ -137,48 +137,75 @@ namespace ALFE
         /// </summary>
         private void AssembleKG(int P = 3)
         {
-            //KG.Clear();
-            //foreach (var elem in Model.Elements)
+            KG.Clear();
+
+            //foreach (var dof in ActiveDofs)
             //{
-            //    for (int i = 0; i < elem.Nodes.Count; i++)
+            //    foreach (var elemID in Model.Nodes[dof.NodeID].ElementID)
             //    {
-            //        Node ni = elem.Nodes[i];
-            //        if (ni.Active)
+            //        var elem = Model.Elements[elemID];
+
+            //        for (int i = 0; i < dof.RowNNZ; i++)
             //        {
-            //            for (int j = 0; j < elem.Nodes.Count; j++)
-            //            {
-            //                Node nj = elem.Nodes[j];
-
-            //                if (nj.Active)
-            //                {
-            //                    int idx1 = ni.PositionKG[nj.ActiveID];
-            //                    for (int m = 0; m < Dim; m++)
-            //                    {
-            //                        for (int n = 0; n < Dim; n++)
-            //                        {
-            //                            if (HardKill == false)
-            //                            {
-            //                                if (elem.Exist == true)
-            //                                    KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * Dim + n, j * Dim + m];
-            //                                else
-            //                                    KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * Dim + n, j * Dim + m] * (double)Math.Pow(0.001, P);
-            //                            }
-            //                            else
-            //                            {
-            //                                if (elem.Exist == true)
-            //                                    KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * Dim + n, j * Dim + m];
-            //                                else
-            //                                    KG.Vals[idx1 + ni.row_nnz * n + m] /= KG.Vals[idx1 + ni.row_nnz * n + m];
-            //                            }
-
-            //                        }
-            //                    }
-            //                }
-            //            }
+            //            int a = elem.DOF_ID[dof.ActiveID];
+            //            int b = elem.DOF_ID[ActiveDofs[dof.PositionKG.Keys[i]].ActiveID];
+            //            KG.Vals[dof.PositionKG[i] + i] += elem.Ke[a, b];
             //        }
             //    }
             //}
-        }
+            DOF a = new DOF();
+            DOF b = new DOF();
+            int start = 0;
+            foreach (var elem in Model.Elements)
+            {
+                //Console.WriteLine(elem.Ke);
+                for (int i = 0; i < elem.DOF_ID.Count; i++)
+                {
+                    for (int j = 0; j < elem.DOF_ID.Count; j++)
+                    {
+                        a = ActiveDofs[elem.DOF_ID.Keys.ToArray()[i]];
+                        b = ActiveDofs[elem.DOF_ID.Keys.ToArray()[j]];
+                        start =a.PositionKG[b.ActiveID];
+                        KG.Vals[start + b.ActiveID] += elem.Ke[elem.DOF_ID[a.ActiveID], elem.DOF_ID[b.ActiveID]];
+                    }
+                }
+            }
+            FEIO.WriteKG(KG, "E:\\ttKG.mtx");
+            //    foreach (var elem in Model.Elements)
+                //    {
+                //        for (int i = 0; i < elem.Nodes.Count; i++)
+                //        {
+                //            Node ni = elem.Nodes[i];
+                //            for (int j = 0; j < elem.Nodes.Count; j++)
+                //            {
+                //                Node nj = elem.Nodes[j];
+                //                int idx1 = ni.PositionKG[nj.ActiveID];
+                //                for (int m = 0; m < Dim; m++)
+                //                {
+                //                    for (int n = 0; n < Dim; n++)
+                //                    {
+                //                        if (HardKill == false)
+                //                        {
+                //                            if (elem.Exist == true)
+                //                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * Dim + n, j * Dim + m];
+                //                            else
+                //                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * Dim + n, j * Dim + m] * Math.Pow(0.001, P);
+                //                        }
+                //                        else
+                //                        {
+                //                            if (elem.Exist == true)
+                //                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * Dim + n, j * Dim + m];
+                //                            else
+                //                                KG.Vals[idx1 + ni.row_nnz * n + m] /= KG.Vals[idx1 + ni.row_nnz * n + m];
+                //                        }
+
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+            }
+
         /// <summary>
         /// Initialize the system for solving
         /// </summary>
@@ -250,13 +277,110 @@ namespace ALFE
         /// </summary>
         private void InitialzeKG()
         {
+            // create CSR indices
+            int row_id = 0;
+            int col_id = 0;
+            foreach (DOF dof in ActiveDofs)
+            {
+                KG.Rows[dof.ActiveID] = row_id;
 
-            // list non-anchored nodes and give them sequential ids
+                SortedSet<int> sortedNeighbors = new SortedSet<int>(Model.Nodes[dof.NodeID].Neighbours);
+
+                foreach (int neighbours in sortedNeighbors)
+                {
+                    if (!Model.Nodes[neighbours].DofX.isFixed)
+                    {
+                        KG.Cols[col_id] = Model.Nodes[neighbours].DofX.ActiveID;
+                        dof.PositionKG.Add(Model.Nodes[neighbours].DofX.ActiveID, row_id);
+                        col_id++;
+                    }
+
+                    if (!Model.Nodes[neighbours].DofY.isFixed)
+                    {
+                        KG.Cols[col_id] = Model.Nodes[neighbours].DofY.ActiveID;
+                        dof.PositionKG.Add(Model.Nodes[neighbours].DofY.ActiveID, row_id);
+                        col_id++;
+                    }
+                    if (Dim == 3)
+                        if (!Model.Nodes[neighbours].DofZ.isFixed)
+                        {
+                            KG.Cols[col_id] = Model.Nodes[neighbours].DofZ.ActiveID;
+                            dof.PositionKG.Add(Model.Nodes[neighbours].DofZ.ActiveID, row_id);
+                            col_id++;
+                        }
+                }
+
+                row_id += dof.RowNNZ;
+            }
+        }
+
+        /// <summary>
+        /// Get the neighbours of each node.
+        /// </summary>
+        private void GetAdjacentNodes()
+        {
+            if (ParallelComputing)
+            {
+                Parallel.ForEach(Model.Nodes, node =>
+                {
+                    foreach (var item in node.ElementID)
+                        foreach (var neighbour in Model.Elements[item].Nodes)
+                            //if(neighbour.ID != node.ID)
+                                lock (node.Neighbours)
+                                    node.Neighbours.Add(neighbour.ID);
+                });
+            }
+            else
+            {
+                foreach (var node in Model.Nodes)
+                    foreach (var item in node.ElementID)
+                        foreach (var neighbour in Model.Elements[item].Nodes)
+                            //if (neighbour.ID != node.ID)
+                                node.Neighbours.Add(neighbour.ID);
+            }
+        }
+
+        /// <summary>
+        /// Get the connected elements of each node.
+        /// </summary>
+        private void GetConnectedElements()
+        {
+            // in each node make a list of elements to which it belongs
+            foreach (var elem in Model.Elements)
+                foreach (var node in elem.Nodes)
+                    node.ElementID.Add(elem.ID);
+        }
+
+        private void ComputeElementDOFs()
+        {
+            foreach (var elem in Model.Elements)
+            {
+                int num = 0;
+                foreach (var node in elem.Nodes)
+                {
+                    if (!node.DofX.isFixed)
+                    {
+                        elem.DOF_ID.Add(node.DofX.ActiveID, num);
+                        num++;
+                    }
+                    
+                    if (!node.DofY.isFixed)
+                    {
+                        elem.DOF_ID.Add(node.DofY.ActiveID, num);
+                        num++;
+                    }
+                    if (Dim == 3 && !node.DofZ.isFixed)
+                    {
+                        elem.DOF_ID.Add(node.DofZ.ActiveID, num);
+                        num++;
+                    }
+                }
+            }
+        }
+
+        private void SetDOFs()
+        {
             int id = 0;
-
-            GetConnectedElements();
-            GetAdjacentNodes();
-            
             foreach (var nd in Model.Nodes)
             {
                 if (!nd.DofX.isFixed)
@@ -280,10 +404,12 @@ namespace ALFE
                     id++;
                 }
             }
+        }
 
+        private void AllocateKG()
+        {
             // count total number of non-zero items.
             int nnzCount = 0;
-            int[] rowNNZ = new int[ActiveDofs.Count];
             foreach (var dof in ActiveDofs)
             {
                 int num = 0;
@@ -291,66 +417,17 @@ namespace ALFE
                 {
                     if (!Model.Nodes[neighbours].DofX.isFixed) num++;
                     if (!Model.Nodes[neighbours].DofY.isFixed) num++;
-                    if (Dim == 3) if(!Model.Nodes[neighbours].DofZ.isFixed) num++;
+                    if (Dim == 3) if (!Model.Nodes[neighbours].DofZ.isFixed) num++;
                 }
-                rowNNZ[dof.ActiveID] +=num;
 
+                dof.RowNNZ = num;
                 nnzCount += num;
             }
 
-
             // allocate CSR
-            // NNZ = nnzCount * 2 - ActiveDofs.Count - 1
-            // the size of the matrix is the number of active dofs.
-            KG = new CSRMatrix(ActiveDofs.Count, nnzCount * 2 - ActiveDofs.Count - 1);
-
-            // create CSR indices
-            int dofCount = 0;
-            foreach (Node nd in Model.Nodes)
-            {
-                //int row_nnz = rowNNZ[nd.DofX.ActiveID];
-                //KG.Rows[nd.ActiveID * Dim + 0] = dofCount;
-                //KG.Rows[nd.ActiveID * Dim + 1] = dofCount + row_nnz;
-                //if (Dim == 3) KG.Rows[nd.ActiveID * Dim + 2] = dofCount + row_nnz * 2;
-                //dofCount += row_nnz * Dim;
-            }
-        }
-
-        /// <summary>
-        /// Get the neighbours of each node.
-        /// </summary>
-        private void GetAdjacentNodes()
-        {
-            if (ParallelComputing)
-            {
-                Parallel.ForEach(Model.Nodes, node =>
-                {
-                    foreach (var item in node.ElementID)
-                        foreach (var neighbour in Model.Elements[item].Nodes)
-                            if (neighbour.ID != node.ID) 
-                                lock (node.Neighbours)
-                                    node.Neighbours.Add(neighbour.ID);
-                });
-            }
-            else
-            {
-                foreach (var node in Model.Nodes)
-                    foreach (var item in node.ElementID)
-                        foreach (var neighbour in Model.Elements[item].Nodes)
-                            if (neighbour.ID != node.ID)
-                                node.Neighbours.Add(neighbour.ID);
-            }
-        }
-
-        /// <summary>
-        /// Get the connected elements of each node.
-        /// </summary>
-        private void GetConnectedElements()
-        {
-            // in each node make a list of elements to which it belongs
-            foreach (var elem in Model.Elements)
-                foreach (var node in elem.Nodes)
-                    node.ElementID.Add(elem.ID);
+            KG = new CSRMatrix(ActiveDofs.Count, nnzCount + ActiveDofs.Count);
+            F = new double[ActiveDofs.Count];
+            X = new double[ActiveDofs.Count];
         }
 
         /// <summary>

@@ -19,6 +19,7 @@ namespace ALFE
         public int ID;
 
         public List<Node> Nodes = new List<Node>();
+        public Dictionary<int, int> DOF_ID = new Dictionary<int, int>();
         public Material Material { get; set; }
 
         /// <summary>
