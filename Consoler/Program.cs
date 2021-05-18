@@ -10,7 +10,7 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestRollerSupport();
+            TestBESO();
 
             Console.ReadKey();
         }
@@ -53,7 +53,7 @@ namespace ALFE
         public static void TestBESO()
         {
             string path = @"E:\ALCoding\ALFE\topoptTest\2DCases";
-            BESO beso = FEIO.ReadBESO(path);
+            BESO beso = FEIO.ReadBESO(path, "beso");
             beso.HardKill = false;
             beso.Initialize();
             beso.Optimize();

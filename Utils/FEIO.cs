@@ -434,9 +434,9 @@ namespace ALFE
         /// </summary>
         /// <param name="path">File path.</param>
         /// <returns>Return a finite element model.</returns>
-        public static BESO ReadBESO(string path)
+        public static BESO ReadBESO(string path, string name)
         {
-            string besoPath = path + "\\beso2.txt";
+            string besoPath = path + "\\" + name + ".txt";
             string projectPath = path + "\\solution";
 
             Model model = new Model();
@@ -470,7 +470,7 @@ namespace ALFE
                     if (line == "FEA Parameters: ")
                     {
                         string[] value = SR.ReadLine().Split(':');
-                        if (value[0] == "KG_Dim")
+                        if (value[0] == "DOF")
                             dof = int.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');
