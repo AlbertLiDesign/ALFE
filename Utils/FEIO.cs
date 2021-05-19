@@ -94,13 +94,15 @@ namespace ALFE
             sw.Close();
             sw.Dispose();
         }
-        public static void WriteKG(CSRMatrix csr, string path)
+        public static void WriteKG(CSRMatrix csr, string path, bool symmetry)
         {
             //path += "/KG.mtx";
             StreamWriter sw = new StreamWriter(path);
 
-            sw.WriteLine("%%MatrixMarket matrix coordinate real symmetric");
-            var mat = csr.ToCOO();
+            if (symmetry) sw.WriteLine("%%MatrixMarket matrix coordinate real symmetric");
+            else sw.WriteLine("%%MatrixMarket matrix coordinate real general");
+
+            var mat = csr.ToCOO(symmetry);
             sw.WriteLine(mat.Rows.ToString() + ' ' + mat.Cols.ToString() + ' ' + mat.NNZ.ToString());
             for (int i = 0; i < mat.NNZ; i++)
             {

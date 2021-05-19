@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ALFE
 {
@@ -41,7 +42,72 @@ namespace ALFE
             Vals = new double[NNZ];
         }
 
-        public COOMatrix ToCOO(bool symmetry = true)
+        public void DeleteRowAndCol(int id)
+        {
+            // Step 1: To compute the nnz of rows we want to remove
+            int row_nnz = Rows[id + 1] - Rows[id];
+
+            var new_Vals = Vals.ToList();
+            var new_Cols = Cols.ToList();
+            var new_Rows = Rows.ToList();
+            // Step 2: To remove the item in Vals and Cols
+            for (int i = 0; i < row_nnz; i++)
+            {
+                new_Vals.RemoveAt(Rows[id]);
+                new_Cols.RemoveAt(Rows[id]);
+            }
+
+            // Step 3: To remove the item in Rows
+            new_Rows.RemoveAt(id + 1);
+
+            // Step 4: To change the indices of the items after the removed item
+            for (int i = id+1; i < new_Rows.Count; i++)
+                new_Rows[i] -= row_nnz;
+
+            // Step 5: To compute the nnz of cols we want to remove
+            int col_nnz = 0;
+
+            List<int> col_ids = new List<int>();
+            for (int i = 0; i < new_Cols.Count; i++)
+            {
+                if (new_Cols[i] == id)
+                {
+                    col_nnz++;
+                    col_ids.Add(i);
+                }
+            }
+
+            // Step 6: To remove the item in Vals and Cols
+            for (int i = 0; i < col_nnz; i++)
+            {
+                new_Vals.RemoveAt(col_ids[i] -i);
+                new_Cols.RemoveAt(col_ids[i] -i);
+            }
+
+            // Step 7: To change the column-index of the items after the removed item
+            for (int i = 0; i < new_Cols.Count; i++)
+                if (new_Cols[i] >= id)
+                    new_Cols[i] -= 1;
+            
+            // Step 8: To change the row-index of the items after the removed item
+            for (int i = 0; i < new_Rows.Count; i++)
+            {
+                int num = 0;
+                for (int j = 0; j < col_ids.Count; j++)
+                    if (new_Rows[i] > col_ids[j])
+                        num++;
+
+                new_Rows[i] -= num;
+            }
+
+            // Step 8: To update the CSR matrix
+            Rows = new_Rows.ToArray();
+            Cols = new_Cols.ToArray();
+            Vals = new_Vals.ToArray();
+            NNZ = Rows.Last();
+            N -= 1;
+        }
+        public COOMatrix ToCOO(bool symmetry = false)
         {
             List<Triplet> triplets = new List<Triplet>();
 

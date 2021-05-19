@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using MathNet.Numerics.Differentiation;
 
 namespace ALFE
 {
@@ -52,8 +53,9 @@ namespace ALFE
         /// <summary>
         /// An index list of anchored nodes.
         /// </summary>
-        private List<int> FixedID;
+        private List<int> FixedID = new List<int>();
 
+        private List<int[]> RollerID = new List<int[]>();
         /// <summary>
         /// Global stiffness matrix
         /// </summary>
@@ -85,8 +87,8 @@ namespace ALFE
             HardKill = hardKill;
             ParallelComputing = parallel;
 
-            ApplySupports();
-            Dim = (Model.Nodes.Count - FixedID.Count) * DOF;
+            ApplyFixedSupports();
+            Dim = (Model.Nodes.Count - FixedID.Count) * DOF - RollerID.Count;
 
             F = new double[Dim];
             X = new double[Dim];
@@ -126,13 +128,24 @@ namespace ALFE
         {
             foreach (var item in Model.Loads)
             {
-                if (!HardKill)
+                var id = Model.Nodes[item.NodeID].ActiveID * DOF;
+
+                if (RollerID.Count != 0)
                 {
-                    var id = Model.Nodes[item.NodeID].ActiveID * DOF;
-                    F[id + 0] = item.ForceVector.X;
-                    F[id + 1] = item.ForceVector.Y;
-                    if (DOF == 3) F[id + 2] = item.ForceVector.Z;
+                    int offset = 0;
+                    for (int i = 0; i < RollerID.Count; i++)
+                    {
+                        var nd = Model.Nodes[RollerID[i][0]];
+                        if (id > nd.ActiveID + RollerID[i][1])
+                            offset++;
+                    }
+
+                    id -= offset;
                 }
+
+                F[id + 0] = item.ForceVector.X;
+                F[id + 1] = item.ForceVector.Y;
+                if (DOF == 3) F[id + 2] = item.ForceVector.Z;
             }
         }
 
@@ -182,6 +195,15 @@ namespace ALFE
                     }
                 }
             }
+
+            if (RollerID.Count!= 0)
+            {
+                for (int i = 0; i < RollerID.Count; i++)
+                {
+                    var nd = Model.Nodes[RollerID[i][0]];
+                    KG.DeleteRowAndCol(nd.ActiveID * DOF + RollerID[i][1]);
+                }
+            }
         }
         /// <summary>
         /// Initialize the system for solving
@@ -215,6 +237,18 @@ namespace ALFE
                 {
                     if (item.Active == true)
                     {
+                        if (RollerID.Count != 0)
+                        {
+                            int offset = 0;
+                                for (int i = 0; i < RollerID.Count; i++)
+                                {
+                                    var nd = Model.Nodes[RollerID[i][0]];
+                                    if (id > nd.ActiveID + RollerID[i][1])
+                                        offset++;
+                                }
+
+                                id -= offset;
+                        }
                         if (DOF == 2) item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0);
                         if (DOF == 3) item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], X[id * DOF + 2]);
                         id++;
@@ -322,26 +356,46 @@ namespace ALFE
         }
 
         /// <summary>
-        /// Apply the boundary conditions to nodes.
+        /// Apply the fixed boundary conditions to nodes.
         /// </summary>
         /// <returns></returns>
-        public void ApplySupports()
+        public void ApplyFixedSupports()
         {
             var nodes = Model.Nodes;
             var supports = Model.Supports;
 
-            List<int> ids = new List<int>(supports.Count);
             for (int i = 0; i < supports.Count; i++)
             {
                 int id = supports[i].NodeID;
-                ids.Add(id);
-                nodes[id].Active = false;
+                if (DOF == 2)
+                {
+                    if (supports[i].FixedX && supports[i].FixedY)
+                    {
+                        FixedID.Add(id);
+                        nodes[id].Active = false;
+                    }
+                    else
+                    {
+                        if (supports[i].FixedX) RollerID.Add(new int[2] { id, 0 });
+                        if (supports[i].FixedY) RollerID.Add(new int[2] { id, 1 });
+                    }
+                }
 
-                if (supports[i].FixedX) nodes[id].Displacement.X = 0.0;
-                if (supports[i].FixedY) nodes[id].Displacement.Y = 0.0;
-                if (supports[i].FixedZ) nodes[id].Displacement.Z = 0.0;
+                if (DOF == 3)
+                {
+                    if (supports[i].FixedX && supports[i].FixedY && supports[i].FixedZ)
+                    {
+                        FixedID.Add(id);
+                        nodes[id].Active = false;
+                    }
+                    else
+                    {
+                        if (supports[i].FixedX) RollerID.Add(new int[2] {id, 0});
+                        if (supports[i].FixedY) RollerID.Add(new int[2] {id, 1});
+                        if (supports[i].FixedZ) RollerID.Add(new int[2] {id, 2});
+                    }
+                }
             }
-            FixedID = ids;
         }
 
         /// <summary>

@@ -10,11 +10,22 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestBESO();
+            TestRollerSupport();
 
             Console.ReadKey();
         }
 
+        public static void TestCSR()
+        {
+            CSRMatrix csr = new CSRMatrix(6, 16);
+            csr.Vals = new double[16] {10, 20, 20, 30, 35, 40, 35, 50, 60, 40, 70, 80, 90, 60, 90, 100};
+            csr.Cols = new int[16] {0, 1, 0, 1, 2, 3, 1, 2, 5, 1, 3, 4, 5, 2, 4, 5 };
+            csr.Rows = new int[7] {0, 2, 6, 9, 11, 13, 16};
+
+            csr.DeleteRowAndCol(2);
+            FEIO.WriteKG(csr, "E:\\testCSR2.mtx", true);
+
+        }
         public static void TestRollerSupport()
         {
             List<Node> nds = new List<Node>();
@@ -42,13 +53,17 @@ namespace ALFE
 
             Model model = new Model(2, nds, elems,
                 new List<Load>(1) {new Load(11, new Vector2D(0.0, -1.0))},
-                new List<Support>(2) {new Support(7, false, true, true), new Support(1, true, true, true)});
-            FESystem sys = new FESystem(model, Solver.SimplicialLLT, false, false);
+                new List<Support>(2) {new Support(7, false, true), new Support(1, true, true)});
+            FESystem sys = new FESystem(model, Solver.CG, false, false);
             Console.Write(sys.Model.ModelInfo());
             sys.Initialize();
             Console.Write(sys.MatrixInfo());
+            
+            var KG = sys.GetKG();
             sys.Solve();
+            //FEIO.WriteKG(KG, "E:\\testKG.mtx", false);
             Console.Write(sys.SolvingInfo());
+            Console.Write(sys.DisplacementInfo());
         }
         public static void TestBESO()
         {
@@ -235,7 +250,7 @@ namespace ALFE
             Console.WriteLine("Solver: " + sys._Solver.ToString());
             Console.WriteLine("Solving: " + sys.TimeCost[3].ToString() + " ms");
             Console.WriteLine(sys.DisplacementInfo());
-            FEIO.WriteKG(sys.GetKG(), "E:\\ALCoding\\ALFE\\topoptTest");
+            FEIO.WriteKG(sys.GetKG(), "E:\\ALCoding\\ALFE\\topoptTest", false);
             Console.WriteLine();
         }
     }
