@@ -1,6 +1,6 @@
 %This file is created by ALFE.
 FEA Parameters: 
-DOF: 3
+KG_Dim: 3
 Element Type: VoxelElement
 Node Count: 14580
 Element Count: 12272

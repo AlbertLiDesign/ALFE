@@ -226,7 +226,7 @@ namespace ALFE
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
-            Solved = SolveSystem((int)_Solver, KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1 ? true : false;
+            Solved = SolveSystem((int) _Solver, KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1;
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -235,19 +235,19 @@ namespace ALFE
             {
                 foreach (var item in Model.Nodes)
                 {
-                    if (item.Active == true)
+                    if (item.Active)
                     {
                         if (RollerID.Count != 0)
                         {
                             int offset = 0;
-                                for (int i = 0; i < RollerID.Count; i++)
-                                {
-                                    var nd = Model.Nodes[RollerID[i][0]];
-                                    if (id > nd.ActiveID + RollerID[i][1])
-                                        offset++;
-                                }
+                            for (int i = 0; i < RollerID.Count; i++)
+                            {
+                                var nd = Model.Nodes[RollerID[i][0]];
+                                if (id * DOF > nd.ActiveID * DOF + RollerID[i][1])
+                                    offset++;
+                            }
 
-                                id -= offset;
+                            id -= offset;
                         }
                         if (DOF == 2) item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0);
                         if (DOF == 3) item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], X[id * DOF + 2]);
