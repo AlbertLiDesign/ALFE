@@ -67,8 +67,8 @@ namespace ALFE
         }
         public static void TestBESO()
         {
-            string path = @"E:\ALCoding\ALFE\topoptTest\Example2";
-            BESO beso = FEIO.ReadBESO(path, "beso2");
+            string path = @"E:\ALCoding\ALFE\topoptTest\2DCases";
+            BESO beso = FEIO.ReadBESO(path, "beso");
             beso.HardKill = false;
             beso.Initialize();
             beso.Optimize();
