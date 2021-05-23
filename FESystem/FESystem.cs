@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using MathNet.Numerics.Differentiation;
@@ -175,15 +176,15 @@ namespace ALFE
                                     {
                                         if (HardKill == false)
                                         {
-                                            if (elem.Exist == true)
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
+                                            if (elem.Exist)
+                                                KG.Vals[idx1 + ni.row_nnz * n + m] -= elem.Ke[i * DOF + n, j * DOF + m];
                                             else
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * (double)Math.Pow(0.001, P);
+                                                KG.Vals[idx1 + ni.row_nnz * n + m] -= elem.Ke[i * DOF + n, j * DOF + m] * Math.Pow(0.001, P);
                                         }
                                         else
                                         {
-                                            if (elem.Exist == true)
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
+                                            if (elem.Exist)
+                                                KG.Vals[idx1 + ni.row_nnz * n + m] -= elem.Ke[i * DOF + n, j * DOF + m];
                                             else
                                                 KG.Vals[idx1 + ni.row_nnz * n + m] /= KG.Vals[idx1 + ni.row_nnz * n + m];
                                         }
@@ -230,30 +231,31 @@ namespace ALFE
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-            int id = 0;
+            
             if (Solved)
             {
+                int id = 0;
+                var Dis = X.ToList();
+                if (RollerID.Count != 0)
+                {
+                    for (int i = 0; i < RollerID.Count; i++)
+                    {
+                        var nd = Model.Nodes[RollerID[i][0]];
+                        Dis.Insert(nd.ActiveID * DOF + RollerID[i][1], 0.0);
+                    }
+                }
+
+                id = 0;
                 foreach (var item in Model.Nodes)
                 {
                     if (item.Active)
                     {
-                        if (RollerID.Count != 0)
-                        {
-                            int offset = 0;
-                            for (int i = 0; i < RollerID.Count; i++)
-                            {
-                                var nd = Model.Nodes[RollerID[i][0]];
-                                if (id * DOF > nd.ActiveID * DOF + RollerID[i][1])
-                                    offset++;
-                            }
-
-                            id -= offset;
-                        }
-                        if (DOF == 2) item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], 0.0);
-                        if (DOF == 3) item.Displacement = new Vector3D(X[id * DOF + 0], X[id * DOF + 1], X[id * DOF + 2]);
-                        id++;
+                        if (DOF == 2) item.Displacement = new Vector3D(-Dis[id + 0], -Dis[id + 1], 0.0);
+                        if (DOF == 3) item.Displacement = new Vector3D(-Dis[id + 0], -Dis[id + 1], -Dis[id + 2]);
+                        id += DOF;
                     }
                 }
+
             }
             else
             {

@@ -54,7 +54,7 @@ namespace ALFE
             Model model = new Model(2, nds, elems,
                 new List<Load>(1) {new Load(11, new Vector2D(0.0, -1.0))},
                 new List<Support>(2) {new Support(7, false, true), new Support(1, true, true)});
-            FESystem sys = new FESystem(model, Solver.CG, false, false);
+            FESystem sys = new FESystem(model, Solver.SimplicialLLT, false, false);
             Console.Write(sys.Model.ModelInfo());
             sys.Initialize();
             Console.Write(sys.MatrixInfo());
