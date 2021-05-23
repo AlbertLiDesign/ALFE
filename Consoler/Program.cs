@@ -10,7 +10,7 @@ namespace ALFE
         {
             Console.WriteLine("Start to test, please wait a few seconds...");
 
-            TestRollerSupport();
+            TestBESO();
 
             Console.ReadKey();
         }
@@ -53,7 +53,7 @@ namespace ALFE
 
             Model model = new Model(2, nds, elems,
                 new List<Load>(1) {new Load(11, new Vector2D(0.0, -1.0))},
-                new List<Support>(2) {new Support(7, false, true), new Support(1, true, true)});
+                new List<Support>(2) {new Support(7,SupportType.Fixed), new Support(1, SupportType.Fixed) });
             FESystem sys = new FESystem(model, Solver.SimplicialLLT, false, false);
             Console.Write(sys.Model.ModelInfo());
             sys.Initialize();
@@ -67,8 +67,8 @@ namespace ALFE
         }
         public static void TestBESO()
         {
-            string path = @"E:\ALCoding\ALFE\topoptTest\2DCases";
-            BESO beso = FEIO.ReadBESO(path, "beso");
+            string path = @"E:\ALCoding\ALFE\topoptTest\Example2";
+            BESO beso = FEIO.ReadBESO(path, "beso2");
             beso.HardKill = false;
             beso.Initialize();
             beso.Optimize();
@@ -234,10 +234,10 @@ namespace ALFE
 
             var supports = new List<Support>(4)
             {
-                new Support(0, true, true, true),
-                new Support(1, true, true, true),
-                new Support(2, true, true, true),
-                new Support(3, true, true, true)
+                new Support(0, SupportType.Fixed),
+                new Support(1, SupportType.Fixed),
+                new Support(2, SupportType.Fixed),
+                new Support(3, SupportType.Fixed)
             };
 
             var model = new Model(3, nodes, elements, loads, supports);

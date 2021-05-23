@@ -99,9 +99,7 @@ namespace ALFE
             //path += "/KG.mtx";
             StreamWriter sw = new StreamWriter(path);
 
-            if (symmetry) sw.WriteLine("%%MatrixMarket matrix coordinate real symmetric");
-            else sw.WriteLine("%%MatrixMarket matrix coordinate real general");
-
+            sw.WriteLine("%%MatrixMarket matrix coordinate real symmetric");
             var mat = csr.ToCOO(symmetry);
             sw.WriteLine(mat.Rows.ToString() + ' ' + mat.Cols.ToString() + ' ' + mat.NNZ.ToString());
             for (int i = 0; i < mat.NNZ; i++)
@@ -192,7 +190,7 @@ namespace ALFE
             StreamWriter sw = new StreamWriter(output);
             sw.WriteLine("%This file is created by ALFE.");
             sw.WriteLine("FEA Parameters: ");
-            sw.WriteLine("KG_Dim: " + model.DOF.ToString());
+            sw.WriteLine("DOF: " + model.DOF.ToString());
             sw.WriteLine("Element Type: " + model.Elements[0].Type.ToString());
             sw.WriteLine("Node Count: " + model.Nodes.Count.ToString());
             sw.WriteLine("Element Count: " + model.Elements.Count.ToString());
@@ -223,14 +221,7 @@ namespace ALFE
                 sw.WriteLine("L," + item.NodeID.ToString() + ',' +
                     item.ForceVector.X.ToString() + ',' + item.ForceVector.Y.ToString() + ',' + item.ForceVector.Z.ToString());
             foreach (var item in model.Supports)
-            {
-                int x = 0, y = 0, z = 0;
-                if (item.FixedX) x = 1;
-                if (item.FixedY) y = 1;
-                if (item.FixedZ) z = 1;
-                sw.WriteLine("S," + item.NodeID.ToString() + ',' + x.ToString(), +',' + y.ToString(), + ',' + z.ToString());
-            }
-               
+                sw.WriteLine("S," + item.NodeID.ToString() + ',' + item.Type.ToString());
 
             sw.Flush();
             sw.Close();
@@ -266,7 +257,7 @@ namespace ALFE
                     if (line == "FEA Parameters: ")
                     {
                         string[] value = SR.ReadLine().Split(':');
-                        if (value[0] == "KG_Dim")
+                        if (value[0] == "DOF")
                             dof = int.Parse(value[1].Split(' ')[1]);
 
                         value = SR.ReadLine().Split(':');
@@ -350,7 +341,7 @@ namespace ALFE
 
                     if (value[0] == "S")
                         if (value[2] == "Fixed")
-                            supports.Add(new Support(int.Parse(value[1]), true, true, true));
+                            supports.Add(new Support(int.Parse(value[1]), SupportType.Fixed));
                 }
                 #endregion
 
@@ -376,7 +367,7 @@ namespace ALFE
 
             Model model = beso.Model;
             sw.WriteLine("FEA Parameters: ");
-            sw.WriteLine("KG_Dim: " + model.DOF.ToString());
+            sw.WriteLine("DOF: " + model.DOF.ToString());
             sw.WriteLine("Element Type: " + model.Elements[0].Type.ToString());
             sw.WriteLine("Node Count: " + model.Nodes.Count.ToString());
             sw.WriteLine("Element Count: " + model.Elements.Count.ToString());
@@ -417,13 +408,7 @@ namespace ALFE
                 sw.WriteLine("L," + item.NodeID.ToString() + ',' +
                     item.ForceVector.X.ToString() + ',' + item.ForceVector.Y.ToString() + ',' + item.ForceVector.Z.ToString());
             foreach (var item in model.Supports)
-            {
-                int x = 0, y = 0, z = 0;
-                if (item.FixedX) x = 1;
-                if (item.FixedY) y = 1;
-                if (item.FixedZ) z = 1;
-                sw.WriteLine("S," + item.NodeID.ToString() + ',' + x.ToString() +',' + y.ToString() +',' + z.ToString());
-            }
+                sw.WriteLine("S," + item.NodeID.ToString() + ',' + item.Type.ToString());
 
             sw.Flush();
             sw.Close();
@@ -620,13 +605,8 @@ namespace ALFE
                         loads.Add(new Load(dof, int.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3]), double.Parse(value[4])));
 
                     if (value[0] == "S")
-                    {
-                        bool x = false, y = false, z = false;
-                        if (int.Parse(value[2]) == 1) x = true;
-                        if (int.Parse(value[3]) == 1) y = true;
-                        if (int.Parse(value[4]) == 1) z = true;
-                        supports.Add(new Support(int.Parse(value[1]), x, y, z));
-                    }
+                        if (value[2] == "Fixed")
+                            supports.Add(new Support(int.Parse(value[1]), SupportType.Fixed));
                 }
                 #endregion
 

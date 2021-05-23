@@ -3,25 +3,15 @@
     public class Support
     {
         public int NodeID { get; set; }
-        public bool FixedX = true;
-        public bool FixedY = true;
-        public bool FixedZ = true;
-        public int Dim;
-
-        public Support(int node, bool fixedX, bool fixedY)
+        public SupportType Type;
+        public Support(int node, SupportType type)
         {
-            NodeID = node;
-            FixedX = fixedX;
-            FixedY = fixedY;
-            Dim = 2;
+            this.NodeID = node;
+            this.Type = type;
         }
-        public Support(int node, bool fixedX, bool fixedY, bool fixedZ)
-        {
-            NodeID = node;
-            FixedX = fixedX;
-            FixedY = fixedY;
-            FixedZ = fixedZ;
-            Dim = 3;
-        }
+    }
+    public enum SupportType
+    {
+        Fixed = 0
     }
 }

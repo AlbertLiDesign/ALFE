@@ -45,7 +45,7 @@ namespace ALFE
                 {
                     nodes.Add(new Node(i, j));
                     if (i == 0)
-                        supports.Add(new Support(j, true, true, true));
+                        supports.Add(new Support(j, SupportType.Fixed));
                 }
             }
 
@@ -96,7 +96,7 @@ namespace ALFE
                 {
                     nodes.Add(new Node((double)i, (double)j));
                     if (i == 0)
-                        supports.Add(new Support(j, true, true, true));
+                        supports.Add(new Support(j, SupportType.Fixed));
                 }
             }
 
@@ -148,7 +148,7 @@ namespace ALFE
                 {
                     nodes.Add(new Node(i, j));
                     if (i == 0)
-                        supports.Add(new Support(j, true, true, true));
+                        supports.Add(new Support(j, SupportType.Fixed));
                 }
             }
 
