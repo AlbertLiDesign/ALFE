@@ -1,0 +1,25 @@
+Project Path: E:\ALCoding\ALFE\topoptTest\3DCases\solution
+------------------- Model Info -------------------
+Nodes: 52111
+Degree-of-freedom: 156333
+Elements: 42946
+Type: VoxelElement
+------------------- Matrix Info -------------------
+Rows: 156321
+Cols: 156321
+NNZ: 11626551
+------------------- Time Cost -------------------
+Computing Ke: 42.9477 ms
+Initializing KG: 524.0774 ms
+Prefiltering: 5195.4502 ms
+
+################### Step: 0 #####################
+Compliance: 5926488.42381547
+Volume: 1
+------------------- Time Cost -------------------
+Assembling KG: 320.7581 ms
+Solving: 12629.5198 ms
+Computing Sensitivity: 225.2756 ms
+Fltering Sensitivity: 1585.5889 ms
+Marking Elements: 24.9874 ms
+Checking Convergence: 3.0675 ms

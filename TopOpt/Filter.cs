@@ -147,7 +147,7 @@ namespace ALFE.TopOpt
         private static List<int>[] KDTreeMultiSearch(List<Vector3D> pts, KDTree<int> tree, double radius, int maxReturned)
         {
             List<int>[] indices = new List<int>[pts.Count];
-            Parallel.ForEach<Tuple<int, int>>(Partitioner.Create(0, pts.Count, (int)Math.Ceiling((double)pts.Count / (double)Environment.ProcessorCount * 2.0)), delegate (Tuple<int, int> rng, ParallelLoopState loopState)
+            Parallel.ForEach(Partitioner.Create(0, pts.Count, (int)Math.Ceiling(pts.Count / (double)Environment.ProcessorCount * 2.0)), delegate (Tuple<int, int> rng, ParallelLoopState loopState)
             {
                 for (int i = rng.Item1; i < rng.Item2; i++)
                 {
@@ -158,7 +158,7 @@ namespace ALFE.TopOpt
                         point3d.X,
                         point3d.Y,
                         point3d.Z
-                    }, maxReturned, num * num).ToList<int>();
+                    }, maxReturned, num * num).ToList();
                     indices[i] = list;
                 }
             });
