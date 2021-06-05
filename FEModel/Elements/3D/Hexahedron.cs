@@ -164,7 +164,7 @@ namespace ALFE
                     {
                         var quad_J = ComputeJ(glq.Xi[i], glq.Xi[j], glq.Xi[k]);
                         var quad_B = ComputeB(quad_J, glq.Xi[i], glq.Xi[j], glq.Xi[k]);
-                        Ke -= glq.Weights[i] * glq.Weights[j] * glq.Weights[k] * quad_B.TransposeThisAndMultiply(D).Multiply(quad_B).Multiply(quad_J.Determinant());
+                        Ke += glq.Weights[i] * glq.Weights[j] * glq.Weights[k] * quad_B.TransposeThisAndMultiply(D).Multiply(quad_B).Multiply(quad_J.Determinant());
                     }
                 }
             }

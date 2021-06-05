@@ -203,13 +203,13 @@ namespace ALFE.TopOpt
             double th = 0.0;
             double tv = curV * Model.Elements.Count;
 
-            while (((highest - lowest) / highest) > 1.0e-5f)
+            while (((highest - lowest) / highest) > 1.0e-5)
             {
                 th = (highest + lowest) * 0.5;
                 double sum = 0.0;
                 foreach (var elem in Model.Elements)
                 {
-                    var v = Ae[elem.ID] > th ? 1.0 : 0.001f;
+                    var v = Ae[elem.ID] > th ? 1.0 : 0.001;
                     elem.Xe = v;
                     elem.Exist = elem.Xe == 1.0 ? true : false;
                     sum += v;
@@ -250,11 +250,11 @@ namespace ALFE.TopOpt
                 {
                     elem.ComputeUe();
 
-                    Matrix<double> Ke = null;
-                    if (elem.Exist == true)
+                    Matrix<double> Ke;
+                    if (elem.Exist)
                         Ke = elem.Ke;
                     else
-                        Ke = (Matrix)elem.Ke.Multiply((double)Math.Pow(0.001, (double)PenaltyExponent));
+                        Ke = (Matrix)elem.Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
 
                     var Ue = elem.Ue;
                     if (elem.Exist != true)

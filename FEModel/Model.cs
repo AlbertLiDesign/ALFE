@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ALFE
 {
@@ -111,6 +113,56 @@ namespace ALFE
             Supports = supports;
         }
 
+        public List<double> ComputeVertSensitivities(List<double> elemSensitivities)
+        {
+            GetAdjacentNodes();
+            GetConnectedElements();
+            var Vert_Value = new List<double>();
+            foreach (var item in Nodes)
+            {
+                double sensitivity = 0.0;
+                for (int i = 0; i < item.ElementID.Count; i++)
+                {
+                    sensitivity += elemSensitivities[item.ElementID[i]] * 0.125;
+                }
+                Vert_Value.Add(sensitivity);
+            }
+
+            // 映射到0-1
+            double max = Vert_Value.Max();
+            double min = Vert_Value.Min();
+            for (int i = 0; i < Vert_Value.Count; i++)
+            {
+                Vert_Value[i] = (Vert_Value[i] - min) / (max - min);
+            }
+            return Vert_Value;
+        }
+
+        /// <summary>
+        /// Get the neighbours of each node.
+        /// </summary>
+        private void GetAdjacentNodes()
+        {
+            Parallel.ForEach(Nodes, node =>
+            {
+                foreach (var item in node.ElementID)
+                foreach (var neighbour in Elements[item].Nodes)
+                    if (neighbour.Active)
+                        lock (node.Neighbours)
+                            node.Neighbours.Add(neighbour.ActiveID);
+            });
+        }
+
+        /// <summary>
+        /// Get the connected elements of each node.
+        /// </summary>
+        private void GetConnectedElements()
+        {
+            // in each node make a list of elements to which it belongs
+            foreach (var elem in Elements)
+            foreach (var node in elem.Nodes)
+                node.ElementID.Add(elem.ID);
+        }
         public string ModelInfo()
         {
             string info = "------------------- Model Info -------------------";

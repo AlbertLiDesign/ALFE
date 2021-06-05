@@ -69,7 +69,6 @@ namespace ALFE
         {
             string path = @"E:\ALCoding\ALFE\topoptTest\Example3";
             BESO beso = FEIO.ReadBESO(path, "beso");
-            beso.HardKill = false;
             beso.Initialize();
             beso.Optimize();
             FEIO.WriteIsovalues(path, beso);
@@ -219,8 +218,8 @@ namespace ALFE
                 new Node(0.5,0.25,0.0)
             };
 
-            var element0 = new Hexahedron(new List<Node>(8) { nodes[0], nodes[1], nodes[2], nodes[3], nodes[4], nodes[5], nodes[6], nodes[7] }, new Material(210, 0.3));
-            var element1 = new Hexahedron(new List<Node>(8) { nodes[4], nodes[5], nodes[6], nodes[7], nodes[8], nodes[9], nodes[10], nodes[11] }, new Material(210, 0.3));
+            var element0 = new Hexahedron(new List<Node>(8) { nodes[0], nodes[1], nodes[2], nodes[3], nodes[4], nodes[5], nodes[6], nodes[7] }, new Material(1, 0.3));
+            var element1 = new Hexahedron(new List<Node>(8) { nodes[4], nodes[5], nodes[6], nodes[7], nodes[8], nodes[9], nodes[10], nodes[11] }, new Material(1, 0.3));
 
             var elements = new List<Element>(2) { element0, element1 };
 
@@ -244,6 +243,9 @@ namespace ALFE
 
             FESystem sys = new FESystem(model, Solver.SimplicialLLT);
             sys.Initialize();
+            Console.WriteLine(model.Elements[0].Ke);
+            Console.WriteLine(model.Elements[0].B);
+            Console.WriteLine(model.Elements[0].D);
             sys.Solve();
             Console.Write(sys.Model.ModelInfo());
             Console.Write(sys.MatrixInfo());
