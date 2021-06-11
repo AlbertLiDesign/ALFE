@@ -203,14 +203,15 @@ namespace ALFE
             List<Node> nodes = new List<Node>()
             {
                 new Node(0.0,0.0,0.0),
-                new Node(0.0,0.0,0.25),
-                new Node(0.0,0.25,0.25),
+                new Node(0.25,0.0,0.0),
+                new Node(0.25,0.25,0.0),
                 new Node(0.0,0.25,0.0),
 
-                new Node(0.25,0.0,0.0),
+                new Node(0.0,0.0,0.25),
                 new Node(0.25,0.0,0.25),
                 new Node(0.25,0.25,0.25),
-                new Node(0.25,0.25,0.0),
+                new Node(0.0,0.25,0.25),
+
 
                 new Node(0.5,0.0,0.0),
                 new Node(0.5,0.0,0.25),
@@ -219,34 +220,34 @@ namespace ALFE
             };
 
             var element0 = new Hexahedron(new List<Node>(8) { nodes[0], nodes[1], nodes[2], nodes[3], nodes[4], nodes[5], nodes[6], nodes[7] }, new Material(1, 0.3));
-            var element1 = new Hexahedron(new List<Node>(8) { nodes[4], nodes[5], nodes[6], nodes[7], nodes[8], nodes[9], nodes[10], nodes[11] }, new Material(1, 0.3));
+            //var element1 = new Hexahedron(new List<Node>(8) { nodes[4], nodes[5], nodes[6], nodes[7], nodes[8], nodes[9], nodes[10], nodes[11] }, new Material(1, 0.3));
 
-            var elements = new List<Element>(2) { element0, element1 };
+            var elements = new List<Element>(1) { element0};
 
-            var loads = new List<Load>(4)
-            {
-                new Load(8, 4.6875, 0.0,0.0),
-                new Load(9, 4.6875, 0.0,0.0),
-                new Load(10,4.6875, 0.0,0.0),
-                new Load(11, 4.6875, 0.0,0.0)
-            };
+            //var loads = new List<Load>(4)
+            //{
+            //    new Load(8, 4.6875, 0.0,0.0),
+            //    new Load(9, 4.6875, 0.0,0.0),
+            //    new Load(10,4.6875, 0.0,0.0),
+            //    new Load(11, 4.6875, 0.0,0.0)
+            //};
 
-            var supports = new List<Support>(4)
-            {
-                new Support(0, SupportType.Fixed),
-                new Support(1, SupportType.Fixed),
-                new Support(2, SupportType.Fixed),
-                new Support(3, SupportType.Fixed)
-            };
+            //var supports = new List<Support>(4)
+            //{
+            //    new Support(0, SupportType.Fixed),
+            //    new Support(1, SupportType.Fixed),
+            //    new Support(2, SupportType.Fixed),
+            //    new Support(3, SupportType.Fixed)
+            //};
 
-            var model = new Model(3, nodes, elements, loads, supports);
+            var model = new Model(3, nodes, elements);
 
             FESystem sys = new FESystem(model, Solver.SimplicialLLT);
             sys.Initialize();
             Console.WriteLine(model.Elements[0].Ke);
             Console.WriteLine(model.Elements[0].B);
             Console.WriteLine(model.Elements[0].D);
-            sys.Solve();
+            //sys.Solve();
             Console.Write(sys.Model.ModelInfo());
             Console.Write(sys.MatrixInfo());
             Console.WriteLine("Solver: " + sys._Solver.ToString());

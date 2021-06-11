@@ -32,7 +32,6 @@ namespace ALFE
             B = new DenseMatrix(6, 24);
             Ke = new DenseMatrix(24, 24);
         }
-
         public override void ComputeD()
         {
             D = new DenseMatrix(6, 6);
@@ -41,42 +40,42 @@ namespace ALFE
 
             D[0, 0] = D[1, 1] = D[2, 2] = (1.0 - Material.nu) * coeff1;
             D[0, 1] = D[0, 2] = D[1, 2] = D[1, 0] = D[2, 0] = D[2, 1] = Material.nu * coeff1;
-            D[3, 3] = D[4, 4] = D[5, 5] = (1 - Material.nu) * coeff1 * 0.5;
+            D[3, 3] = D[4, 4] = D[5, 5] = (1 - 2 * Material.nu) * coeff1 * 0.5;
         }
 
         public DenseMatrix ComputeJ(double s = 0.0, double t = 0.0, double u = 0.0)
         {
-            var N1s = (t - 1) * (1 + u) * 0.125;
-            var N1t = (s - 1) * (1 + u) * 0.125;
-            var N1u = (1 - s) * (1 - t) * 0.125;
+            var N1s = -(1 - t) * (1 - u) * 0.125;
+            var N1t = -(1 - s) * (1 - u) * 0.125;
+            var N1u = -(1 - s) * (1 - t) * 0.125;
 
-            var N2s = (t - 1) * (1 - u) * 0.125;
-            var N2t = (s - 1) * (1 - u) * 0.125;
-            var N2u = (s - 1) * (1 - t) * 0.125;
+            var N2s = (1 - t) * (1 - u) * 0.125;
+            var N2t = -(1 + s) * (1 - u) * 0.125;
+            var N2u = -(1 + s) * (1 - t) * 0.125;
 
-            var N3s = (t + 1) * (u - 1) * 0.125;
-            var N3t = (1 - s) * (1 - u) * 0.125;
-            var N3u = (s - 1) * (1 + t) * 0.125;
+            var N3s = (1 + t) * (1 - u) * 0.125;
+            var N3t = (1 + s) * (1 - u) * 0.125;
+            var N3u = -(1 + s) * (1 + t) * 0.125;
 
-            var N4s = (t + 1) * (-u - 1) * 0.125;
-            var N4t = (1 - s) * (1 + u) * 0.125;
-            var N4u = (1 - s) * (1 + t) * 0.125;
+            var N4s = -(1 + t) * (1 - u) * 0.125;
+            var N4t = (1 - s) * (1 - u) * 0.125;
+            var N4u = -(1 - s) * (1 + t) * 0.125;
 
-            var N5s = (1 - t) * (1 + u) * 0.125;
-            var N5t = (-s - 1) * (1 + u) * 0.125;
-            var N5u = (1 + s) * (1 - t) * 0.125;
+            var N5s = -(1 - t) * (1 + u) * 0.125;
+            var N5t = -(1 - s) * (1 + u) * 0.125;
+            var N5u = (1 - s) * (1 - t) * 0.125;
 
-            var N6s = (1 - t) * (1 - u) * 0.125;
-            var N6t = (-1 - s) * (1 - u) * 0.125;
-            var N6u = (1 + s) * (t - 1) * 0.125;
+            var N6s = (1 - t) * (1 + u) * 0.125;
+            var N6t = -(1 + s) * (1 + u) * 0.125;
+            var N6u = (1 + s) * (1 - t) * 0.125;
 
-            var N7s = (t + 1) * (1 - u) * 0.125;
-            var N7t = (s + 1) * (1 - u) * 0.125;
-            var N7u = (-1 - s) * (1 + t) * 0.125;
+            var N7s = (1 + t) * (1 + u) * 0.125;
+            var N7t = (1 + s) * (1 + u) * 0.125;
+            var N7u = (1 + s) * (1 + t) * 0.125;
 
-            var N8s = (t + 1) * (1 + u) * 0.125;
-            var N8t = (s + 1) * (1 + u) * 0.125;
-            var N8u = (1 + s) * (1 + t) * 0.125;
+            var N8s = -(1 + t) * (1 + u) * 0.125;
+            var N8t = (1 - s) * (1 + u) * 0.125;
+            var N8u = (1 - s) * (1 + t) * 0.125;
 
             Ns = new double[8]
             {
@@ -151,10 +150,8 @@ namespace ALFE
         public override void ComputeKe()
         {
             ComputeD();
-            J = ComputeJ();
-            B = ComputeB(J);
 
-            GaussLegendreQuadrature glq = new GaussLegendreQuadrature(2);
+            GaussLegendreQuadrature glq = new GaussLegendreQuadrature(1);
 
             for (int i = 0; i < glq.Xi.Count; i++)
             {
@@ -164,7 +161,7 @@ namespace ALFE
                     {
                         var quad_J = ComputeJ(glq.Xi[i], glq.Xi[j], glq.Xi[k]);
                         var quad_B = ComputeB(quad_J, glq.Xi[i], glq.Xi[j], glq.Xi[k]);
-                        Ke -= glq.Weights[i] * glq.Weights[j] * glq.Weights[k] * quad_B.TransposeThisAndMultiply(D).Multiply(quad_B).Multiply(quad_J.Determinant());
+                        Ke += glq.Weights[i] * glq.Weights[j] * glq.Weights[k] * quad_B.TransposeThisAndMultiply(D).Multiply(quad_B).Multiply(quad_J.Determinant());
                     }
                 }
             }

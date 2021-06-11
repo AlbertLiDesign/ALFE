@@ -211,7 +211,7 @@ namespace ALFE.TopOpt
                 {
                     var v = Ae[elem.ID] > th ? 1.0 : 0.001;
                     elem.Xe = v;
-                    elem.Exist = elem.Xe == 1.0 ? true : false;
+                    elem.Exist = elem.Xe == 1.0;
                     sum += v;
                 }
 
@@ -236,10 +236,8 @@ namespace ALFE.TopOpt
                         Ke = (Matrix)elem.Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
 
                     var Ue = elem.Ue;
-                    if (elem.Exist != true)
-                        Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
-
-                    elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+                    var c = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+                    elem.C = elem.Exist ? c : c * Math.Pow(0.001, PenaltyExponent);
 
                     values[elem.ID] = elem.C / elem.Xe;
                 });
@@ -257,10 +255,8 @@ namespace ALFE.TopOpt
                         Ke = (Matrix)elem.Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
 
                     var Ue = elem.Ue;
-                    if (elem.Exist != true)
-                        Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
-
-                    elem.C = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+                    var c = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
+                    elem.C = elem.Exist ?  c : c * Math.Pow(0.001, PenaltyExponent);
 
                     values[elem.ID] = elem.C / elem.Xe;
                 }
@@ -296,7 +292,7 @@ namespace ALFE.TopOpt
                 double sensitivity = 0.0;
                 for (int i = 0; i < item.ElementID.Count; i++)
                 {
-                    sensitivity += elemSensitivities[item.ElementID[i]] * 0.125;
+                    sensitivity += elemSensitivities[item.ElementID[i]] * 1/ item.ElementID.Count;
                 }
                 Vert_Value.Add(sensitivity);
             }
