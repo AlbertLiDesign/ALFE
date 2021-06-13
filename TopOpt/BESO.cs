@@ -46,6 +46,8 @@ namespace ALFE.TopOpt
         /// </summary>
         public int MaximumIteration;
 
+        private double Xmin = 0.001;
+
         public List<double> Sensitivities = new List<double>();
 
         /// <summary>
@@ -109,7 +111,7 @@ namespace ALFE.TopOpt
 
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
-        public void Optimize()
+        public void Optimize(bool writeKG = false)
         {
             double delta = 1.0;
             int iter = 0;
@@ -126,11 +128,12 @@ namespace ALFE.TopOpt
 
                 Console.WriteLine("Prepare to solve the system");
                 sw.Restart();
-                //FEIO.WriteKG(System.GetKG(), "E:\\KG" + iter.ToString() + ".mtx");
+                if (writeKG && iter == 0) FEIO.WriteKG(System.GetKG(),Path + iter.ToString() + ".mtx", true);
                 System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
+                //var dist = System.GetDisplacement();
                 //FEPrint.PrintDisplacement(System);
 
 
@@ -209,7 +212,7 @@ namespace ALFE.TopOpt
                 double sum = 0.0;
                 foreach (var elem in Model.Elements)
                 {
-                    var v = Ae[elem.ID] > th ? 1.0 : 0.001;
+                    var v = Ae[elem.ID] > th ? 1.0 : Xmin;
                     elem.Xe = v;
                     elem.Exist = elem.Xe == 1.0;
                     sum += v;
@@ -228,16 +231,8 @@ namespace ALFE.TopOpt
                 Parallel.ForEach(Model.Elements, elem =>
                 {
                     elem.ComputeUe();
-
-                    Matrix<double> Ke;
-                    if (elem.Exist)
-                        Ke = elem.Ke;
-                    else
-                        Ke = (Matrix)elem.Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
-
-                    var Ue = elem.Ue;
-                    var c = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
-                    elem.C = elem.Exist ? c : c * Math.Pow(0.001, PenaltyExponent);
+                    var c = 0.5 * elem.Ue.TransposeThisAndMultiply(elem.Ke).Multiply(elem.Ue)[0, 0];
+                    elem.C = elem.Exist ? c : c * Math.Pow(Xmin, PenaltyExponent);
 
                     values[elem.ID] = elem.C / elem.Xe;
                 });
@@ -247,16 +242,9 @@ namespace ALFE.TopOpt
                 foreach (var elem in Model.Elements)
                 {
                     elem.ComputeUe();
-
-                    Matrix<double> Ke;
-                    if (elem.Exist)
-                        Ke = elem.Ke;
-                    else
-                        Ke = (Matrix)elem.Ke.Multiply(Math.Pow(0.001, PenaltyExponent));
-
-                    var Ue = elem.Ue;
-                    var c = 0.5 * Ue.TransposeThisAndMultiply(Ke).Multiply(Ue)[0, 0];
-                    elem.C = elem.Exist ?  c : c * Math.Pow(0.001, PenaltyExponent);
+                    elem.ComputeUe();
+                    var c = 0.5 * elem.Ue.TransposeThisAndMultiply(elem.Ke).Multiply(elem.Ue)[0, 0];
+                    elem.C = elem.Exist ? c : c * Math.Pow(Xmin, PenaltyExponent);
 
                     values[elem.ID] = elem.C / elem.Xe;
                 }

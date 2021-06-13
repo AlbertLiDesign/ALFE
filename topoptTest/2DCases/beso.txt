@@ -4,7 +4,7 @@ DOF: 2
 Element Type: PixelElement
 Node Count: 16261
 Element Count: 16000
-Load Count: 1
+Load Count: 3
 Support Count: 101
 Young's Modulus: 1
 Possion Rate: 0.300000011920929
@@ -32279,6 +32279,8 @@ E,16155,16256,16257,16156
 E,16156,16257,16258,16157
 E,16157,16258,16259,16158
 E,16158,16259,16260,16159
+L,16210,0,-1,0
+L,16210,0,-1,0
 L,16210,0,-1,0
 S,0,Fixed
 S,1,Fixed

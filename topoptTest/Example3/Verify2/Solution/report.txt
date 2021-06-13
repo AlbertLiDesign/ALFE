@@ -1,0 +1,25 @@
+Project Path: E:\ALCoding\ALFE\topoptTest\Example3\Verify2\solution
+------------------- Model Info -------------------
+Nodes: 75
+Degree-of-freedom: 225
+Elements: 32
+Type: VoxelElement
+------------------- Matrix Info -------------------
+Rows: 219
+Cols: 219
+NNZ: 10305
+------------------- Time Cost -------------------
+Computing Ke: 87.2655 ms
+Initializing KG: 133.0123 ms
+Prefiltering: 122.3295 ms
+
+################### Step: 0 #####################
+Compliance: 1.65423743686421
+Volume: 1
+------------------- Time Cost -------------------
+Assembling KG: 10416.584 ms
+Solving: 646.4406 ms
+Computing Sensitivity: 75.3693 ms
+Fltering Sensitivity: 0.4912 ms
+Marking Elements: 0.8876 ms
+Checking Convergence: 1.4211 ms
