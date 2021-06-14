@@ -23,7 +23,6 @@ namespace ALFE
 
             Material = material;
             Thickness = thickness;
-            Exist = exist;
             Type = ElementType.TriangleElement;
             Dim = 2;
             ComputeArea();

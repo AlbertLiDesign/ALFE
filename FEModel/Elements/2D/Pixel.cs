@@ -17,7 +17,6 @@ namespace ALFE
 
             Nodes = nodes;
             Material = material;
-            Exist = exist;
             Type = ElementType.PixelElement;
             Dim = 2;
         }

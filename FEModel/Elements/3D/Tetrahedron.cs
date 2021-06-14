@@ -19,7 +19,6 @@ namespace ALFE
             }
 
             Material = material;
-            Exist = exist;
             Type = ElementType.TetrahedronElement;
             Dim = 3;
         }

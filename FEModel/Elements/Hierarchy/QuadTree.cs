@@ -41,7 +41,6 @@ namespace ALFE
             Value = value;
 
             Material = material;
-            Exist = exist;
             Type = ElementType.QuadTreeElement;
             Dim = 2;
         }
@@ -56,7 +55,6 @@ namespace ALFE
             Value = value;
 
             Material = material;
-            Exist = exist;
             Type = ElementType.QuadTreeElement;
             Dim = 2;
         }

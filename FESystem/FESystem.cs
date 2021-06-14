@@ -162,14 +162,14 @@ namespace ALFE
                                     {
                                         if (HardKill == false)
                                         {
-                                            if (elem.Exist)
+                                            if (elem.Xe == 1.0)
                                                 KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
                                             else
                                                 KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * Math.Pow(0.001, P);
                                         }
                                         else
                                         {
-                                            if (elem.Exist)
+                                            if (elem.Xe == 1.0)
                                                 KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
                                             else
                                                 KG.Vals[idx1 + ni.row_nnz * n + m] /= KG.Vals[idx1 + ni.row_nnz * n + m];

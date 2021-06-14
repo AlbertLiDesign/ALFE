@@ -25,7 +25,6 @@ namespace ALFE
             }
 
             Material = material;
-            Exist = exist;
             Type = ElementType.HexahedronElement;
             Dim = 3;
 

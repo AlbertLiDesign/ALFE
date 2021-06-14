@@ -23,7 +23,6 @@ namespace ALFE
 
             Material = material;
             Thickness = thichness;
-            Exist = exist;
             Type = ElementType.QuadElement;
             Dim = 2;
 

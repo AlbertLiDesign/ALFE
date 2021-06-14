@@ -90,6 +90,12 @@ namespace ALFE
             Console.WriteLine("Assembling KG: " + timeCost[2].ToString() + " ms");
             Console.WriteLine("Solving: " + timeCost[3].ToString() + " ms");
         }
+        public static void PrintDisplacement(FESystem sys, int i)
+        {
+            Console.WriteLine("Node [" + i.ToString() + "] Displement is " + sys.Model.Nodes[i].Displacement.X.ToString() +
+                              '\t' + sys.Model.Nodes[i].Displacement.Y.ToString() +
+                              '\t' + sys.Model.Nodes[i].Displacement.Z.ToString());
+        }
         public static void PrintDisplacement(FESystem sys)
         {
             foreach (var item in sys.Model.Nodes)

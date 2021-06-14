@@ -75,7 +75,7 @@ namespace ALFE
             string output = path + '\\' + iter.ToString() + ".txt";
             StreamWriter sw = new StreamWriter(output);
             foreach (var elem in elems)
-                if (elem.Exist != true)
+                if (elem.Xe != 1.0)
                     sw.WriteLine(elem.ID.ToString());
             sw.Flush();
             sw.Close();

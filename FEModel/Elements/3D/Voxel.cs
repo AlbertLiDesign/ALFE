@@ -24,7 +24,6 @@ namespace ALFE
             }
 
             Material = material;
-            Exist = exist;
             Type = ElementType.VoxelElement;
             Dim = 3;
 
@@ -151,7 +150,7 @@ namespace ALFE
         {
             ComputeD();
 
-            GaussLegendreQuadrature glq = new GaussLegendreQuadrature(1);
+            GaussLegendreQuadrature glq = new GaussLegendreQuadrature(3);
 
             for (int i = 0; i < glq.Xi.Count; i++)
             {

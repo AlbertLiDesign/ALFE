@@ -109,49 +109,63 @@ namespace ALFE.TopOpt
             solvingInfo += "Prefiltering: " + sw.Elapsed.TotalMilliseconds.ToString() + " ms";
             solvingInfo += '\n';
 
-            FEIO.WriteInvalidElements(0, Path, Model.Elements);
+            //FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
         public void Optimize(bool writeKG = false)
         {
             double delta = 1.0;
             int iter = 0;
+            double currentVolume = 1.0;
             List<double> Ae_old = new List<double>();
-            while (delta > 0.001 && iter < MaximumIteration)
+            List<double> Ae = new List<double>();
+
+            while (delta > 0.001 && iter < MaximumIteration 
+                   || Math.Abs(currentVolume - VolumeFraction) > 0.01)
             {
+                iter += 1;
+                currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));
+
                 List<double> timeCost = new List<double>();
+                #region Run FEA
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                // Run FEA
                 System.Initialize();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 Console.WriteLine("Prepare to solve the system");
                 sw.Restart();
-                if (writeKG && iter == 0) FEIO.WriteKG(System.GetKG(),Path + iter.ToString() + ".mtx", true);
+                //if (writeKG && iter == 1) FEIO.WriteKG(System.GetKG(),Path + iter.ToString() + ".mtx", false);
                 System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
-
-                //var dist = System.GetDisplacement();
-                //FEPrint.PrintDisplacement(System);
-
+                Console.WriteLine("Done");
+                #endregion
+                FEPrint.PrintDisplacement(System, 0);
+                FEPrint.PrintDisplacement(System, 4);
+                FEPrint.PrintDisplacement(System, 8);
+                FEPrint.PrintDisplacement(System, 12);
+                FEPrint.PrintDisplacement(System, 16);
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
-                List<double> Ae = CalSensitivities();
+                Ae = CalSensitivities();
+
                 HistoryC.Add(CalGlobalCompliance());
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
-
-
+                
                 sw.Restart();
                 // Process sensitivities
                 Ae = FltAe(_Filter, Ae);
-                if (iter > 0)
-                    for (int i = 0; i < Ae.Count; i++)
-                        Ae[i] = (Ae[i] + Ae_old[i]) * 0.5;
 
+                if (iter > 1)
+                {
+                    for (int i = 0; i < Ae.Count; i++)
+                    {
+                        Ae[i] = (Ae[i] + Ae_old[i]) * 0.5;
+                    }
+                }
                 // Record the sensitiveies in each step
                 var raw = new double[Ae.Count];
                 Ae.CopyTo(raw);
@@ -161,25 +175,29 @@ namespace ALFE.TopOpt
 
                 // Run BESO
                 sw.Restart();
-                double sum = 0.0;
-                foreach (var elem in Model.Elements)
-                    sum += elem.Xe;
-
-                HistoryV.Add(sum / Model.Elements.Count);
-                double curV = Math.Max(VolumeFraction, HistoryV.Last() * (1.0 - EvolutionRate));
-                BESO_Core(curV, Ae);
+                BESO_Core(currentVolume, Ae);
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
+                double sum = 0.0;
+                double removeNum = 0;
+                foreach (var elem in Model.Elements)
+                {
+                    if (elem.Xe != 1.0)
+                        removeNum++;
+                    sum += elem.Xe;
+                }
+
+                HistoryV.Add(sum / Model.Elements.Count);
+
                 sw.Restart();
-                iter += 1;
                 FEIO.WriteInvalidElements(iter, Path, Model.Elements);
 
                 Sensitivities = Ae_old;
                 System.Update();
 
                 // Check convergence 
-                if (iter >= 10)
+                if (iter > 10)
                 {
                     var newV = 0.0;
                     var lastV = 0.0;
@@ -198,13 +216,14 @@ namespace ALFE.TopOpt
             }
             FEIO.WriteSensitivities(Path, Sensitivities);
             FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
+            Console.WriteLine("Done BESO");
         }
         private void BESO_Core(double curV, List<double> Ae)
         {
             double lowest = Ae.Min();
             double highest = Ae.Max();
             double th = 0.0;
-            double tv = curV * Model.Elements.Count;
+            double volfra = curV * Model.Elements.Count;
 
             while (((highest - lowest) / highest) > 1.0e-5)
             {
@@ -214,11 +233,10 @@ namespace ALFE.TopOpt
                 {
                     var v = Ae[elem.ID] > th ? 1.0 : Xmin;
                     elem.Xe = v;
-                    elem.Exist = elem.Xe == 1.0;
                     sum += v;
                 }
 
-                if (sum - tv > 0.0) lowest = th;
+                if (sum - volfra > 0.0) lowest = th;
                 else highest = th;
             }
             isovalues.Add(th);
@@ -232,9 +250,9 @@ namespace ALFE.TopOpt
                 {
                     elem.ComputeUe();
                     var c = 0.5 * elem.Ue.TransposeThisAndMultiply(elem.Ke).Multiply(elem.Ue)[0, 0];
-                    elem.C = elem.Exist ? c : c * Math.Pow(Xmin, PenaltyExponent);
+                    elem.C = Math.Pow(elem.Xe, PenaltyExponent) * c;
 
-                    values[elem.ID] = elem.C / elem.Xe;
+                    values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
                 });
             }
             else
@@ -244,9 +262,9 @@ namespace ALFE.TopOpt
                     elem.ComputeUe();
                     elem.ComputeUe();
                     var c = 0.5 * elem.Ue.TransposeThisAndMultiply(elem.Ke).Multiply(elem.Ue)[0, 0];
-                    elem.C = elem.Exist ? c : c * Math.Pow(Xmin, PenaltyExponent);
+                    elem.C = Math.Pow(elem.Xe, PenaltyExponent) * c;
 
-                    values[elem.ID] = elem.C / elem.Xe;
+                    values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
                 }
             }
             return values.ToList();

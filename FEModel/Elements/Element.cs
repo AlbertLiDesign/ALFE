@@ -31,7 +31,6 @@ namespace ALFE
         /// Compliance
         /// </summary>
         public double C;
-        public bool Exist { get; set; }
 
         public ElementType Type;
 
