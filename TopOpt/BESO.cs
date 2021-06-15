@@ -141,11 +141,11 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
                 Console.WriteLine("Done");
                 #endregion
-                FEPrint.PrintDisplacement(System, 0);
-                FEPrint.PrintDisplacement(System, 4);
-                FEPrint.PrintDisplacement(System, 8);
-                FEPrint.PrintDisplacement(System, 12);
-                FEPrint.PrintDisplacement(System, 16);
+                //FEPrint.PrintDisplacement(System, 0);
+                //FEPrint.PrintDisplacement(System, 4);
+                //FEPrint.PrintDisplacement(System, 8);
+                //FEPrint.PrintDisplacement(System, 12);
+                //FEPrint.PrintDisplacement(System, 16);
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
@@ -235,7 +235,6 @@ namespace ALFE.TopOpt
                     elem.Xe = v;
                     sum += v;
                 }
-
                 if (sum - volfra > 0.0) lowest = th;
                 else highest = th;
             }

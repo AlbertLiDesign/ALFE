@@ -24,9 +24,8 @@ namespace ALFE
         }
         public static void RunVerify3D()
         {
-            string path = @"E:\ALCoding\ALFE\topoptTest\Example3\Verify";
+            string path = @"E:\ALCoding\ALFE\topoptTest\Example3\Verify2";
             BESO beso = FEIO.ReadBESO(path, "beso");
-            Console.WriteLine(beso.Model.Elements[0].Ke);
             beso.Initialize();
             beso.Optimize(true);
             FEIO.WriteIsovalues(path, beso);
