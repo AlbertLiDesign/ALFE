@@ -119,8 +119,7 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             List<double> Ae = new List<double>();
 
-            while (delta > 0.001 && iter < MaximumIteration 
-                   || Math.Abs(currentVolume - VolumeFraction) > 0.01)
+            while (delta > 1e-3)
             {
                 iter += 1;
                 currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));
@@ -135,7 +134,7 @@ namespace ALFE.TopOpt
 
                 Console.WriteLine("Prepare to solve the system");
                 sw.Restart();
-                //if (writeKG && iter == 1) FEIO.WriteKG(System.GetKG(),Path + iter.ToString() + ".mtx", false);
+                if (writeKG && iter == 1) FEIO.WriteKG(System.GetKG(),Path + iter.ToString() + ".mtx", false);
                 System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);

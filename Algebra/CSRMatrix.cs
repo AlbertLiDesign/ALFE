@@ -100,7 +100,7 @@ namespace ALFE
                 new_Rows[i] -= num;
             }
 
-            // Step 8: To update the CSR matrix
+            // Step 9: To update the CSR matrix
             Rows = new_Rows.ToArray();
             Cols = new_Cols.ToArray();
             Vals = new_Vals.ToArray();
