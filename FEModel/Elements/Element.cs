@@ -25,7 +25,7 @@ namespace ALFE
         /// <summary>
         /// Design Variable
         /// </summary>
-        public double Xe;
+        public double Xe = 1.0;
 
         /// <summary>
         /// Compliance

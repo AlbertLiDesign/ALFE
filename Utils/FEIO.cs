@@ -110,6 +110,53 @@ namespace ALFE
             sw.Close();
             sw.Dispose();
         }
+        
+        public static Model ReadTetrahedras(string outputPath)
+        {
+            List<Node> nodes = new List<Node>();
+            List<Element> elems = new List<Element>();
+            if (File.Exists(outputPath))
+            {
+                StreamReader SR = new StreamReader(outputPath);
+                while (!SR.EndOfStream)
+                {
+                    string line = SR.ReadLine();
+
+                    if (line == "Vertices")
+                    {
+                        var vertNum = int.Parse(SR.ReadLine());
+                        for (int i = 0; i < vertNum; i++)
+                        {
+                            line = SR.ReadLine();
+                            string[] tokens = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+                            nodes.Add(new Node(double.Parse(tokens[0]), double.Parse(tokens[1]), double.Parse(tokens[2])));
+                        }
+                    }
+                    if (line == "Tetrahedra")
+                    {
+                        var tetNum = int.Parse(SR.ReadLine());
+                        for (int i = 0; i < tetNum; i++)
+                        {
+                            line = SR.ReadLine();
+                            string[] tokens = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+
+                            List<Node> verts = new List<Node>(4)
+                            {
+                                nodes[int.Parse(tokens[0]) - 1],
+                                nodes[int.Parse(tokens[1]) - 1],
+                                nodes[int.Parse(tokens[2]) - 1],
+                                nodes[int.Parse(tokens[3]) - 1],
+                            };
+                            elems.Add(new Tetrahedron(verts, new Material()));
+                        }
+                    }
+                }
+                SR.Close();
+                SR.Dispose();
+            }
+
+            return new Model(3, nodes, elems);
+        }
         public static Model ReadVTK(string path)
         {
             List<Node> nodes = new List<Node>();

@@ -368,7 +368,7 @@ namespace ALFE
                     item.ComputeKe();
             }
         }
-        private double CalCompliance()
+        public double CalCompliance()
         {
             Parallel.ForEach(Model.Elements, elem =>
             {
