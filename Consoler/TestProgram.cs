@@ -21,45 +21,45 @@ namespace Consoler
             FEIO.WriteKG(csr, "E:\\testCSR2.mtx", true);
 
         }
-        public static void TestRollerSupport()
-        {
-            List<Node> nds = new List<Node>();
-            List<Element> elems = new List<Element>();
+        //public static void TestRollerSupport()
+        //{
+        //    List<Node> nds = new List<Node>();
+        //    List<Element> elems = new List<Element>();
 
-            nds.Add(new Node(3, 1));
-            nds.Add(new Node(3, 0));
-            nds.Add(new Node(2, 1));
-            nds.Add(new Node(2, 0));
-            nds.Add(new Node(0, 1));
-            nds.Add(new Node(1, 1));
-            nds.Add(new Node(1, 0));
-            nds.Add(new Node(0, 0));
-            nds.Add(new Node(3, 2));
-            nds.Add(new Node(2, 2));
-            nds.Add(new Node(0, 2));
-            nds.Add(new Node(1, 2));
+        //    nds.Add(new Node(3, 1));
+        //    nds.Add(new Node(3, 0));
+        //    nds.Add(new Node(2, 1));
+        //    nds.Add(new Node(2, 0));
+        //    nds.Add(new Node(0, 1));
+        //    nds.Add(new Node(1, 1));
+        //    nds.Add(new Node(1, 0));
+        //    nds.Add(new Node(0, 0));
+        //    nds.Add(new Node(3, 2));
+        //    nds.Add(new Node(2, 2));
+        //    nds.Add(new Node(0, 2));
+        //    nds.Add(new Node(1, 2));
 
-            elems.Add(new Quadrilateral(new List<Node>(4) { nds[2], nds[0], nds[1], nds[3] }, new Material(1.0, 0.3)));
-            elems.Add(new Quadrilateral(new List<Node>(4) { nds[5], nds[2], nds[3], nds[6] }, new Material(1.0, 0.3)));
-            elems.Add(new Quadrilateral(new List<Node>(4) { nds[4], nds[5], nds[6], nds[7] }, new Material(1.0, 0.3)));
-            elems.Add(new Quadrilateral(new List<Node>(4) { nds[9], nds[8], nds[0], nds[2] }, new Material(1.0, 0.3)));
-            elems.Add(new Quadrilateral(new List<Node>(4) { nds[11], nds[9], nds[2], nds[5] }, new Material(1.0, 0.3)));
-            elems.Add(new Quadrilateral(new List<Node>(4) { nds[10], nds[11], nds[5], nds[4] }, new Material(1.0, 0.3)));
+        //    elems.Add(new Quadrilateral(new List<Node>(4) { nds[2], nds[0], nds[1], nds[3] }, new Material(1.0, 0.3)));
+        //    elems.Add(new Quadrilateral(new List<Node>(4) { nds[5], nds[2], nds[3], nds[6] }, new Material(1.0, 0.3)));
+        //    elems.Add(new Quadrilateral(new List<Node>(4) { nds[4], nds[5], nds[6], nds[7] }, new Material(1.0, 0.3)));
+        //    elems.Add(new Quadrilateral(new List<Node>(4) { nds[9], nds[8], nds[0], nds[2] }, new Material(1.0, 0.3)));
+        //    elems.Add(new Quadrilateral(new List<Node>(4) { nds[11], nds[9], nds[2], nds[5] }, new Material(1.0, 0.3)));
+        //    elems.Add(new Quadrilateral(new List<Node>(4) { nds[10], nds[11], nds[5], nds[4] }, new Material(1.0, 0.3)));
 
-            Model model = new Model(2, nds, elems,
-                new List<Load>(1) { new Load(11, new Vector2D(0.0, -1.0)) },
-                new List<Support>(2) { new Support(7, SupportType.Fixed), new Support(1, SupportType.Fixed) });
-            FESystem sys = new FESystem(model, Solver.SimplicialLLT, false, false);
-            Console.Write(sys.Model.ModelInfo());
-            sys.Initialize();
-            Console.Write(sys.MatrixInfo());
+        //    Model model = new Model(2, nds, elems,
+        //        new List<Load>(1) { new Load(11, new Vector2D(0.0, -1.0)) },
+        //        new List<Support>(2) { new Support(7, SupportType.Fixed), new Support(1, SupportType.Fixed) });
+        //    FESystem sys = new FESystem(model, Solver.SimplicialLLT, false, false);
+        //    Console.Write(sys.Model.ModelInfo());
+        //    sys.Initialize();
+        //    Console.Write(sys.MatrixInfo());
 
-            var KG = sys.GetKG();
-            sys.Solve();
-            //FEIO.WriteKG(KG, "E:\\testKG.mtx", false);
-            Console.Write(sys.SolvingInfo());
-            Console.Write(sys.DisplacementInfo());
-        }
+        //    var KG = sys.GetKG();
+        //    sys.Solve();
+        //    //FEIO.WriteKG(KG, "E:\\testKG.mtx", false);
+        //    Console.Write(sys.SolvingInfo());
+        //    Console.Write(sys.DisplacementInfo());
+        //}
         public static void Test()
         {
             Model model2d = new Cantilever2D(ElementType.PixelElement, 200, 200).Model;
