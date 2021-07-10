@@ -9,33 +9,34 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Start to test, please wait a few seconds...");
+            //Console.WriteLine("Start to test, please wait a few seconds...");
 
-            // Create a cantilever model with 200 * 200 pixel elements
-            Model model2d = new Cantilever2D(ElementType.PixelElement, 200, 200).Model;
+            //// Create a cantilever model with 200 * 200 pixel elements
+            //Model model2d = new Cantilever2D(ElementType.PixelElement, 200, 200).Model;
 
-            // Create a finite element system
-            FESystem sys0 = new FESystem(model2d, Solver.SimplicialLLT);
+            //// Create a finite element system
+            //FESystem sys0 = new FESystem(model2d, Solver.SimplicialLLT);
 
-            // To initial the system
-            sys0.Initialize();
+            //// To initial the system
+            //sys0.Initialize();
 
-            // Solve
-            sys0.Solve();
+            //// Solve
+            //sys0.Solve();
 
-            // Print model information
-            Console.Write(sys0.Model.ModelInfo());
+            //// Print model information
+            //Console.Write(sys0.Model.ModelInfo());
 
-            // Print matrix inforamtin
-            Console.Write(sys0.MatrixInfo());
+            //// Print matrix inforamtin
+            //Console.Write(sys0.MatrixInfo());
 
-            // Print solving information
-            Console.Write(sys0.SolvingInfo());
+            //// Print solving information
+            //Console.Write(sys0.SolvingInfo());
 
-            // Print displacement
-            Console.Write(sys0.DisplacementInfo());
+            //// Print displacement
+            //Console.Write(sys0.DisplacementInfo());
 
-            Console.ReadKey();
+            //Console.ReadKey();
+            RunExample3D();
         }
         public static void RunVerify2D()
         {
