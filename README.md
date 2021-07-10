@@ -58,4 +58,4 @@ Solving: 2311.3483 ms
 ## Documentation
 Please click [here](https://albertlidesign.gitbook.io/alfe/)
 ## License
-The code of ALFE itself is lincesed under [LGPL-2.1](https://github.com/AlbertLiDesign/ALFE/blob/master/LICENSE).
+The code of ALFE itself is licensed under [LGPL-2.1](https://github.com/AlbertLiDesign/ALFE/blob/master/LICENSE).

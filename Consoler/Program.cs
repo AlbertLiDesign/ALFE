@@ -9,34 +9,63 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("Start to test, please wait a few seconds...");
+            int xnum = 7;
+            int ynum = 5;
 
-            //// Create a cantilever model with 200 * 200 pixel elements
-            //Model model2d = new Cantilever2D(ElementType.PixelElement, 200, 200).Model;
+            List<Node> nodes = new List<Node>(xnum * ynum);
+            List<Element> elems = new List<Element>((xnum - 1) * (ynum - 1));
+            List<Load> loads = new List<Load>(1);
+            List<Support> supports = new List<Support>(ynum);
 
-            //// Create a finite element system
-            //FESystem sys0 = new FESystem(model2d, Solver.SimplicialLLT);
+            // Define nodes
+            for (int i = 0; i < xnum; i++)
+            {
+                for (int j = 0; j < ynum; j++)
+                {
+                    nodes.Add(new Node(i, j));
+                    if (i == 0)
+                        supports.Add(new Support(j, SupportType.Fixed));
+                }
+            }
 
-            //// To initial the system
-            //sys0.Initialize();
+            // Define Material
+            Material material = new Material(1.0, 0.3);
 
-            //// Solve
-            //sys0.Solve();
+            // Define elements
+            for (int i = 0; i < xnum - 1; i++)
+            {
+                for (int j = 0; j < ynum - 1; j++)
+                {
+                    List<Node> nodalSet = new List<Node>(4)
+                    {
+                        // Counterclockwise
+                        nodes[i * ynum + j],
+                        nodes[i * ynum + (j + 1)],
+                        nodes[(i + 1) * ynum+ (j + 1)],
+                        nodes[(i + 1) * ynum + j],
+                    };
 
-            //// Print model information
-            //Console.Write(sys0.Model.ModelInfo());
+                    // Construct a pixel element
+                    elems.Add(new Pixel(nodalSet, material));
+                }
+            }
 
-            //// Print matrix inforamtin
-            //Console.Write(sys0.MatrixInfo());
+            // Apply the load
+            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0, -1.0)));
 
-            //// Print solving information
-            //Console.Write(sys0.SolvingInfo());
+            // Create a model
+            Model model = new Model(2, nodes, elems, loads, supports);
 
-            //// Print displacement
-            //Console.Write(sys0.DisplacementInfo());
+            // Create a FE system
+            FESystem system = new FESystem(model);
 
-            //Console.ReadKey();
-            RunExample3D();
+            // Initialize the system and solve it.
+            system.Initialize();
+            system.Solve();
+
+            // Print the displacement information
+            Console.WriteLine(system.DisplacementInfo());
+            Console.ReadKey();
         }
         public static void RunVerify2D()
         {
