@@ -1,6 +1,6 @@
 # Quick Start
 
-
+This section briefly describes how to get up and running using ALFE. See Installation for more detailed information such as system requirements and different ways of installing and using ALFE.
 
 ```csharp
 static void Main(string[] args)
