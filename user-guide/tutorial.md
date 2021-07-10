@@ -4,7 +4,7 @@ This section provides a hands-on tutorial on the basic usage of ALFE.
 
 ## Introduction
 
-## Basics
+## 2D Cantilever
 
 Here is a very basic example. We can start from creating a simple 2D cantilever with 6 mm x 4 mm. It is meshed with 24 four-node plane-stress elements. The material is assumed with Young's modulus of 1 MPa and Poisson's ratio of 0.3.
 

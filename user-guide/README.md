@@ -13,7 +13,7 @@ Welcome to the ALFE library user guide. This guide covers all the basics like in
 * [Overview](https://albertlidesign.gitbook.io/alfe/user-guide/overview) – an overview of the library and its capabilities
 * [Quick Start](https://albertlidesign.gitbook.io/alfe/user-guide/quickstart) – how to quickly start using ALFE
 * Installation – detailed installation instructions
-* Tutorial – how to perform basic tasks
+* [Tutorial](https://albertlidesign.gitbook.io/alfe/user-guide/tutorial) – how to perform basic tasks
 * Bibliography – related references
 
 
