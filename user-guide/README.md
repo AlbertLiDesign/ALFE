@@ -4,7 +4,7 @@ description: >-
   element methods.
 ---
 
-# ALFE User Guide
+# User Guide
 
 Welcome to the ALFE library user guide. This guide covers all the basics like installation and [getting started](https://albertlidesign.gitbook.io/alfe/user-guide/quickstart) with the library. See the API Reference for detailed information on the classes and functions provided by the library.
 
