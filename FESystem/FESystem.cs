@@ -319,7 +319,15 @@ namespace ALFE
             // in each node make a list of elements to which it belongs
             foreach (var elem in Model.Elements)
                 foreach (var node in elem.Nodes)
+                {
+                    // Sign non-design domain
+                    if (node.NonDesign)
+                    {
+                        elem.NonDesign = true;
+                        Model.NonDesignDomain.Add(elem.ID);
+                    }
                     node.ElementID.Add(elem.ID);
+                }
         }
 
         /// <summary>

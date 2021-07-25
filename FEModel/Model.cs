@@ -28,6 +28,11 @@ namespace ALFE
         public List<Support> Supports = new List<Support>();
 
         /// <summary>
+        /// Non-design domain
+        /// </summary>
+        public List<int> NonDesignDomain = new List<int>();
+
+        /// <summary>
         /// Degree of freedom
         /// </summary>
         public int DOF;
@@ -84,6 +89,9 @@ namespace ALFE
             {
                 if (item.DOF != DOF)
                     throw new Exception("The KG_Dim of the model fails to match the KG_Dim of the loads.");
+
+                // Load area should be signed as a non-design domain
+                Nodes[item.NodeID].NonDesign = true;
                 Loads.Add(item);
             }
 
@@ -104,6 +112,9 @@ namespace ALFE
             {
                 if (item.DOF != DOF)
                     throw new Exception("The KG_Dim of the model fails to match the KG_Dim of the loads.");
+
+                // Load area should be signed as a non-design domain
+                Nodes[item.NodeID].NonDesign = true;
                 Loads.Add(item);
             }
         }
@@ -160,8 +171,17 @@ namespace ALFE
         {
             // in each node make a list of elements to which it belongs
             foreach (var elem in Elements)
-            foreach (var node in elem.Nodes)
-                node.ElementID.Add(elem.ID);
+                foreach (var node in elem.Nodes)
+                {
+                    // Sign non-design domain
+                    if (node.NonDesign)
+                    {
+                        elem.NonDesign = true;
+                        NonDesignDomain.Add(elem.ID);
+                    }
+                    node.ElementID.Add(elem.ID);
+                }
+                
         }
         public string ModelInfo()
         {

@@ -9,1150 +9,1150 @@ Rows: 154980
 Cols: 154980
 NNZ: 11824362
 ------------------- Time Cost -------------------
-Computing Ke: 55.1285 ms
-Initializing KG: 457.5494 ms
-Prefiltering: 556.0136 ms
+Computing Ke: 51.5197 ms
+Initializing KG: 477.0123 ms
+Prefiltering: 1338.0883 ms
 
 ################### Step: 0 #####################
 Compliance: 2.30980194183144
 Volume: 0.979978374999931
 ------------------- Time Cost -------------------
-Assembling KG: 429.0622 ms
-Solving: 10426.1245 ms
-Computing Sensitivity: 229.9265 ms
-Fltering Sensitivity: 79.8052 ms
-Marking Elements: 22.4884 ms
-Checking Convergence: 3.5576 ms
+Assembling KG: 567.6541 ms
+Solving: 12006.9433 ms
+Computing Sensitivity: 224.5427 ms
+Fltering Sensitivity: 239.3639 ms
+Marking Elements: 18.9547 ms
+Checking Convergence: 45.5034 ms
 
 ################### Step: 1 #####################
-Compliance: 2.30989258218883
-Volume: 0.96037299999987
+Compliance: 2.30989794053036
+Volume: 0.960414624999866
 ------------------- Time Cost -------------------
-Assembling KG: 384.3196 ms
-Solving: 10229.227 ms
-Computing Sensitivity: 260.4406 ms
-Fltering Sensitivity: 92.0103 ms
-Marking Elements: 20.004 ms
-Checking Convergence: 2.5566 ms
+Assembling KG: 533.2332 ms
+Solving: 10260.6997 ms
+Computing Sensitivity: 266.7108 ms
+Fltering Sensitivity: 239.5008 ms
+Marking Elements: 16.717 ms
+Checking Convergence: 2.5685 ms
 
 ################### Step: 2 #####################
-Compliance: 2.31081883918672
-Volume: 0.941225499999842
+Compliance: 2.31083339029399
+Volume: 0.941183874999832
 ------------------- Time Cost -------------------
-Assembling KG: 409.5438 ms
-Solving: 10535.8088 ms
-Computing Sensitivity: 245.0474 ms
-Fltering Sensitivity: 80.1137 ms
-Marking Elements: 27.2343 ms
-Checking Convergence: 2.636 ms
+Assembling KG: 553.5585 ms
+Solving: 10303.6879 ms
+Computing Sensitivity: 245.0446 ms
+Fltering Sensitivity: 238.0079 ms
+Marking Elements: 16.7906 ms
+Checking Convergence: 2.3762 ms
 
 ################### Step: 3 #####################
-Compliance: 2.31322273285164
-Volume: 0.922369374999827
+Compliance: 2.31308064635654
+Volume: 0.922369374999818
 ------------------- Time Cost -------------------
-Assembling KG: 438.7953 ms
-Solving: 10656.1625 ms
-Computing Sensitivity: 307.2441 ms
-Fltering Sensitivity: 114.0414 ms
-Marking Elements: 31.2809 ms
-Checking Convergence: 2.5778 ms
+Assembling KG: 570.4095 ms
+Solving: 10380.5228 ms
+Computing Sensitivity: 245.1727 ms
+Fltering Sensitivity: 243.4222 ms
+Marking Elements: 16.1298 ms
+Checking Convergence: 2.3563 ms
 
 ################### Step: 4 #####################
-Compliance: 2.31585755335795
-Volume: 0.90388787499981
+Compliance: 2.31648927713853
+Volume: 0.903929499999804
 ------------------- Time Cost -------------------
-Assembling KG: 463.4792 ms
-Solving: 11738.1178 ms
-Computing Sensitivity: 298.6954 ms
-Fltering Sensitivity: 101.3217 ms
-Marking Elements: 26.7267 ms
-Checking Convergence: 3.2537 ms
+Assembling KG: 596.963 ms
+Solving: 10647.9232 ms
+Computing Sensitivity: 237.7486 ms
+Fltering Sensitivity: 236.4049 ms
+Marking Elements: 15.6634 ms
+Checking Convergence: 6.8398 ms
 
 ################### Step: 5 #####################
-Compliance: 2.32011643452984
-Volume: 0.885822624999807
+Compliance: 2.31996763643068
+Volume: 0.885864249999802
 ------------------- Time Cost -------------------
-Assembling KG: 488.1443 ms
-Solving: 10800.0326 ms
-Computing Sensitivity: 267.0461 ms
-Fltering Sensitivity: 84.2401 ms
-Marking Elements: 21.1558 ms
-Checking Convergence: 3.3201 ms
+Assembling KG: 602.5173 ms
+Solving: 10368.004 ms
+Computing Sensitivity: 252.3487 ms
+Fltering Sensitivity: 235.726 ms
+Marking Elements: 16.4879 ms
+Checking Convergence: 3.4436 ms
 
 ################### Step: 6 #####################
-Compliance: 2.3244039331141
-Volume: 0.868090374999811
+Compliance: 2.32513077031364
+Volume: 0.868090374999805
 ------------------- Time Cost -------------------
-Assembling KG: 498.3066 ms
-Solving: 11177.4975 ms
-Computing Sensitivity: 239.0317 ms
-Fltering Sensitivity: 86.7951 ms
-Marking Elements: 25.9051 ms
-Checking Convergence: 7.0539 ms
+Assembling KG: 632.9167 ms
+Solving: 10583.138 ms
+Computing Sensitivity: 291.2314 ms
+Fltering Sensitivity: 256.889 ms
+Marking Elements: 21.2341 ms
+Checking Convergence: 22.2012 ms
 
 ################### Step: 7 #####################
-Compliance: 2.33104228722697
-Volume: 0.850774374999805
+Compliance: 2.33002776494201
+Volume: 0.850732749999801
 ------------------- Time Cost -------------------
-Assembling KG: 518.6771 ms
-Solving: 10826.3904 ms
-Computing Sensitivity: 307.4242 ms
-Fltering Sensitivity: 89.1362 ms
-Marking Elements: 38.2853 ms
-Checking Convergence: 24.5732 ms
+Assembling KG: 653.2284 ms
+Solving: 10303.6474 ms
+Computing Sensitivity: 239.9648 ms
+Fltering Sensitivity: 236.617 ms
+Marking Elements: 15.8101 ms
+Checking Convergence: 3.5693 ms
 
 ################### Step: 8 #####################
-Compliance: 2.33644213004473
-Volume: 0.833708124999815
+Compliance: 2.337357913885
+Volume: 0.833708124999809
 ------------------- Time Cost -------------------
-Assembling KG: 531.63 ms
-Solving: 11055.9239 ms
-Computing Sensitivity: 239.8315 ms
-Fltering Sensitivity: 79.4401 ms
-Marking Elements: 21.4801 ms
-Checking Convergence: 16.1907 ms
+Assembling KG: 659.8942 ms
+Solving: 10405.0243 ms
+Computing Sensitivity: 231.5214 ms
+Fltering Sensitivity: 235.4201 ms
+Marking Elements: 17.7071 ms
+Checking Convergence: 3.7276 ms
 
 ################### Step: 9 #####################
-Compliance: 2.34454332093807
-Volume: 0.817099749999827
+Compliance: 2.34373175299233
+Volume: 0.817099749999822
 ------------------- Time Cost -------------------
-Assembling KG: 560.2341 ms
-Solving: 11281.5131 ms
-Computing Sensitivity: 258.4868 ms
-Fltering Sensitivity: 81.769 ms
-Marking Elements: 29.2909 ms
-Checking Convergence: 4.6196 ms
+Assembling KG: 678.2613 ms
+Solving: 10492.7992 ms
+Computing Sensitivity: 253.2216 ms
+Fltering Sensitivity: 238.9599 ms
+Marking Elements: 16.6254 ms
+Checking Convergence: 4.9765 ms
 
 ################### Step: 10 #####################
-Compliance: 2.35092040359224
-Volume: 0.800741124999841
+Compliance: 2.35046190231969
+Volume: 0.800741124999837
 ------------------- Time Cost -------------------
-Assembling KG: 577.4786 ms
-Solving: 11515.4927 ms
-Computing Sensitivity: 292.9867 ms
-Fltering Sensitivity: 89.8023 ms
-Marking Elements: 31.3058 ms
-Checking Convergence: 19.3086 ms
+Assembling KG: 691.3443 ms
+Solving: 10944.1048 ms
+Computing Sensitivity: 260.3675 ms
+Fltering Sensitivity: 235.7388 ms
+Marking Elements: 16.0806 ms
+Checking Convergence: 4.4709 ms
 
 ################### Step: 11 #####################
-Compliance: 2.35840295706836
-Volume: 0.784715499999839
+Compliance: 2.35787181462386
+Volume: 0.784715499999833
 ------------------- Time Cost -------------------
-Assembling KG: 605.1837 ms
-Solving: 10983.7311 ms
-Computing Sensitivity: 261.3914 ms
-Fltering Sensitivity: 82.3326 ms
-Marking Elements: 21.1147 ms
-Checking Convergence: 42.2111 ms
+Assembling KG: 726.4853 ms
+Solving: 10478.8933 ms
+Computing Sensitivity: 294.3307 ms
+Fltering Sensitivity: 243.6807 ms
+Marking Elements: 16.7529 ms
+Checking Convergence: 26.4577 ms
 
 ################### Step: 12 #####################
-Compliance: 2.36589566661609
-Volume: 0.769022874999856
+Compliance: 2.36602238214415
+Volume: 0.768981249999853
 ------------------- Time Cost -------------------
-Assembling KG: 612.4705 ms
-Solving: 10878.7614 ms
-Computing Sensitivity: 225.9926 ms
-Fltering Sensitivity: 79.3538 ms
-Marking Elements: 22.1363 ms
-Checking Convergence: 7.5054 ms
+Assembling KG: 718.5359 ms
+Solving: 10330.1346 ms
+Computing Sensitivity: 242.2119 ms
+Fltering Sensitivity: 235.7939 ms
+Marking Elements: 18.6487 ms
+Checking Convergence: 4.0733 ms
 
 ################### Step: 13 #####################
-Compliance: 2.37295993479335
-Volume: 0.753621624999879
+Compliance: 2.37289022221951
+Volume: 0.753663249999877
 ------------------- Time Cost -------------------
-Assembling KG: 626.5394 ms
-Solving: 10993.9418 ms
-Computing Sensitivity: 308.2779 ms
-Fltering Sensitivity: 88.3708 ms
-Marking Elements: 29.5663 ms
-Checking Convergence: 117.8836 ms
+Assembling KG: 745.1004 ms
+Solving: 10430.504 ms
+Computing Sensitivity: 224.6408 ms
+Fltering Sensitivity: 239.03 ms
+Marking Elements: 16.0796 ms
+Checking Convergence: 8.0276 ms
 
 ################### Step: 14 #####################
-Compliance: 2.38092164272687
-Volume: 0.738594999999907
+Compliance: 2.38064975700009
+Volume: 0.738553374999905
 ------------------- Time Cost -------------------
-Assembling KG: 646.781 ms
-Solving: 11032.0282 ms
-Computing Sensitivity: 251.1754 ms
-Fltering Sensitivity: 81.8932 ms
-Marking Elements: 19.4595 ms
-Checking Convergence: 100.9047 ms
+Assembling KG: 750.2807 ms
+Solving: 10289.6731 ms
+Computing Sensitivity: 248.5549 ms
+Fltering Sensitivity: 239.5721 ms
+Marking Elements: 15.9008 ms
+Checking Convergence: 4.1777 ms
 
 ################### Step: 15 #####################
-Compliance: 2.38910144954915
-Volume: 0.723818124999938
+Compliance: 2.38820047476593
+Volume: 0.723776499999938
 ------------------- Time Cost -------------------
-Assembling KG: 664.7667 ms
-Solving: 10890.3203 ms
-Computing Sensitivity: 268.4504 ms
-Fltering Sensitivity: 82.2248 ms
-Marking Elements: 33.0028 ms
-Checking Convergence: 96.8354 ms
+Assembling KG: 766.7636 ms
+Solving: 10258.9156 ms
+Computing Sensitivity: 259.9633 ms
+Fltering Sensitivity: 235.1293 ms
+Marking Elements: 19.9862 ms
+Checking Convergence: 4.6095 ms
 
 ################### Step: 16 #####################
-Compliance: 2.39666310520539
-Volume: 0.709332624999975
+Compliance: 2.39631065997254
+Volume: 0.709290999999975
 ------------------- Time Cost -------------------
-Assembling KG: 678.8087 ms
-Solving: 11070.9492 ms
-Computing Sensitivity: 301.1814 ms
-Fltering Sensitivity: 101.3164 ms
-Marking Elements: 25.5334 ms
-Checking Convergence: 98.1596 ms
+Assembling KG: 789.4548 ms
+Solving: 10484.348 ms
+Computing Sensitivity: 285.4895 ms
+Fltering Sensitivity: 258.5042 ms
+Marking Elements: 18.0862 ms
+Checking Convergence: 4.6613 ms
 
 ################### Step: 17 #####################
-Compliance: 2.40504221774016
-Volume: 0.695138500000017
+Compliance: 2.40464300954505
+Volume: 0.695138500000018
 ------------------- Time Cost -------------------
-Assembling KG: 708.5998 ms
-Solving: 10862.0446 ms
-Computing Sensitivity: 232.5948 ms
-Fltering Sensitivity: 78.6058 ms
-Marking Elements: 20.6413 ms
-Checking Convergence: 109.0623 ms
+Assembling KG: 788.1099 ms
+Solving: 10552.9741 ms
+Computing Sensitivity: 251.1437 ms
+Fltering Sensitivity: 237.1431 ms
+Marking Elements: 16.6733 ms
+Checking Convergence: 4.4346 ms
 
 ################### Step: 18 #####################
-Compliance: 2.41348432713252
+Compliance: 2.41351092959913
 Volume: 0.681194125000065
 ------------------- Time Cost -------------------
-Assembling KG: 708.4818 ms
-Solving: 11121.0073 ms
-Computing Sensitivity: 263.0446 ms
-Fltering Sensitivity: 85.7737 ms
-Marking Elements: 28.3348 ms
-Checking Convergence: 4.6994 ms
+Assembling KG: 809.3763 ms
+Solving: 10473.0662 ms
+Computing Sensitivity: 228.2064 ms
+Fltering Sensitivity: 238.8173 ms
+Marking Elements: 16.1017 ms
+Checking Convergence: 8.4968 ms
 
 ################### Step: 19 #####################
-Compliance: 2.42240391567765
-Volume: 0.667624375000068
+Compliance: 2.42184096011408
+Volume: 0.667582750000068
 ------------------- Time Cost -------------------
-Assembling KG: 734.9352 ms
-Solving: 11174.752 ms
-Computing Sensitivity: 295.9266 ms
-Fltering Sensitivity: 97.7951 ms
-Marking Elements: 20.8241 ms
-Checking Convergence: 4.6792 ms
+Assembling KG: 833.0044 ms
+Solving: 10556.5979 ms
+Computing Sensitivity: 244.279 ms
+Fltering Sensitivity: 237.0495 ms
+Marking Elements: 20.6278 ms
+Checking Convergence: 5.7361 ms
 
 ################### Step: 20 #####################
-Compliance: 2.43159606895233
+Compliance: 2.43086749364131
 Volume: 0.65426275000007
 ------------------- Time Cost -------------------
-Assembling KG: 740.9381 ms
-Solving: 11155.3133 ms
-Computing Sensitivity: 255.7182 ms
-Fltering Sensitivity: 86.4277 ms
-Marking Elements: 35.5531 ms
-Checking Convergence: 105.424 ms
+Assembling KG: 837.536 ms
+Solving: 10361.2481 ms
+Computing Sensitivity: 253.0424 ms
+Fltering Sensitivity: 248.8074 ms
+Marking Elements: 16.2397 ms
+Checking Convergence: 4.7482 ms
 
 ################### Step: 21 #####################
-Compliance: 2.44104841810227
+Compliance: 2.44042262118777
 Volume: 0.641192500000073
 ------------------- Time Cost -------------------
-Assembling KG: 759.7128 ms
-Solving: 11204.4235 ms
-Computing Sensitivity: 251.9583 ms
-Fltering Sensitivity: 84.4633 ms
-Marking Elements: 27.2183 ms
-Checking Convergence: 116.165 ms
+Assembling KG: 854.7924 ms
+Solving: 10691.6175 ms
+Computing Sensitivity: 288.1374 ms
+Fltering Sensitivity: 245.1938 ms
+Marking Elements: 15.7735 ms
+Checking Convergence: 5.9388 ms
 
 ################### Step: 22 #####################
-Compliance: 2.45091561071879
+Compliance: 2.45017927970496
 Volume: 0.628330375000076
 ------------------- Time Cost -------------------
-Assembling KG: 825.4888 ms
-Solving: 11349.476 ms
-Computing Sensitivity: 275.9411 ms
-Fltering Sensitivity: 96.8463 ms
-Marking Elements: 21.2572 ms
-Checking Convergence: 112.2612 ms
+Assembling KG: 873.4421 ms
+Solving: 10513.8157 ms
+Computing Sensitivity: 246.121 ms
+Fltering Sensitivity: 235.8534 ms
+Marking Elements: 20.7982 ms
+Checking Convergence: 4.6476 ms
 
 ################### Step: 23 #####################
-Compliance: 2.4606232850725
+Compliance: 2.45964214290373
 Volume: 0.615801250000078
 ------------------- Time Cost -------------------
-Assembling KG: 878.9664 ms
-Solving: 10747.3619 ms
-Computing Sensitivity: 227.5158 ms
-Fltering Sensitivity: 77.6238 ms
-Marking Elements: 19.7422 ms
-Checking Convergence: 112.4293 ms
+Assembling KG: 870.9322 ms
+Solving: 10312.9242 ms
+Computing Sensitivity: 260.5588 ms
+Fltering Sensitivity: 239.9676 ms
+Marking Elements: 16.705 ms
+Checking Convergence: 5.5478 ms
 
 ################### Step: 24 #####################
-Compliance: 2.47107562619786
-Volume: 0.603438625000081
+Compliance: 2.46960649702862
+Volume: 0.603480250000081
 ------------------- Time Cost -------------------
-Assembling KG: 794.8185 ms
-Solving: 10374.9809 ms
-Computing Sensitivity: 221.1836 ms
-Fltering Sensitivity: 78.9117 ms
-Marking Elements: 18.7092 ms
-Checking Convergence: 9.6188 ms
+Assembling KG: 884.1794 ms
+Solving: 10417.3602 ms
+Computing Sensitivity: 245.1542 ms
+Fltering Sensitivity: 238.6911 ms
+Marking Elements: 18.0397 ms
+Checking Convergence: 5.4747 ms
 
 ################### Step: 25 #####################
-Compliance: 2.48144666171339
+Compliance: 2.48030509648658
 Volume: 0.591409000000083
 ------------------- Time Cost -------------------
-Assembling KG: 815.0339 ms
-Solving: 10340.2308 ms
-Computing Sensitivity: 257.0837 ms
-Fltering Sensitivity: 82.8843 ms
-Marking Elements: 19.6854 ms
-Checking Convergence: 5.2832 ms
+Assembling KG: 899.9505 ms
+Solving: 10640.1676 ms
+Computing Sensitivity: 249.6995 ms
+Fltering Sensitivity: 238.1727 ms
+Marking Elements: 18.2241 ms
+Checking Convergence: 5.8839 ms
 
 ################### Step: 26 #####################
-Compliance: 2.49253083748091
-Volume: 0.579587500000086
+Compliance: 2.49147716346732
+Volume: 0.579545875000085
 ------------------- Time Cost -------------------
-Assembling KG: 824.0411 ms
-Solving: 10470.9016 ms
-Computing Sensitivity: 227.5628 ms
-Fltering Sensitivity: 78.6753 ms
-Marking Elements: 19.3679 ms
-Checking Convergence: 10.911 ms
+Assembling KG: 918.1814 ms
+Solving: 10609.3581 ms
+Computing Sensitivity: 292.4495 ms
+Fltering Sensitivity: 240.3132 ms
+Marking Elements: 15.4904 ms
+Checking Convergence: 5.3674 ms
 
 ################### Step: 27 #####################
-Compliance: 2.50403314884947
-Volume: 0.568015750000088
+Compliance: 2.50295149611567
+Volume: 0.567974125000088
 ------------------- Time Cost -------------------
-Assembling KG: 835.0698 ms
-Solving: 10330.4142 ms
-Computing Sensitivity: 242.6437 ms
-Fltering Sensitivity: 79.2656 ms
-Marking Elements: 18.0058 ms
-Checking Convergence: 6.2491 ms
+Assembling KG: 923.3983 ms
+Solving: 10356.59 ms
+Computing Sensitivity: 241.278 ms
+Fltering Sensitivity: 243.8835 ms
+Marking Elements: 19.9141 ms
+Checking Convergence: 5.279 ms
 
 ################### Step: 28 #####################
-Compliance: 2.51536855729324
-Volume: 0.55656887500009
+Compliance: 2.51474191858574
+Volume: 0.55665212500009
 ------------------- Time Cost -------------------
-Assembling KG: 847.0487 ms
-Solving: 10215.2106 ms
-Computing Sensitivity: 264.6611 ms
-Fltering Sensitivity: 87.2619 ms
-Marking Elements: 22.772 ms
-Checking Convergence: 8.6485 ms
+Assembling KG: 943.1558 ms
+Solving: 10263.6466 ms
+Computing Sensitivity: 242.9731 ms
+Fltering Sensitivity: 236.6547 ms
+Marking Elements: 15.5252 ms
+Checking Convergence: 5.7447 ms
 
 ################### Step: 29 #####################
-Compliance: 2.52669240455501
-Volume: 0.545496625000092
+Compliance: 2.52666817124134
+Volume: 0.545455000000093
 ------------------- Time Cost -------------------
-Assembling KG: 852.7223 ms
-Solving: 10396.3366 ms
-Computing Sensitivity: 237.8258 ms
-Fltering Sensitivity: 76.7965 ms
-Marking Elements: 17.9302 ms
-Checking Convergence: 23.42 ms
+Assembling KG: 944.696 ms
+Solving: 10426.9427 ms
+Computing Sensitivity: 244.7269 ms
+Fltering Sensitivity: 238.299 ms
+Marking Elements: 15.1495 ms
+Checking Convergence: 30.1362 ms
 
 ################### Step: 30 #####################
-Compliance: 2.53887626857768
+Compliance: 2.53866129719534
 Volume: 0.534590875000095
 ------------------- Time Cost -------------------
-Assembling KG: 869.8473 ms
-Solving: 10283.5412 ms
-Computing Sensitivity: 240.6933 ms
-Fltering Sensitivity: 85.6115 ms
-Marking Elements: 28.1825 ms
-Checking Convergence: 51.7356 ms
+Assembling KG: 959.8632 ms
+Solving: 10363.7812 ms
+Computing Sensitivity: 260.1757 ms
+Fltering Sensitivity: 247.8142 ms
+Marking Elements: 15.4219 ms
+Checking Convergence: 6.1501 ms
 
 ################### Step: 31 #####################
-Compliance: 2.55156878583202
-Volume: 0.523893250000097
+Compliance: 2.55203928590225
+Volume: 0.523934875000097
 ------------------- Time Cost -------------------
-Assembling KG: 897.8893 ms
-Solving: 10455.797 ms
-Computing Sensitivity: 262.1771 ms
-Fltering Sensitivity: 88.9151 ms
-Marking Elements: 32.8251 ms
-Checking Convergence: 29.9157 ms
+Assembling KG: 965.9014 ms
+Solving: 10473.7008 ms
+Computing Sensitivity: 284.9859 ms
+Fltering Sensitivity: 243.6172 ms
+Marking Elements: 15.532 ms
+Checking Convergence: 6.345 ms
 
 ################### Step: 32 #####################
-Compliance: 2.56440459867192
+Compliance: 2.56469395802677
 Volume: 0.513445375000099
 ------------------- Time Cost -------------------
-Assembling KG: 908.7621 ms
-Solving: 10447.2274 ms
-Computing Sensitivity: 211.5772 ms
-Fltering Sensitivity: 79.8668 ms
-Marking Elements: 18.1446 ms
-Checking Convergence: 20.1307 ms
+Assembling KG: 991.2633 ms
+Solving: 10500.337 ms
+Computing Sensitivity: 242.9103 ms
+Fltering Sensitivity: 240.5459 ms
+Marking Elements: 15.5777 ms
+Checking Convergence: 6.7477 ms
 
 ################### Step: 33 #####################
-Compliance: 2.57744592901811
-Volume: 0.503164000000101
+Compliance: 2.57785196046144
+Volume: 0.503122375000101
 ------------------- Time Cost -------------------
-Assembling KG: 906.1601 ms
-Solving: 10300.3692 ms
-Computing Sensitivity: 250.2356 ms
-Fltering Sensitivity: 78.9129 ms
-Marking Elements: 21.175 ms
-Checking Convergence: 6.4453 ms
+Assembling KG: 997.6244 ms
+Solving: 10431.4181 ms
+Computing Sensitivity: 231.8126 ms
+Fltering Sensitivity: 238.3855 ms
+Marking Elements: 15.6613 ms
+Checking Convergence: 7.2395 ms
 
 ################### Step: 34 #####################
-Compliance: 2.59164903757069
+Compliance: 2.59234523333724
 Volume: 0.493132375000103
 ------------------- Time Cost -------------------
-Assembling KG: 917.8581 ms
-Solving: 10466.4296 ms
-Computing Sensitivity: 243.2419 ms
-Fltering Sensitivity: 82.4177 ms
-Marking Elements: 19.3266 ms
-Checking Convergence: 8.1286 ms
+Assembling KG: 1000.1111 ms
+Solving: 10547.5901 ms
+Computing Sensitivity: 255.7667 ms
+Fltering Sensitivity: 235.6641 ms
+Marking Elements: 17.8959 ms
+Checking Convergence: 6.8684 ms
 
 ################### Step: 35 #####################
-Compliance: 2.60451558602063
-Volume: 0.483184000000105
+Compliance: 2.60695847548331
+Volume: 0.483225625000105
 ------------------- Time Cost -------------------
-Assembling KG: 933.6416 ms
-Solving: 10328.9405 ms
-Computing Sensitivity: 222.1067 ms
-Fltering Sensitivity: 77.1099 ms
-Marking Elements: 17.9732 ms
-Checking Convergence: 7.0321 ms
+Assembling KG: 1006.23 ms
+Solving: 10428.062 ms
+Computing Sensitivity: 256.8076 ms
+Fltering Sensitivity: 241.8228 ms
+Marking Elements: 16.6812 ms
+Checking Convergence: 6.1663 ms
 
 ################### Step: 36 #####################
-Compliance: 2.61829096574575
-Volume: 0.473527000000107
+Compliance: 2.62165061561581
+Volume: 0.473568625000107
 ------------------- Time Cost -------------------
-Assembling KG: 935.8099 ms
-Solving: 10293.5494 ms
-Computing Sensitivity: 226.987 ms
-Fltering Sensitivity: 78.2325 ms
-Marking Elements: 20.6917 ms
-Checking Convergence: 29.7584 ms
+Assembling KG: 1022.3324 ms
+Solving: 10380.1146 ms
+Computing Sensitivity: 293.7787 ms
+Fltering Sensitivity: 244.7042 ms
+Marking Elements: 20.8505 ms
+Checking Convergence: 9.9252 ms
 
 ################### Step: 37 #####################
-Compliance: 2.63258201131081
-Volume: 0.464036500000109
+Compliance: 2.63682329976807
+Volume: 0.464078125000109
 ------------------- Time Cost -------------------
-Assembling KG: 950.2744 ms
-Solving: 10431.8347 ms
-Computing Sensitivity: 266.8192 ms
-Fltering Sensitivity: 91.5489 ms
-Marking Elements: 23.5216 ms
-Checking Convergence: 6.3711 ms
+Assembling KG: 1035.3485 ms
+Solving: 10435.457 ms
+Computing Sensitivity: 252.2008 ms
+Fltering Sensitivity: 235.6463 ms
+Marking Elements: 23.5118 ms
+Checking Convergence: 7.5498 ms
 
 ################### Step: 38 #####################
-Compliance: 2.6472381740052
+Compliance: 2.65214552449573
 Volume: 0.454837375000111
 ------------------- Time Cost -------------------
-Assembling KG: 955.5835 ms
-Solving: 10251.088 ms
-Computing Sensitivity: 228.555 ms
-Fltering Sensitivity: 77.0986 ms
-Marking Elements: 18.2656 ms
-Checking Convergence: 112.8828 ms
+Assembling KG: 1043.7517 ms
+Solving: 10427.2325 ms
+Computing Sensitivity: 338.1885 ms
+Fltering Sensitivity: 240.0677 ms
+Marking Elements: 15.6067 ms
+Checking Convergence: 12.3508 ms
 
 ################### Step: 39 #####################
-Compliance: 2.66165523254959
+Compliance: 2.66785245799563
 Volume: 0.445679875000113
 ------------------- Time Cost -------------------
-Assembling KG: 977.1167 ms
-Solving: 10308.6522 ms
-Computing Sensitivity: 237.9698 ms
-Fltering Sensitivity: 79.0283 ms
-Marking Elements: 21.3013 ms
-Checking Convergence: 11.7323 ms
+Assembling KG: 1046.9265 ms
+Solving: 10520.3589 ms
+Computing Sensitivity: 289.6325 ms
+Fltering Sensitivity: 244.1087 ms
+Marking Elements: 17.6227 ms
+Checking Convergence: 6.8271 ms
 
 ################### Step: 40 #####################
-Compliance: 2.67769861299328
+Compliance: 2.68474083871095
 Volume: 0.436772125000114
 ------------------- Time Cost -------------------
-Assembling KG: 1000.2863 ms
-Solving: 10447.969 ms
-Computing Sensitivity: 257.5611 ms
-Fltering Sensitivity: 84.9938 ms
-Marking Elements: 20.3883 ms
-Checking Convergence: 8.5167 ms
+Assembling KG: 1101.0503 ms
+Solving: 10569.7351 ms
+Computing Sensitivity: 255.2273 ms
+Fltering Sensitivity: 235.5016 ms
+Marking Elements: 15.1943 ms
+Checking Convergence: 6.7945 ms
 
 ################### Step: 41 #####################
-Compliance: 2.69411657580054
-Volume: 0.428030875000116
+Compliance: 2.70200019571288
+Volume: 0.428072500000116
 ------------------- Time Cost -------------------
-Assembling KG: 990.6259 ms
-Solving: 10297.5042 ms
-Computing Sensitivity: 226.0655 ms
-Fltering Sensitivity: 80.4028 ms
-Marking Elements: 18.3843 ms
-Checking Convergence: 11.4347 ms
-
-################### Step: 42 #####################
-Compliance: 2.71049420875864
-Volume: 0.419497750000118
-------------------- Time Cost -------------------
-Assembling KG: 1001.958 ms
-Solving: 10679.8823 ms
-Computing Sensitivity: 272.3141 ms
-Fltering Sensitivity: 78.1848 ms
-Marking Elements: 18.2601 ms
-Checking Convergence: 112.0485 ms
-
-################### Step: 43 #####################
-Compliance: 2.7266040123886
-Volume: 0.411131125000119
-------------------- Time Cost -------------------
-Assembling KG: 1010.6959 ms
-Solving: 10262.695 ms
-Computing Sensitivity: 265.1478 ms
-Fltering Sensitivity: 93.6657 ms
-Marking Elements: 20.1051 ms
-Checking Convergence: 11.326 ms
-
-################### Step: 44 #####################
-Compliance: 2.74346448618908
-Volume: 0.402847750000121
-------------------- Time Cost -------------------
-Assembling KG: 1030.5178 ms
-Solving: 10368.6365 ms
-Computing Sensitivity: 238.0876 ms
-Fltering Sensitivity: 76.799 ms
-Marking Elements: 20.6664 ms
-Checking Convergence: 13.4866 ms
-
-################### Step: 45 #####################
-Compliance: 2.76283860047373
-Volume: 0.394814125000123
-------------------- Time Cost -------------------
-Assembling KG: 1035.3756 ms
-Solving: 10984.5534 ms
-Computing Sensitivity: 255.1959 ms
-Fltering Sensitivity: 79.8963 ms
-Marking Elements: 20.3372 ms
-Checking Convergence: 7.0991 ms
-
-################### Step: 46 #####################
-Compliance: 2.77878082885323
-Volume: 0.386947000000124
-------------------- Time Cost -------------------
-Assembling KG: 1071.4721 ms
-Solving: 11061.0949 ms
-Computing Sensitivity: 290.1891 ms
-Fltering Sensitivity: 90.1288 ms
-Marking Elements: 24.5134 ms
-Checking Convergence: 10.6182 ms
-
-################### Step: 47 #####################
-Compliance: 2.797394418199
-Volume: 0.379163125000126
-------------------- Time Cost -------------------
-Assembling KG: 1062.8283 ms
-Solving: 10961.5567 ms
-Computing Sensitivity: 274.8087 ms
-Fltering Sensitivity: 77.5221 ms
-Marking Elements: 18.2679 ms
-Checking Convergence: 116.0668 ms
-
-################### Step: 48 #####################
-Compliance: 2.81611899687369
-Volume: 0.371629000000127
-------------------- Time Cost -------------------
-Assembling KG: 1059.4059 ms
-Solving: 10464.9763 ms
-Computing Sensitivity: 279.8514 ms
-Fltering Sensitivity: 77.0748 ms
-Marking Elements: 22.668 ms
-Checking Convergence: 7.8466 ms
-
-################### Step: 49 #####################
-Compliance: 2.83460956282264
-Volume: 0.364178125000129
-------------------- Time Cost -------------------
-Assembling KG: 1071.1474 ms
-Solving: 10220.0057 ms
-Computing Sensitivity: 260.9743 ms
-Fltering Sensitivity: 86.2707 ms
-Marking Elements: 24.2373 ms
-Checking Convergence: 9.2669 ms
-
-################### Step: 50 #####################
-Compliance: 2.85460860863872
-Volume: 0.35685212500013
-------------------- Time Cost -------------------
-Assembling KG: 1074.4596 ms
-Solving: 10330.3699 ms
-Computing Sensitivity: 245.1158 ms
-Fltering Sensitivity: 78.451 ms
-Marking Elements: 21.562 ms
-Checking Convergence: 7.3785 ms
-
-################### Step: 51 #####################
-Compliance: 2.87494070494275
-Volume: 0.349775875000131
-------------------- Time Cost -------------------
-Assembling KG: 1086.7199 ms
-Solving: 10361.1837 ms
-Computing Sensitivity: 254.8189 ms
-Fltering Sensitivity: 78.0221 ms
-Marking Elements: 18.1768 ms
-Checking Convergence: 7.2349 ms
-
-################### Step: 52 #####################
-Compliance: 2.89461084922094
-Volume: 0.342782875000133
-------------------- Time Cost -------------------
-Assembling KG: 1090.9078 ms
-Solving: 10290.1475 ms
-Computing Sensitivity: 262.8987 ms
-Fltering Sensitivity: 84.7545 ms
-Marking Elements: 19.4604 ms
-Checking Convergence: 9.1272 ms
-
-################### Step: 53 #####################
-Compliance: 2.91588337062732
-Volume: 0.335873125000134
-------------------- Time Cost -------------------
-Assembling KG: 1097.1441 ms
-Solving: 10491.9918 ms
-Computing Sensitivity: 290.004 ms
-Fltering Sensitivity: 78.1215 ms
-Marking Elements: 19.0776 ms
-Checking Convergence: 7.0477 ms
-
-################### Step: 54 #####################
-Compliance: 2.93875245020025
-Volume: 0.329171500000135
-------------------- Time Cost -------------------
-Assembling KG: 1117.7988 ms
-Solving: 10274.4818 ms
-Computing Sensitivity: 251.4417 ms
-Fltering Sensitivity: 79.0465 ms
-Marking Elements: 18.1957 ms
-Checking Convergence: 7.0175 ms
-
-################### Step: 55 #####################
-Compliance: 2.96228662842277
-Volume: 0.322636375000137
-------------------- Time Cost -------------------
-Assembling KG: 1108.8566 ms
-Solving: 10396.0463 ms
-Computing Sensitivity: 274.6158 ms
-Fltering Sensitivity: 115.7703 ms
-Marking Elements: 23.0762 ms
-Checking Convergence: 10.3448 ms
-
-################### Step: 56 #####################
-Compliance: 2.9857626387577
-Volume: 0.316184500000138
-------------------- Time Cost -------------------
-Assembling KG: 1130.4876 ms
-Solving: 10337.9206 ms
-Computing Sensitivity: 248.8327 ms
-Fltering Sensitivity: 77.6544 ms
-Marking Elements: 19.391 ms
-Checking Convergence: 7.8027 ms
-
-################### Step: 57 #####################
-Compliance: 3.00962052393359
-Volume: 0.309815875000139
-------------------- Time Cost -------------------
-Assembling KG: 1130.8218 ms
-Solving: 10352.5523 ms
-Computing Sensitivity: 246.7824 ms
-Fltering Sensitivity: 77.4994 ms
-Marking Elements: 25.4257 ms
-Checking Convergence: 36.3436 ms
-
-################### Step: 58 #####################
-Compliance: 3.03376202958915
-Volume: 0.30365537500014
-------------------- Time Cost -------------------
-Assembling KG: 1142.0024 ms
-Solving: 10379.5613 ms
-Computing Sensitivity: 274.2639 ms
-Fltering Sensitivity: 85.9642 ms
-Marking Elements: 18.9815 ms
-Checking Convergence: 10.2518 ms
-
-################### Step: 59 #####################
-Compliance: 3.05820919931338
-Volume: 0.297536500000141
-------------------- Time Cost -------------------
-Assembling KG: 1138.8196 ms
-Solving: 10557.2954 ms
-Computing Sensitivity: 311.6922 ms
-Fltering Sensitivity: 78.0978 ms
-Marking Elements: 22.8599 ms
-Checking Convergence: 7.6503 ms
-
-################### Step: 60 #####################
-Compliance: 3.08358178367418
-Volume: 0.291584125000143
-------------------- Time Cost -------------------
-Assembling KG: 1172.0708 ms
-Solving: 10187.9153 ms
-Computing Sensitivity: 262.2738 ms
-Fltering Sensitivity: 78.5511 ms
-Marking Elements: 17.1608 ms
+Assembling KG: 1069.6799 ms
+Solving: 10396.8916 ms
+Computing Sensitivity: 292.9878 ms
+Fltering Sensitivity: 240.315 ms
+Marking Elements: 15.2148 ms
 Checking Convergence: 7.4323 ms
 
-################### Step: 61 #####################
-Compliance: 3.11083531201251
-Volume: 0.285798250000144
+################### Step: 42 #####################
+Compliance: 2.71986865119367
+Volume: 0.419497750000118
 ------------------- Time Cost -------------------
-Assembling KG: 1166.6097 ms
-Solving: 10371.2471 ms
-Computing Sensitivity: 280.7049 ms
-Fltering Sensitivity: 91.1064 ms
-Marking Elements: 19.8528 ms
-Checking Convergence: 9.784 ms
+Assembling KG: 1088.1491 ms
+Solving: 10831.0474 ms
+Computing Sensitivity: 251.9266 ms
+Fltering Sensitivity: 245.2049 ms
+Marking Elements: 14.7945 ms
+Checking Convergence: 6.7093 ms
+
+################### Step: 43 #####################
+Compliance: 2.73680598624414
+Volume: 0.411131125000119
+------------------- Time Cost -------------------
+Assembling KG: 1086.3574 ms
+Solving: 10386.4215 ms
+Computing Sensitivity: 256.0071 ms
+Fltering Sensitivity: 239.5994 ms
+Marking Elements: 15.3218 ms
+Checking Convergence: 10.1007 ms
+
+################### Step: 44 #####################
+Compliance: 2.75525391443053
+Volume: 0.402847750000121
+------------------- Time Cost -------------------
+Assembling KG: 1092.2864 ms
+Solving: 10300.9559 ms
+Computing Sensitivity: 398.4239 ms
+Fltering Sensitivity: 235.8066 ms
+Marking Elements: 15.0515 ms
+Checking Convergence: 113.764 ms
+
+################### Step: 45 #####################
+Compliance: 2.77437603020471
+Volume: 0.394814125000123
+------------------- Time Cost -------------------
+Assembling KG: 1094.8805 ms
+Solving: 10619.324 ms
+Computing Sensitivity: 281.4364 ms
+Fltering Sensitivity: 239.8706 ms
+Marking Elements: 15.134 ms
+Checking Convergence: 6.8019 ms
+
+################### Step: 46 #####################
+Compliance: 2.79364220347226
+Volume: 0.386905375000124
+------------------- Time Cost -------------------
+Assembling KG: 1105.2439 ms
+Solving: 10559.4812 ms
+Computing Sensitivity: 264.5392 ms
+Fltering Sensitivity: 236.3807 ms
+Marking Elements: 16.0159 ms
+Checking Convergence: 14.0077 ms
+
+################### Step: 47 #####################
+Compliance: 2.81328450673379
+Volume: 0.379204750000126
+------------------- Time Cost -------------------
+Assembling KG: 1128.3948 ms
+Solving: 10553.7254 ms
+Computing Sensitivity: 263.3024 ms
+Fltering Sensitivity: 237.5737 ms
+Marking Elements: 17.4656 ms
+Checking Convergence: 7.565 ms
+
+################### Step: 48 #####################
+Compliance: 2.83195771210165
+Volume: 0.371587375000127
+------------------- Time Cost -------------------
+Assembling KG: 1119.2552 ms
+Solving: 10730.6349 ms
+Computing Sensitivity: 252.942 ms
+Fltering Sensitivity: 234.975 ms
+Marking Elements: 14.9157 ms
+Checking Convergence: 27.6729 ms
+
+################### Step: 49 #####################
+Compliance: 2.85220559714216
+Volume: 0.364178125000128
+------------------- Time Cost -------------------
+Assembling KG: 1123.7681 ms
+Solving: 10494.5156 ms
+Computing Sensitivity: 274.1298 ms
+Fltering Sensitivity: 241.2037 ms
+Marking Elements: 15.7164 ms
+Checking Convergence: 10.3078 ms
+
+################### Step: 50 #####################
+Compliance: 2.87401452383585
+Volume: 0.35689375000013
+------------------- Time Cost -------------------
+Assembling KG: 1129.7249 ms
+Solving: 10640.965 ms
+Computing Sensitivity: 354.1625 ms
+Fltering Sensitivity: 234.7581 ms
+Marking Elements: 15.0026 ms
+Checking Convergence: 6.8847 ms
+
+################### Step: 51 #####################
+Compliance: 2.89354345767268
+Volume: 0.349734250000131
+------------------- Time Cost -------------------
+Assembling KG: 1148.7015 ms
+Solving: 10496.444 ms
+Computing Sensitivity: 253.9042 ms
+Fltering Sensitivity: 237.6934 ms
+Marking Elements: 16.4516 ms
+Checking Convergence: 8.6716 ms
+
+################### Step: 52 #####################
+Compliance: 2.91622457090999
+Volume: 0.342782875000132
+------------------- Time Cost -------------------
+Assembling KG: 1156.7957 ms
+Solving: 10315.4033 ms
+Computing Sensitivity: 269.4208 ms
+Fltering Sensitivity: 236.3518 ms
+Marking Elements: 18.0693 ms
+Checking Convergence: 44.1172 ms
+
+################### Step: 53 #####################
+Compliance: 2.93811247886169
+Volume: 0.335873125000134
+------------------- Time Cost -------------------
+Assembling KG: 1153.7913 ms
+Solving: 10437.7395 ms
+Computing Sensitivity: 293.8952 ms
+Fltering Sensitivity: 252.7484 ms
+Marking Elements: 15.18 ms
+Checking Convergence: 7.4109 ms
+
+################### Step: 54 #####################
+Compliance: 2.96276979296486
+Volume: 0.329171500000135
+------------------- Time Cost -------------------
+Assembling KG: 1198.7616 ms
+Solving: 11117.1122 ms
+Computing Sensitivity: 262.9098 ms
+Fltering Sensitivity: 255.8218 ms
+Marking Elements: 18.5856 ms
+Checking Convergence: 7.568 ms
+
+################### Step: 55 #####################
+Compliance: 2.98485454687043
+Volume: 0.322594750000136
+------------------- Time Cost -------------------
+Assembling KG: 1170.4038 ms
+Solving: 11291.2957 ms
+Computing Sensitivity: 322.6449 ms
+Fltering Sensitivity: 256.4215 ms
+Marking Elements: 20.1125 ms
+Checking Convergence: 14.308 ms
+
+################### Step: 56 #####################
+Compliance: 3.01154909928846
+Volume: 0.316184500000137
+------------------- Time Cost -------------------
+Assembling KG: 1201.2388 ms
+Solving: 11542.2539 ms
+Computing Sensitivity: 266.9749 ms
+Fltering Sensitivity: 237.7062 ms
+Marking Elements: 15.2816 ms
+Checking Convergence: 30.2715 ms
+
+################### Step: 57 #####################
+Compliance: 3.03225616248581
+Volume: 0.309815875000139
+------------------- Time Cost -------------------
+Assembling KG: 1191.7833 ms
+Solving: 10726.3063 ms
+Computing Sensitivity: 277.938 ms
+Fltering Sensitivity: 259.6308 ms
+Marking Elements: 21.3358 ms
+Checking Convergence: 8.3827 ms
+
+################### Step: 58 #####################
+Compliance: 3.06110953686532
+Volume: 0.30365537500014
+------------------- Time Cost -------------------
+Assembling KG: 1215.8859 ms
+Solving: 11914.2482 ms
+Computing Sensitivity: 278.4063 ms
+Fltering Sensitivity: 237.8303 ms
+Marking Elements: 14.4726 ms
+Checking Convergence: 11.8259 ms
+
+################### Step: 59 #####################
+Compliance: 3.08306185475223
+Volume: 0.297578125000141
+------------------- Time Cost -------------------
+Assembling KG: 1228.0795 ms
+Solving: 11919.0994 ms
+Computing Sensitivity: 273.5595 ms
+Fltering Sensitivity: 263.7889 ms
+Marking Elements: 20.8907 ms
+Checking Convergence: 7.8272 ms
+
+################### Step: 60 #####################
+Compliance: 3.11347574188145
+Volume: 0.291584125000142
+------------------- Time Cost -------------------
+Assembling KG: 1247.9952 ms
+Solving: 10885.8181 ms
+Computing Sensitivity: 270.7874 ms
+Fltering Sensitivity: 242.4379 ms
+Marking Elements: 21.0872 ms
+Checking Convergence: 21.3884 ms
+
+################### Step: 61 #####################
+Compliance: 3.13688085207077
+Volume: 0.285756625000143
+------------------- Time Cost -------------------
+Assembling KG: 1209.6953 ms
+Solving: 10873.7678 ms
+Computing Sensitivity: 279.7647 ms
+Fltering Sensitivity: 247.3707 ms
+Marking Elements: 14.6399 ms
+Checking Convergence: 10.8073 ms
 
 ################### Step: 62 #####################
-Compliance: 3.13657999160253
-Volume: 0.280095625000145
+Compliance: 3.16774563087285
+Volume: 0.280095625000144
 ------------------- Time Cost -------------------
-Assembling KG: 1184.8351 ms
-Solving: 10485.2813 ms
-Computing Sensitivity: 261.2599 ms
-Fltering Sensitivity: 78.9737 ms
-Marking Elements: 18.725 ms
-Checking Convergence: 9.7719 ms
+Assembling KG: 1226.1217 ms
+Solving: 10787.2017 ms
+Computing Sensitivity: 288.3884 ms
+Fltering Sensitivity: 236.5636 ms
+Marking Elements: 14.9399 ms
+Checking Convergence: 12.9475 ms
 
 ################### Step: 63 #####################
-Compliance: 3.16325252069165
-Volume: 0.274476250000146
+Compliance: 3.19299002375873
+Volume: 0.274434625000145
 ------------------- Time Cost -------------------
-Assembling KG: 1172.9341 ms
-Solving: 10284.4299 ms
-Computing Sensitivity: 260.4995 ms
-Fltering Sensitivity: 78.7456 ms
-Marking Elements: 19.5855 ms
-Checking Convergence: 8.6825 ms
+Assembling KG: 1220.5793 ms
+Solving: 10503.3574 ms
+Computing Sensitivity: 270.4712 ms
+Fltering Sensitivity: 234.826 ms
+Marking Elements: 14.656 ms
+Checking Convergence: 7.4309 ms
 
 ################### Step: 64 #####################
-Compliance: 3.19058919151981
-Volume: 0.268981750000147
+Compliance: 3.23169054784793
+Volume: 0.268981750000146
 ------------------- Time Cost -------------------
-Assembling KG: 1183.0454 ms
-Solving: 10453.1517 ms
-Computing Sensitivity: 270.1288 ms
-Fltering Sensitivity: 87.1428 ms
-Marking Elements: 24.2107 ms
-Checking Convergence: 8.3418 ms
+Assembling KG: 1244.0835 ms
+Solving: 10381.1408 ms
+Computing Sensitivity: 264.328 ms
+Fltering Sensitivity: 236.6869 ms
+Marking Elements: 18.0044 ms
+Checking Convergence: 112.3511 ms
 
 ################### Step: 65 #####################
-Compliance: 3.22059761706002
-Volume: 0.263570500000148
+Compliance: 3.25486298988647
+Volume: 0.263612125000147
 ------------------- Time Cost -------------------
-Assembling KG: 1190.7347 ms
-Solving: 10427.8715 ms
-Computing Sensitivity: 370.9545 ms
-Fltering Sensitivity: 79.3054 ms
-Marking Elements: 25.0278 ms
-Checking Convergence: 10.4382 ms
+Assembling KG: 1234.2886 ms
+Solving: 10392.3629 ms
+Computing Sensitivity: 284.2459 ms
+Fltering Sensitivity: 254.7222 ms
+Marking Elements: 14.4106 ms
+Checking Convergence: 10.9901 ms
 
 ################### Step: 66 #####################
-Compliance: 3.25001723302947
-Volume: 0.258284125000149
+Compliance: 3.29262118972339
+Volume: 0.258284125000148
 ------------------- Time Cost -------------------
-Assembling KG: 1187.9531 ms
-Solving: 10483.4166 ms
-Computing Sensitivity: 295.3542 ms
-Fltering Sensitivity: 78.8718 ms
-Marking Elements: 17.0527 ms
-Checking Convergence: 8.2218 ms
+Assembling KG: 1240.1917 ms
+Solving: 10358.91 ms
+Computing Sensitivity: 292.0024 ms
+Fltering Sensitivity: 241.7953 ms
+Marking Elements: 15.8769 ms
+Checking Convergence: 12.9351 ms
 
 ################### Step: 67 #####################
-Compliance: 3.28032662143989
-Volume: 0.25312262500015
+Compliance: 3.31726019306392
+Volume: 0.253122625000149
 ------------------- Time Cost -------------------
-Assembling KG: 1202.9353 ms
-Solving: 10235.0369 ms
-Computing Sensitivity: 275.4061 ms
-Fltering Sensitivity: 85.9562 ms
-Marking Elements: 19.0291 ms
-Checking Convergence: 8.1339 ms
+Assembling KG: 1241.0461 ms
+Solving: 10313.0838 ms
+Computing Sensitivity: 364.5329 ms
+Fltering Sensitivity: 238.7973 ms
+Marking Elements: 14.9125 ms
+Checking Convergence: 7.5546 ms
 
 ################### Step: 68 #####################
-Compliance: 3.31590006981122
-Volume: 0.248086000000151
+Compliance: 3.40201041506056
+Volume: 0.248086000000149
 ------------------- Time Cost -------------------
-Assembling KG: 1213.5282 ms
-Solving: 10260.4707 ms
-Computing Sensitivity: 243.9478 ms
-Fltering Sensitivity: 78.6312 ms
-Marking Elements: 17.0853 ms
-Checking Convergence: 7.9931 ms
+Assembling KG: 1245.1318 ms
+Solving: 10561.4068 ms
+Computing Sensitivity: 263.9196 ms
+Fltering Sensitivity: 242.1575 ms
+Marking Elements: 18.8865 ms
+Checking Convergence: 109.3251 ms
 
 ################### Step: 69 #####################
-Compliance: 3.3455558680032
-Volume: 0.243091000000152
+Compliance: 3.411540295127
+Volume: 0.24309100000015
 ------------------- Time Cost -------------------
-Assembling KG: 1210.7369 ms
-Solving: 10416.7255 ms
-Computing Sensitivity: 266.5125 ms
-Fltering Sensitivity: 77.2253 ms
-Marking Elements: 21.5573 ms
-Checking Convergence: 11.1772 ms
+Assembling KG: 1251.5843 ms
+Solving: 10496.982 ms
+Computing Sensitivity: 273.2754 ms
+Fltering Sensitivity: 241.0285 ms
+Marking Elements: 14.6801 ms
+Checking Convergence: 11.2354 ms
 
 ################### Step: 70 #####################
-Compliance: 3.38165000084739
-Volume: 0.238262500000152
+Compliance: 3.44023884455644
+Volume: 0.238220875000151
 ------------------- Time Cost -------------------
-Assembling KG: 1216.1219 ms
-Solving: 10427.7244 ms
-Computing Sensitivity: 288.9013 ms
-Fltering Sensitivity: 100.2053 ms
-Marking Elements: 22.3331 ms
-Checking Convergence: 10.0798 ms
+Assembling KG: 1256.2608 ms
+Solving: 10540.1832 ms
+Computing Sensitivity: 272.6177 ms
+Fltering Sensitivity: 236.2385 ms
+Marking Elements: 14.6169 ms
+Checking Convergence: 10.4248 ms
 
 ################### Step: 71 #####################
-Compliance: 3.41153575549021
-Volume: 0.233517250000153
+Compliance: 3.4732432790911
+Volume: 0.233475625000151
 ------------------- Time Cost -------------------
-Assembling KG: 1223.0295 ms
-Solving: 10538.1459 ms
-Computing Sensitivity: 293.0155 ms
-Fltering Sensitivity: 77.5283 ms
-Marking Elements: 18.778 ms
-Checking Convergence: 110.058 ms
+Assembling KG: 1267.3677 ms
+Solving: 10864.6596 ms
+Computing Sensitivity: 268.844 ms
+Fltering Sensitivity: 235.1996 ms
+Marking Elements: 14.6359 ms
+Checking Convergence: 8.0385 ms
 
 ################### Step: 72 #####################
-Compliance: 3.44375225845546
-Volume: 0.228855250000154
+Compliance: 3.51157834971646
+Volume: 0.228813625000152
 ------------------- Time Cost -------------------
-Assembling KG: 1218.6257 ms
-Solving: 10347.4482 ms
-Computing Sensitivity: 269.535 ms
-Fltering Sensitivity: 78.0717 ms
-Marking Elements: 19.2607 ms
-Checking Convergence: 8.6986 ms
+Assembling KG: 1270.1506 ms
+Solving: 10401.549 ms
+Computing Sensitivity: 268.0956 ms
+Fltering Sensitivity: 235.5689 ms
+Marking Elements: 14.9476 ms
+Checking Convergence: 110.1675 ms
 
 ################### Step: 73 #####################
-Compliance: 3.47806046851454
-Volume: 0.224234875000154
+Compliance: 3.5756425862684
+Volume: 0.224234875000153
 ------------------- Time Cost -------------------
-Assembling KG: 1226.5994 ms
-Solving: 10359.1999 ms
-Computing Sensitivity: 279.3799 ms
-Fltering Sensitivity: 92.614 ms
-Marking Elements: 27.3035 ms
-Checking Convergence: 12.664 ms
+Assembling KG: 1276.4457 ms
+Solving: 10308.5762 ms
+Computing Sensitivity: 312.8112 ms
+Fltering Sensitivity: 253.971 ms
+Marking Elements: 14.6635 ms
+Checking Convergence: 10.36 ms
 
 ################### Step: 74 #####################
-Compliance: 3.51371558917422
-Volume: 0.219781000000155
+Compliance: 3.59529263428498
+Volume: 0.219781000000153
 ------------------- Time Cost -------------------
-Assembling KG: 1231.1508 ms
-Solving: 10382.0913 ms
-Computing Sensitivity: 263.7952 ms
-Fltering Sensitivity: 82.4232 ms
-Marking Elements: 17.2501 ms
-Checking Convergence: 106.2815 ms
+Assembling KG: 1280.2312 ms
+Solving: 10796.4603 ms
+Computing Sensitivity: 273.7538 ms
+Fltering Sensitivity: 237.2995 ms
+Marking Elements: 15.0752 ms
+Checking Convergence: 16.2755 ms
 
 ################### Step: 75 #####################
-Compliance: 3.55128172351987
-Volume: 0.215327125000156
+Compliance: 3.6490479385667
+Volume: 0.215327125000154
 ------------------- Time Cost -------------------
-Assembling KG: 1249.1497 ms
-Solving: 10254.6265 ms
-Computing Sensitivity: 262.2595 ms
-Fltering Sensitivity: 80.6615 ms
-Marking Elements: 17.2679 ms
-Checking Convergence: 8.229 ms
+Assembling KG: 1286.5435 ms
+Solving: 10762.1364 ms
+Computing Sensitivity: 267.9588 ms
+Fltering Sensitivity: 247.0339 ms
+Marking Elements: 20.4923 ms
+Checking Convergence: 9.041 ms
 
 ################### Step: 76 #####################
-Compliance: 3.58871070278109
-Volume: 0.211081375000156
+Compliance: 3.69049009994331
+Volume: 0.211123000000155
 ------------------- Time Cost -------------------
-Assembling KG: 1244.0392 ms
-Solving: 10403.0308 ms
-Computing Sensitivity: 277.3466 ms
-Fltering Sensitivity: 91.9715 ms
-Marking Elements: 19.2328 ms
-Checking Convergence: 102.1571 ms
+Assembling KG: 1295.9863 ms
+Solving: 10435.5448 ms
+Computing Sensitivity: 259.3538 ms
+Fltering Sensitivity: 243.1785 ms
+Marking Elements: 14.4408 ms
+Checking Convergence: 111.8248 ms
 
 ################### Step: 77 #####################
-Compliance: 3.62781544838223
-Volume: 0.206794000000157
+Compliance: 3.72575598255355
+Volume: 0.206835625000155
 ------------------- Time Cost -------------------
-Assembling KG: 1251.7533 ms
-Solving: 10221.147 ms
-Computing Sensitivity: 267.5996 ms
-Fltering Sensitivity: 78.132 ms
-Marking Elements: 16.3237 ms
-Checking Convergence: 13.6607 ms
+Assembling KG: 1294.5283 ms
+Solving: 10345.3369 ms
+Computing Sensitivity: 287.3412 ms
+Fltering Sensitivity: 245.8623 ms
+Marking Elements: 14.4237 ms
+Checking Convergence: 12.2381 ms
 
 ################### Step: 78 #####################
-Compliance: 3.665935085882
-Volume: 0.202714750000157
+Compliance: 3.76624962956197
+Volume: 0.202673125000156
 ------------------- Time Cost -------------------
-Assembling KG: 1259.7876 ms
-Solving: 10269.531 ms
-Computing Sensitivity: 255.135 ms
-Fltering Sensitivity: 77.656 ms
-Marking Elements: 18.7432 ms
-Checking Convergence: 10.5532 ms
+Assembling KG: 1300.1667 ms
+Solving: 10531.8645 ms
+Computing Sensitivity: 279.7419 ms
+Fltering Sensitivity: 236.2073 ms
+Marking Elements: 14.2131 ms
+Checking Convergence: 11.6402 ms
 
 ################### Step: 79 #####################
-Compliance: 3.70455638682661
-Volume: 0.198677125000158
+Compliance: 3.80877516367697
+Volume: 0.198635500000157
 ------------------- Time Cost -------------------
-Assembling KG: 1259.2755 ms
-Solving: 10446.2849 ms
-Computing Sensitivity: 282.0864 ms
-Fltering Sensitivity: 96.3536 ms
-Marking Elements: 18.1768 ms
-Checking Convergence: 8.7503 ms
+Assembling KG: 1307.9835 ms
+Solving: 10340.2891 ms
+Computing Sensitivity: 367.437 ms
+Fltering Sensitivity: 237.0093 ms
+Marking Elements: 14.2758 ms
+Checking Convergence: 9.4591 ms
 
 ################### Step: 80 #####################
-Compliance: 3.74502591313796
-Volume: 0.194639500000158
+Compliance: 3.84722300743525
+Volume: 0.194639500000157
 ------------------- Time Cost -------------------
-Assembling KG: 1264.9795 ms
-Solving: 10320.5799 ms
-Computing Sensitivity: 252.9987 ms
-Fltering Sensitivity: 76.6724 ms
-Marking Elements: 16.5557 ms
-Checking Convergence: 9.3066 ms
+Assembling KG: 1299.8893 ms
+Solving: 10465.0829 ms
+Computing Sensitivity: 267.059 ms
+Fltering Sensitivity: 242.5155 ms
+Marking Elements: 14.2506 ms
+Checking Convergence: 105.628 ms
 
 ################### Step: 81 #####################
-Compliance: 3.78650341749807
-Volume: 0.190810000000159
+Compliance: 3.89696833080613
+Volume: 0.190768375000158
 ------------------- Time Cost -------------------
-Assembling KG: 1266.1459 ms
-Solving: 10265.9524 ms
-Computing Sensitivity: 238.0487 ms
-Fltering Sensitivity: 77.1193 ms
-Marking Elements: 24.9007 ms
-Checking Convergence: 13.9095 ms
+Assembling KG: 1315.8689 ms
+Solving: 10928.4706 ms
+Computing Sensitivity: 267.351 ms
+Fltering Sensitivity: 246.1161 ms
+Marking Elements: 14.0792 ms
+Checking Convergence: 8.6881 ms
 
 ################### Step: 82 #####################
-Compliance: 3.82977914818366
-Volume: 0.186980500000159
+Compliance: 3.95435752614079
+Volume: 0.186980500000158
 ------------------- Time Cost -------------------
-Assembling KG: 1267.3095 ms
-Solving: 10358.0226 ms
-Computing Sensitivity: 282.1339 ms
-Fltering Sensitivity: 82.7507 ms
-Marking Elements: 23.776 ms
-Checking Convergence: 10.325 ms
+Assembling KG: 1312.2937 ms
+Solving: 10493.7364 ms
+Computing Sensitivity: 277.4887 ms
+Fltering Sensitivity: 236.658 ms
+Marking Elements: 15.2756 ms
+Checking Convergence: 11.7907 ms
 
 ################### Step: 83 #####################
-Compliance: 3.88653614608442
-Volume: 0.18319262500016
+Compliance: 3.9967661232242
+Volume: 0.183192625000159
 ------------------- Time Cost -------------------
-Assembling KG: 1269.6265 ms
-Solving: 10650.7991 ms
-Computing Sensitivity: 255.6017 ms
-Fltering Sensitivity: 77.8182 ms
-Marking Elements: 16.4739 ms
-Checking Convergence: 10.5674 ms
+Assembling KG: 1319.1632 ms
+Solving: 10362.4191 ms
+Computing Sensitivity: 276.5949 ms
+Fltering Sensitivity: 234.2823 ms
+Marking Elements: 15.4676 ms
+Checking Convergence: 12.0453 ms
 
 ################### Step: 84 #####################
-Compliance: 3.94363266683575
-Volume: 0.17952962500016
+Compliance: 4.03786902118133
+Volume: 0.179571250000159
 ------------------- Time Cost -------------------
-Assembling KG: 1286.376 ms
-Solving: 10333.7846 ms
-Computing Sensitivity: 271.1263 ms
-Fltering Sensitivity: 77.6839 ms
-Marking Elements: 17.9306 ms
-Checking Convergence: 34.9607 ms
+Assembling KG: 1314.0797 ms
+Solving: 10565.7684 ms
+Computing Sensitivity: 292.2942 ms
+Fltering Sensitivity: 266.3676 ms
+Marking Elements: 21.2369 ms
+Checking Convergence: 102.4736 ms
 
 ################### Step: 85 #####################
-Compliance: 3.97952238971773
-Volume: 0.17599150000016
+Compliance: 4.0823252957628
+Volume: 0.175991500000158
 ------------------- Time Cost -------------------
-Assembling KG: 1288.0729 ms
-Solving: 10311.7218 ms
-Computing Sensitivity: 293.9131 ms
-Fltering Sensitivity: 82.2192 ms
-Marking Elements: 20.1449 ms
-Checking Convergence: 11.9005 ms
+Assembling KG: 1372.3227 ms
+Solving: 10545.8479 ms
+Computing Sensitivity: 291.4148 ms
+Fltering Sensitivity: 241.4032 ms
+Marking Elements: 14.1815 ms
+Checking Convergence: 8.4212 ms
 
 ################### Step: 86 #####################
-Compliance: 4.01944535720874
-Volume: 0.172411750000161
+Compliance: 4.12726223891467
+Volume: 0.172453375000158
 ------------------- Time Cost -------------------
-Assembling KG: 1281.0442 ms
-Solving: 10265.4537 ms
-Computing Sensitivity: 256.0399 ms
-Fltering Sensitivity: 77.1396 ms
-Marking Elements: 16.7216 ms
-Checking Convergence: 12.0601 ms
+Assembling KG: 1318.1672 ms
+Solving: 10380.377 ms
+Computing Sensitivity: 258.5696 ms
+Fltering Sensitivity: 237.0623 ms
+Marking Elements: 16.7085 ms
+Checking Convergence: 12.512 ms
 
 ################### Step: 87 #####################
-Compliance: 4.07151249577182
-Volume: 0.16904012500016
+Compliance: 4.17692189225799
+Volume: 0.169040125000158
 ------------------- Time Cost -------------------
-Assembling KG: 1300.6981 ms
-Solving: 10250.5202 ms
-Computing Sensitivity: 261.8472 ms
-Fltering Sensitivity: 78.0585 ms
-Marking Elements: 18.4188 ms
-Checking Convergence: 11.9971 ms
+Assembling KG: 1335.1018 ms
+Solving: 10354.0106 ms
+Computing Sensitivity: 261.247 ms
+Fltering Sensitivity: 238.2664 ms
+Marking Elements: 14.0318 ms
+Checking Convergence: 11.8487 ms
 
 ################### Step: 88 #####################
-Compliance: 4.11467269724248
-Volume: 0.165585250000161
+Compliance: 4.26579331517552
+Volume: 0.165626875000159
 ------------------- Time Cost -------------------
-Assembling KG: 1291.9199 ms
-Solving: 10387.1205 ms
-Computing Sensitivity: 384.4663 ms
-Fltering Sensitivity: 91.313 ms
-Marking Elements: 18.0467 ms
-Checking Convergence: 9.8062 ms
+Assembling KG: 1336.1997 ms
+Solving: 10374.0284 ms
+Computing Sensitivity: 288.7349 ms
+Fltering Sensitivity: 245.4385 ms
+Marking Elements: 14.0903 ms
+Checking Convergence: 116.5104 ms
 
 ################### Step: 89 #####################
-Compliance: 4.16644006847484
+Compliance: 4.28991787964459
 Volume: 0.162296875000159
 ------------------- Time Cost -------------------
-Assembling KG: 1291.5864 ms
-Solving: 10202.0032 ms
-Computing Sensitivity: 268.0667 ms
-Fltering Sensitivity: 82.5201 ms
-Marking Elements: 17.3969 ms
-Checking Convergence: 8.3737 ms
+Assembling KG: 1341.491 ms
+Solving: 10559.1625 ms
+Computing Sensitivity: 279.8797 ms
+Fltering Sensitivity: 242.6248 ms
+Marking Elements: 14.279 ms
+Checking Convergence: 8.5598 ms
 
 ################### Step: 90 #####################
-Compliance: 4.21618040665637
+Compliance: 4.33481351538469
 Volume: 0.159091750000159
 ------------------- Time Cost -------------------
-Assembling KG: 1306.6793 ms
-Solving: 10255.0426 ms
-Computing Sensitivity: 248.6427 ms
-Fltering Sensitivity: 77.1076 ms
-Marking Elements: 16.4911 ms
-Checking Convergence: 37.1617 ms
+Assembling KG: 1339.024 ms
+Solving: 10520.1288 ms
+Computing Sensitivity: 268.5142 ms
+Fltering Sensitivity: 236.2196 ms
+Marking Elements: 14.1883 ms
+Checking Convergence: 8.5421 ms
 
 ################### Step: 91 #####################
-Compliance: 4.26805216186104
+Compliance: 4.42792881374415
 Volume: 0.155845000000159
 ------------------- Time Cost -------------------
-Assembling KG: 1308.5213 ms
-Solving: 10231.3805 ms
-Computing Sensitivity: 336.1944 ms
-Fltering Sensitivity: 82.8052 ms
-Marking Elements: 16.9673 ms
-Checking Convergence: 14.7451 ms
+Assembling KG: 1331.0128 ms
+Solving: 10427.8105 ms
+Computing Sensitivity: 266.1402 ms
+Fltering Sensitivity: 236.5264 ms
+Marking Elements: 14.2425 ms
+Checking Convergence: 9.1218 ms
 
 ################### Step: 92 #####################
-Compliance: 4.32975126484733
-Volume: 0.152806375000157
+Compliance: 4.4526657136297
+Volume: 0.152806375000159
 ------------------- Time Cost -------------------
-Assembling KG: 1306.6528 ms
-Solving: 10302.2253 ms
-Computing Sensitivity: 269.0184 ms
-Fltering Sensitivity: 77.6848 ms
-Marking Elements: 16.5162 ms
-Checking Convergence: 14.7119 ms
+Assembling KG: 1352.3685 ms
+Solving: 10478.2465 ms
+Computing Sensitivity: 273.7524 ms
+Fltering Sensitivity: 234.8457 ms
+Marking Elements: 13.9289 ms
+Checking Convergence: 118.6395 ms
 
 ################### Step: 93 #####################
-Compliance: 4.37696106884954
-Volume: 0.149975875000155
+Compliance: 4.50674628690861
+Volume: 0.150017500000155
 ------------------- Time Cost -------------------
-Assembling KG: 1311.8504 ms
-Solving: 10309.6687 ms
-Computing Sensitivity: 324.3282 ms
-Fltering Sensitivity: 78.1836 ms
-Marking Elements: 19.2568 ms
-Checking Convergence: 12.0034 ms
+Assembling KG: 1343.6919 ms
+Solving: 10669.8373 ms
+Computing Sensitivity: 303.9331 ms
+Fltering Sensitivity: 240.2364 ms
+Marking Elements: 13.6645 ms
+Checking Convergence: 11.3048 ms
 
 ################### Step: 94 #####################
-Compliance: 4.43064940918776
+Compliance: 4.55794240206139
 Volume: 0.149975875000155
 ------------------- Time Cost -------------------
-Assembling KG: 1325.5379 ms
-Solving: 10223.4813 ms
-Computing Sensitivity: 390.7262 ms
-Fltering Sensitivity: 83.0651 ms
-Marking Elements: 18.7692 ms
-Checking Convergence: 9.2096 ms
+Assembling KG: 1356.2151 ms
+Solving: 10385.9575 ms
+Computing Sensitivity: 265.9211 ms
+Fltering Sensitivity: 235.03 ms
+Marking Elements: 13.5825 ms
+Checking Convergence: 13.766 ms
 
 ################### Step: 95 #####################
-Compliance: 4.42658350705946
-Volume: 0.150017500000155
+Compliance: 4.55754543969988
+Volume: 0.149975875000155
 ------------------- Time Cost -------------------
-Assembling KG: 1320.2071 ms
-Solving: 10403.0923 ms
-Computing Sensitivity: 244.5703 ms
-Fltering Sensitivity: 78.6844 ms
-Marking Elements: 16.7344 ms
-Checking Convergence: 9.0349 ms
+Assembling KG: 1349.1932 ms
+Solving: 10366.2938 ms
+Computing Sensitivity: 324.2257 ms
+Fltering Sensitivity: 234.204 ms
+Marking Elements: 16.6651 ms
+Checking Convergence: 10.4811 ms
 
 ################### Step: 96 #####################
-Compliance: 4.42230199738335
+Compliance: 4.55980402964505
 Volume: 0.150017500000155
 ------------------- Time Cost -------------------
-Assembling KG: 1313.5227 ms
-Solving: 10275.4031 ms
-Computing Sensitivity: 256.1773 ms
-Fltering Sensitivity: 77.7848 ms
-Marking Elements: 17.445 ms
-Checking Convergence: 9.8616 ms
+Assembling KG: 1362.043 ms
+Solving: 10757.9187 ms
+Computing Sensitivity: 336.0693 ms
+Fltering Sensitivity: 265.6765 ms
+Marking Elements: 16.0823 ms
+Checking Convergence: 106.0905 ms
 
 ################### Step: 97 #####################
-Compliance: 4.42635083535375
-Volume: 0.149975875000155
-------------------- Time Cost -------------------
-Assembling KG: 1335.5419 ms
-Solving: 10479.8355 ms
-Computing Sensitivity: 276.0451 ms
-Fltering Sensitivity: 89.3297 ms
-Marking Elements: 18.6364 ms
-Checking Convergence: 11.4754 ms
-
-################### Step: 98 #####################
-Compliance: 4.42158701029907
-Volume: 0.149975875000155
-------------------- Time Cost -------------------
-Assembling KG: 1316.5242 ms
-Solving: 10299.3449 ms
-Computing Sensitivity: 279.8377 ms
-Fltering Sensitivity: 76.9985 ms
-Marking Elements: 16.4821 ms
-Checking Convergence: 12.5109 ms
-
-################### Step: 99 #####################
-Compliance: 4.42240041562807
-Volume: 0.149975875000155
-------------------- Time Cost -------------------
-Assembling KG: 1336.4119 ms
-Solving: 10237.645 ms
-Computing Sensitivity: 262.5908 ms
-Fltering Sensitivity: 78.4616 ms
-Marking Elements: 16.9293 ms
-Checking Convergence: 11.4815 ms
-
-################### Step: 100 #####################
-Compliance: 4.42475875451567
-Volume: 0.149975875000155
-------------------- Time Cost -------------------
-Assembling KG: 1312.9896 ms
-Solving: 10363.0716 ms
-Computing Sensitivity: 291.695 ms
-Fltering Sensitivity: 121.6389 ms
-Marking Elements: 18.6432 ms
-Checking Convergence: 9.3761 ms
-
-################### Step: 101 #####################
-Compliance: 4.42160967313054
-Volume: 0.149975875000155
-------------------- Time Cost -------------------
-Assembling KG: 1326.4492 ms
-Solving: 10413.7819 ms
-Computing Sensitivity: 296.8556 ms
-Fltering Sensitivity: 78.1766 ms
-Marking Elements: 19.8877 ms
-Checking Convergence: 8.7415 ms
-
-################### Step: 102 #####################
-Compliance: 4.42110412123353
+Compliance: 4.55922932172565
 Volume: 0.150017500000155
 ------------------- Time Cost -------------------
-Assembling KG: 1314.035 ms
-Solving: 10469.826 ms
-Computing Sensitivity: 272.9472 ms
-Fltering Sensitivity: 76.8279 ms
-Marking Elements: 18.407 ms
-Checking Convergence: 14.6115 ms
+Assembling KG: 1429.5506 ms
+Solving: 11378.7915 ms
+Computing Sensitivity: 488.0051 ms
+Fltering Sensitivity: 244.0618 ms
+Marking Elements: 18.36 ms
+Checking Convergence: 12.984 ms
+
+################### Step: 98 #####################
+Compliance: 4.56076522420032
+Volume: 0.149975875000159
+------------------- Time Cost -------------------
+Assembling KG: 1375.5744 ms
+Solving: 11270.8115 ms
+Computing Sensitivity: 316.2697 ms
+Fltering Sensitivity: 254.4732 ms
+Marking Elements: 20.4313 ms
+Checking Convergence: 14.4127 ms
+
+################### Step: 99 #####################
+Compliance: 4.56188569326929
+Volume: 0.149975875000156
+------------------- Time Cost -------------------
+Assembling KG: 1361.0413 ms
+Solving: 10664.3767 ms
+Computing Sensitivity: 258.2426 ms
+Fltering Sensitivity: 238.3113 ms
+Marking Elements: 14.0882 ms
+Checking Convergence: 108.1892 ms
+
+################### Step: 100 #####################
+Compliance: 4.56100871599327
+Volume: 0.150017500000159
+------------------- Time Cost -------------------
+Assembling KG: 1359.0337 ms
+Solving: 10425.9017 ms
+Computing Sensitivity: 277.1367 ms
+Fltering Sensitivity: 239.8884 ms
+Marking Elements: 14.1271 ms
+Checking Convergence: 9.8024 ms
+
+################### Step: 101 #####################
+Compliance: 4.56141169896791
+Volume: 0.150017500000159
+------------------- Time Cost -------------------
+Assembling KG: 1351.9096 ms
+Solving: 10548.0162 ms
+Computing Sensitivity: 280.2813 ms
+Fltering Sensitivity: 247.6492 ms
+Marking Elements: 16.1895 ms
+Checking Convergence: 9.7651 ms
+
+################### Step: 102 #####################
+Compliance: 4.56198861182793
+Volume: 0.149975875000159
+------------------- Time Cost -------------------
+Assembling KG: 1346.2556 ms
+Solving: 11113.9489 ms
+Computing Sensitivity: 269.4891 ms
+Fltering Sensitivity: 249.5802 ms
+Marking Elements: 14.1356 ms
+Checking Convergence: 14.8408 ms
 
 ################### Step: 103 #####################
-Compliance: 4.42496607776504
-Volume: 0.149975875000155
+Compliance: 4.56244753541497
+Volume: 0.149975875000159
 ------------------- Time Cost -------------------
-Assembling KG: 1311.6897 ms
-Solving: 10331.8173 ms
-Computing Sensitivity: 298.422 ms
-Fltering Sensitivity: 96.9695 ms
-Marking Elements: 18.5125 ms
-Checking Convergence: 12.0238 ms
+Assembling KG: 1347.8988 ms
+Solving: 10847.6165 ms
+Computing Sensitivity: 287.9814 ms
+Fltering Sensitivity: 249.2715 ms
+Marking Elements: 15.5801 ms
+Checking Convergence: 12.7671 ms

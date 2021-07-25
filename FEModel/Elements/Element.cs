@@ -32,6 +32,11 @@ namespace ALFE
         /// </summary>
         public double C;
 
+        /// <summary>
+        /// Whether the element is located in a non-design domain.
+        /// </summary>
+        public bool NonDesign = false;
+
         public ElementType Type;
 
         /// <summary>

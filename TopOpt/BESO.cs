@@ -230,9 +230,12 @@ namespace ALFE.TopOpt
                 double sum = 0.0;
                 foreach (var elem in Model.Elements)
                 {
-                    var v = Ae[elem.ID] > th ? 1.0 : Xmin;
-                    elem.Xe = v;
-                    sum += v;
+                    if (!elem.NonDesign)
+                    {
+                        var v = Ae[elem.ID] > th ? 1.0 : Xmin;
+                        elem.Xe = v;
+                        sum += v;
+                    }
                 }
                 if (sum - volfra > 0.0) lowest = th;
                 else highest = th;

@@ -4,7 +4,7 @@ DOF: 3
 Element Type: VoxelElement
 Node Count: 52521
 Element Count: 48000
-Load Count: 2
+Load Count: 1
 Support Count: 861
 Young's Modulus: 1
 Possion Rate: 0.300000011920929
@@ -12,7 +12,7 @@ Possion Rate: 0.300000011920929
 BESO Parameters: 
 Volume Fraction: 0.15
 Evolution Rate: 0.02
-Filter Radius: 2
+Filter Radius: 3
 Penalty Exponent: 3
 Maximum Iteration: 200
 Solver: 4
@@ -100539,7 +100539,6 @@ E,51214,51235,51236,51215,52495,52516,52517,52496
 E,51215,51236,51237,51216,52496,52517,52518,52497
 E,51216,51237,51238,51217,52497,52518,52519,52498
 E,51217,51238,51239,51218,52498,52519,52520,52499
-L,2540,0,0,-1
 L,2540,0,0,-1
 S,0,Fixed
 S,3,Fixed

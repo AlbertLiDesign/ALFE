@@ -24,6 +24,11 @@ namespace ALFE
         /// </summary>
         public bool Active = true;
 
+        /// <summary>
+        /// Whether the node should be signed as a non-design node.
+        /// </summary>
+        public bool NonDesign = false;
+
         public List<int> ElementID = new List<int>();
 
         public int ID;

@@ -9,63 +9,7 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            int xnum = 7;
-            int ynum = 5;
-
-            List<Node> nodes = new List<Node>(xnum * ynum);
-            List<Element> elems = new List<Element>((xnum - 1) * (ynum - 1));
-            List<Load> loads = new List<Load>(1);
-            List<Support> supports = new List<Support>(ynum);
-
-            // Define nodes
-            for (int i = 0; i < xnum; i++)
-            {
-                for (int j = 0; j < ynum; j++)
-                {
-                    nodes.Add(new Node(i, j));
-                    if (i == 0)
-                        supports.Add(new Support(j, SupportType.Fixed));
-                }
-            }
-
-            // Define Material
-            Material material = new Material(1.0, 0.3);
-
-            // Define elements
-            for (int i = 0; i < xnum - 1; i++)
-            {
-                for (int j = 0; j < ynum - 1; j++)
-                {
-                    List<Node> nodalSet = new List<Node>(4)
-                    {
-                        // Counterclockwise
-                        nodes[i * ynum + j],
-                        nodes[i * ynum + (j + 1)],
-                        nodes[(i + 1) * ynum+ (j + 1)],
-                        nodes[(i + 1) * ynum + j],
-                    };
-
-                    // Construct a pixel element
-                    elems.Add(new Pixel(nodalSet, material));
-                }
-            }
-
-            // Apply the load
-            loads.Add(new Load(nodes.Count - (int)Math.Ceiling(ynum / 2.0), new Vector2D(0.0, -1.0)));
-
-            // Create a model
-            Model model = new Model(2, nodes, elems, loads, supports);
-
-            // Create a FE system
-            FESystem system = new FESystem(model);
-
-            // Initialize the system and solve it.
-            system.Initialize();
-            system.Solve();
-
-            // Print the displacement information
-            Console.WriteLine(system.DisplacementInfo());
-            Console.ReadKey();
+            RunChair2D();
         }
         public static void RunVerify2D()
         {
@@ -88,6 +32,15 @@ namespace ALFE
             string path = @"E:\ALCoding\ALFE\topoptTest\Example3";
             BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();
+            beso.Optimize();
+            FEIO.WriteIsovalues(path, beso);
+        }
+        public static void RunChair2D()
+        {
+            string path = @"F:\OneDrive\OneDrive - RMIT University\Work\AResearch\PostprocessingPaper\Numberical Experiments\2D Chair\TopologyOptimisation";
+            BESO beso = FEIO.ReadBESO(path, "beso");
+            beso.Initialize();
+            Console.WriteLine(beso.Model.Elements[0].Ke);
             beso.Optimize();
             FEIO.WriteIsovalues(path, beso);
         }
