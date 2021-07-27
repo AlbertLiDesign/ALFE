@@ -6,7 +6,7 @@ namespace ALFE
 {
     public class Tetrahedron : Element
     {
-        public Tetrahedron(List<Node> nodes, Material material, bool exist = true)
+        public Tetrahedron(List<Node> nodes, Material material, bool nondesign = false)
         {
             if (nodes.Count != 4)
                 throw new Exception("The number of nodes must be 4.");
@@ -20,6 +20,7 @@ namespace ALFE
 
             Material = material;
             Type = ElementType.TetrahedronElement;
+            NonDesign = nondesign;
             Dim = 3;
         }
 

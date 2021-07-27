@@ -11,7 +11,7 @@ namespace ALFE
         private double[] Nt;
         private double[] Nu;
         public Matrix<double> J;
-        public Voxel(List<Node> nodes, Material material, bool exist = true)
+        public Voxel(List<Node> nodes, Material material, bool nondesign = false)
         {
             if (nodes.Count != 8)
                 throw new Exception("The number of nodes must be 8.");
@@ -25,6 +25,7 @@ namespace ALFE
 
             Material = material;
             Type = ElementType.VoxelElement;
+            NonDesign = nondesign;
             Dim = 3;
 
             J = new DenseMatrix(3, 3);

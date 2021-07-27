@@ -324,7 +324,6 @@ namespace ALFE
                     if (node.NonDesign)
                     {
                         elem.NonDesign = true;
-                        Model.NonDesignDomain.Add(elem.ID);
                     }
                     node.ElementID.Add(elem.ID);
                 }

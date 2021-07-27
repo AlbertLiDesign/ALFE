@@ -119,7 +119,7 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             List<double> Ae = new List<double>();
 
-            while (delta > 1e-3)
+            while (delta > 1e-3 || currentVolume>VolumeFraction)
             {
                 iter += 1;
                 currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));

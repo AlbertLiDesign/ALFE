@@ -28,11 +28,6 @@ namespace ALFE
         public List<Support> Supports = new List<Support>();
 
         /// <summary>
-        /// Non-design domain
-        /// </summary>
-        public List<int> NonDesignDomain = new List<int>();
-
-        /// <summary>
         /// Degree of freedom
         /// </summary>
         public int DOF;
@@ -177,7 +172,6 @@ namespace ALFE
                     if (node.NonDesign)
                     {
                         elem.NonDesign = true;
-                        NonDesignDomain.Add(elem.ID);
                     }
                     node.ElementID.Add(elem.ID);
                 }

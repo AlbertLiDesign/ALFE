@@ -440,7 +440,8 @@ namespace ALFE
                 sw.WriteLine("N," + node.Position.X.ToString() + ',' + node.Position.Y.ToString() + ',' + node.Position.Z.ToString());
             foreach (var elem in model.Elements)
             {
-                sw.Write("E,");
+                if (elem.NonDesign) sw.Write("NE,");
+                else sw.Write("E,");
                 int n = 1;
                 foreach (var node in elem.Nodes)
                 {
@@ -614,8 +615,10 @@ namespace ALFE
                         nodes.Add(new Node(dof, double.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3])));
 
 
-                    if (value[0] == "E")
+                    if (value[0] == "E" || value[0] == "NE")
                     {
+                        bool nondesign = false;
+                        if (value[0] == "NE") nondesign = true;
                         List<Node> elemNodes = new List<Node>();
                         for (int i = 1; i < value.Length; i++)
                         {
@@ -626,22 +629,22 @@ namespace ALFE
                         switch (elementType)
                         {
                             case ElementType.PixelElement:
-                                elements.Add(new Pixel(elemNodes, material));
+                                elements.Add(new Pixel(elemNodes, material, nondesign));
                                 break;
                             case ElementType.TriangleElement:
-                                elements.Add(new Triangle(elemNodes, material));
+                                elements.Add(new Triangle(elemNodes, material,1.0, nondesign));
                                 break;
                             case ElementType.QuadElement:
-                                elements.Add(new Quadrilateral(elemNodes, material));
+                                elements.Add(new Quadrilateral(elemNodes, material, 1.0, nondesign));
                                 break;
                             case ElementType.TetrahedronElement:
-                                elements.Add(new Tetrahedron(elemNodes, material));
+                                elements.Add(new Tetrahedron(elemNodes, material, nondesign));
                                 break;
                             case ElementType.HexahedronElement:
-                                elements.Add(new Hexahedron(elemNodes, material));
+                                elements.Add(new Hexahedron(elemNodes, material, nondesign));
                                 break;
                             case ElementType.VoxelElement:
-                                elements.Add(new Voxel(elemNodes, material));
+                                elements.Add(new Voxel(elemNodes, material, nondesign));
                                 break;
                             default:
                                 throw new Exception("Unknown element type.");

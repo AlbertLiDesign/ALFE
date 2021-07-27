@@ -9,7 +9,7 @@ namespace ALFE
         public double Area;
         public double Thickness = 1.0;
 
-        public Triangle(List<Node> nodes, Material material, double thickness = 1.0, bool exist = true)
+        public Triangle(List<Node> nodes, Material material, double thickness = 1.0, bool nondesign = false)
         {
             if (nodes.Count != 3)
                 throw new Exception("The number of nodes must be 3.");
@@ -24,6 +24,7 @@ namespace ALFE
             Material = material;
             Thickness = thickness;
             Type = ElementType.TriangleElement;
+            NonDesign = nondesign;
             Dim = 2;
             ComputeArea();
         }

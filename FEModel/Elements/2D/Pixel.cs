@@ -6,7 +6,7 @@ namespace ALFE
 {
     public class Pixel : Element
     {
-        public Pixel(List<Node> nodes, Material material, bool exist = true)
+        public Pixel(List<Node> nodes, Material material, bool nondesign = false)
         {
             foreach (var item in nodes)
             {
@@ -19,6 +19,7 @@ namespace ALFE
             Material = material;
             Type = ElementType.PixelElement;
             Dim = 2;
+            NonDesign = nondesign;
         }
 
         public override void ComputeD() { }

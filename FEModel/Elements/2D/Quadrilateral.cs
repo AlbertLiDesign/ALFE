@@ -9,7 +9,7 @@ namespace ALFE
         public double J;
         public double Thickness = 1.0;
 
-        public Quadrilateral(List<Node> nodes, Material material, double thichness = 1.0, bool exist = true)
+        public Quadrilateral(List<Node> nodes, Material material, double thichness = 1.0, bool nondesign = false)
         {
             if (nodes.Count != 4)
                 throw new Exception("The number of nodes must be 4.");
@@ -25,6 +25,7 @@ namespace ALFE
             Thickness = thichness;
             Type = ElementType.QuadElement;
             Dim = 2;
+            NonDesign = nondesign;
 
             D = new DenseMatrix(3, 3);
             B = new DenseMatrix(3, 8);

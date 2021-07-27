@@ -12,7 +12,7 @@ namespace ALFE
         private double[] Nu;
         private Vector3D Size;
         public Matrix<double> J;
-        public Hexahedron(List<Node> nodes, Material material, bool exist = true)
+        public Hexahedron(List<Node> nodes, Material material, bool nondesign = false)
         {
             if (nodes.Count != 8)
                 throw new Exception("The number of nodes must be 8.");
@@ -26,6 +26,7 @@ namespace ALFE
 
             Material = material;
             Type = ElementType.HexahedronElement;
+            NonDesign = nondesign;
             Dim = 3;
 
             J = new DenseMatrix(3, 3);
