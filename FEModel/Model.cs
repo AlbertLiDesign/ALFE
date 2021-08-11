@@ -129,7 +129,7 @@ namespace ALFE
                 double sensitivity = 0.0;
                 for (int i = 0; i < item.ElementID.Count; i++)
                 {
-                    sensitivity += elemSensitivities[item.ElementID[i]] * 0.125;
+                    sensitivity += elemSensitivities[item.ElementID[i]] / item.ElementID.Count;
                 }
                 Vert_Value.Add(sensitivity);
             }
