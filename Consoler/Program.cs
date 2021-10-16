@@ -9,7 +9,8 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            RunChair2D();
+            RunVerify2D();
+            Console.ReadKey();
         }
         public static void RunVerify2D()
         {
@@ -103,6 +104,33 @@ namespace ALFE
             Console.WriteLine(model.Elements[0].Ke);
             Console.WriteLine(system.CalCompliance());
             Console.ReadKey();
+        }
+        public static void VerifyHex()
+        {
+            //var n0 = new Node(3, 0.0, 0.0, 0.0);
+            //var n1 = new Node(3, 1.0, 0.0, 0.0);
+            //var n2 = new Node(3, 1.0, 1.0, 0.0);
+            //var n3 = new Node(3, 0.0, 1.0, 0.0);
+
+            //var n4 = new Node(3, 0.0, 0.0, 1.0);
+            //var n5 = new Node(3, 1.0, 0.0, 1.0);
+            //var n6 = new Node(3, 1.0, 1.0, 1.0);
+            //var n7 = new Node(3, 0.0, 1.0, 1.0);
+
+            //var nds = new List<Node>(8) { n0, n1, n2, n3, n4, n5, n6, n7 };
+            //var el = new Hexahedron(nds, new Material());
+            //el.ComputeKe();
+            //Console.WriteLine(el.Ke);
+
+            var n0 = new Node(3, 0.0, 0.0, 0.0);
+            var n1 = new Node(3, 1.0, 0.0, 0.0);
+            var n2 = new Node(3, 1.0, 1.0, 0.0);
+            var n3 = new Node(3, 1.0, 1.0, 1.0);
+
+            var nds = new List<Node>(4) { n0, n1, n2, n3};
+            var el = new Tetrahedron(nds, new Material());
+            el.ComputeKe();
+            Console.WriteLine(el.Ke);
         }
     }
 }

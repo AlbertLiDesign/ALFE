@@ -10,7 +10,6 @@ namespace ALFE
         private double[] Ns;
         private double[] Nt;
         private double[] Nu;
-        private Vector3D Size;
         public Matrix<double> J;
         public Hexahedron(List<Node> nodes, Material material, bool nondesign = false)
         {
@@ -152,8 +151,8 @@ namespace ALFE
         public override void ComputeKe()
         {
             ComputeD();
-
-            GaussLegendreQuadrature glq = new GaussLegendreQuadrature(1);
+            var quad_J1 = ComputeJ(0.0,0.0,0.0);
+            GaussLegendreQuadrature glq = new GaussLegendreQuadrature(2);
 
             for (int i = 0; i < glq.Xi.Count; i++)
             {
@@ -163,6 +162,11 @@ namespace ALFE
                     {
                         var quad_J = ComputeJ(glq.Xi[i], glq.Xi[j], glq.Xi[k]);
                         var quad_B = ComputeB(quad_J, glq.Xi[i], glq.Xi[j], glq.Xi[k]);
+                        var a = quad_B.TransposeThisAndMultiply(D);
+                        a= a.Multiply(quad_B);
+                        Console.WriteLine(D);
+                        Console.WriteLine(quad_B);
+                        Console.WriteLine(a);
                         Ke += glq.Weights[i] * glq.Weights[j] * glq.Weights[k] * quad_B.TransposeThisAndMultiply(D).Multiply(quad_B).Multiply(quad_J.Determinant());
                     }
                 }
