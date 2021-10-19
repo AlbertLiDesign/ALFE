@@ -119,17 +119,11 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             List<double> Ae = new List<double>();
 
-            while (delta > 1e-3)
+            while (delta > 0.001 && iter < MaximumIteration
+                   || Math.Abs(currentVolume - VolumeFraction) > 0.01)
             {
                 iter += 1;
                 currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));
-                if (iter > 1)
-                {
-                    var raw = new double[Ae.Count];
-                    Ae.CopyTo(raw);
-                    Ae_old = raw.ToList();
-                }
-
 
                 List<double> timeCost = new List<double>();
                 #region Run FEA
@@ -147,6 +141,11 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
                 Console.WriteLine("Done");
                 #endregion
+                FEPrint.PrintDisplacement(System, 0);
+                FEPrint.PrintDisplacement(System, 4);
+                FEPrint.PrintDisplacement(System, 8);
+                FEPrint.PrintDisplacement(System, 12);
+                FEPrint.PrintDisplacement(System, 16);
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
@@ -155,13 +154,22 @@ namespace ALFE.TopOpt
                 HistoryC.Add(CalGlobalCompliance());
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
-                
+
                 sw.Restart();
                 // Process sensitivities
                 Ae = FltAe(_Filter, Ae);
+
                 if (iter > 1)
+                {
                     for (int i = 0; i < Ae.Count; i++)
+                    {
                         Ae[i] = (Ae[i] + Ae_old[i]) * 0.5;
+                    }
+                }
+                // Record the sensitiveies in each step
+                var raw = new double[Ae.Count];
+                Ae.CopyTo(raw);
+                Ae_old = raw.ToList();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -223,13 +231,11 @@ namespace ALFE.TopOpt
                 double sum = 0.0;
                 foreach (var elem in Model.Elements)
                 {
-                    if (!elem.NonDesign)
-                    {
-                        var v = Ae[elem.ID] > th ? 1.0 : Xmin;
-                        elem.Xe = v;
-                        sum += v;
-                    }
+                    var v = Ae[elem.ID] > th ? 1.0 : Xmin;
+                    elem.Xe = v;
+                    sum += v;
                 }
+
                 if (sum - volfra > 0.0) lowest = th;
                 else highest = th;
             }
@@ -292,7 +298,7 @@ namespace ALFE.TopOpt
                 double sensitivity = 0.0;
                 for (int i = 0; i < item.ElementID.Count; i++)
                 {
-                    sensitivity += elemSensitivities[item.ElementID[i]] * 1/ item.ElementID.Count;
+                    sensitivity += elemSensitivities[item.ElementID[i]] * 1 / item.ElementID.Count;
                 }
                 Vert_Value.Add(sensitivity);
             }

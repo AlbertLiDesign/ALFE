@@ -10,7 +10,7 @@ namespace ALFE
         static void Main(string[] args)
         {
             RunVerify2D();
-            Console.ReadKey();
+
         }
         public static void RunVerify2D()
         {
@@ -22,7 +22,7 @@ namespace ALFE
         }
         public static void RunVerify3D()
         {
-            string path = @"E:\ALCoding\ALFE\topoptTest\Example3\Verify3";
+            string path = @"E:\ALCoding\ALFE\topoptTest\Example3\Verify2";
             BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();
             beso.Optimize(true);
@@ -102,7 +102,6 @@ namespace ALFE
             system.Solve();
 
             Console.WriteLine(model.Elements[0].Ke);
-            Console.WriteLine(system.CalCompliance());
             Console.ReadKey();
         }
         public static void VerifyHex()

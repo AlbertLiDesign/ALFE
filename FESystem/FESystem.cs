@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -205,7 +204,7 @@ namespace ALFE
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
-            Solved = SolveSystem((int) _Solver, KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1;
+            Solved = SolveSystem((int)_Solver, KG.Rows, KG.Cols, KG.Vals, F, Dim, KG.NNZ, X) == 1;
             sw.Stop();
             TimeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -319,14 +318,7 @@ namespace ALFE
             // in each node make a list of elements to which it belongs
             foreach (var elem in Model.Elements)
                 foreach (var node in elem.Nodes)
-                {
-                    // Sign non-design domain
-                    if (node.NonDesign)
-                    {
-                        elem.NonDesign = true;
-                    }
                     node.ElementID.Add(elem.ID);
-                }
         }
 
         /// <summary>
@@ -375,19 +367,6 @@ namespace ALFE
                     item.ComputeKe();
             }
         }
-        public double CalCompliance()
-        {
-            Parallel.ForEach(Model.Elements, elem =>
-            {
-                elem.ComputeUe();
-                elem.C = 0.5 * elem.Ue.TransposeThisAndMultiply(elem.Ke).Multiply(elem.Ue)[0, 0];
-            });
-            double compliance = 0.0;
-            foreach (var elem in Model.Elements)
-                compliance += elem.C;
-            return compliance;
-        }
-
         [DllImport("ALSolver.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true, SetLastError = false)]
         private static extern int SolveSystem(int solver, int[] rows_offset, int[] cols, double[] vals, double[] F, int dim, int nnz, double[] X);
 

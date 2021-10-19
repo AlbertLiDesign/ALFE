@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ALFE.TopOpt;
+using System;
+using System.Collections.Generic;
 
 namespace ALFE
 {
@@ -22,7 +24,10 @@ namespace ALFE
         }
         public static void TestPixels(int x = 7, int y = 5)
         {
-            Model model2d = new Cantilever2D(ElementType.PixelElement, x, y).Model;
+            Model model2d = new Cantilever2D(ElementType.PixelElement, x+1, y+1).Model;
+            var _Filter = new ALFE.TopOpt.Filter(model2d.Elements, 2.0, 2);
+            _Filter.PreFlt();
+
             FESystem sys = new FESystem(model2d);
             sys.Solve();
             FEPrint.PrintSystemInfo(sys);
