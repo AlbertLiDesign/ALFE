@@ -55,6 +55,8 @@ namespace ALFE.TopOpt
         /// </summary>
         public int Dim;
 
+        public bool HardKill = false;
+
         private Filter _Filter;
 
         /// <summary>
@@ -67,10 +69,9 @@ namespace ALFE.TopOpt
         /// </summary>
         private List<double> HistoryV = new List<double>();
 
-        public bool HardKill = false;
 
         public BESO() { }
-        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, bool hardKill = false, Solver solver = 0)
+        public BESO(string path, FESystem system, double rmin, double ert = 0.02, double p = 3.0, double vf = 0.5, int maxIter = 100, bool hardKill = true, Solver solver = 0)
         {
             if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
@@ -78,8 +79,6 @@ namespace ALFE.TopOpt
                 throw new Exception("Vt must be large than 0 and be less than 1.");
 
             System = system;
-            HardKill = hardKill;
-            System.HardKill = hardKill;
             Model = system.Model;
             VolumeFraction = vf;
             PenaltyExponent = p;
@@ -89,6 +88,9 @@ namespace ALFE.TopOpt
             Dim = system.Model.DOF;
             Path = path;
             System._Solver = solver;
+            HardKill = hardKill;
+            if (HardKill)
+                Xmin = 0.0;
         }
 
         public void Initialize()
@@ -109,9 +111,9 @@ namespace ALFE.TopOpt
             solvingInfo += "Prefiltering: " + sw.Elapsed.TotalMilliseconds.ToString() + " ms";
             solvingInfo += '\n';
 
-            //FEIO.WriteInvalidElements(0, Path, Model.Elements);
+            FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
-        public void Optimize(bool writeKG = false)
+        public void Optimize()
         {
             double delta = 1.0;
             int iter = 0;
@@ -141,11 +143,6 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
                 Console.WriteLine("Done");
                 #endregion
-                FEPrint.PrintDisplacement(System, 0);
-                FEPrint.PrintDisplacement(System, 4);
-                FEPrint.PrintDisplacement(System, 8);
-                FEPrint.PrintDisplacement(System, 12);
-                FEPrint.PrintDisplacement(System, 16);
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
@@ -175,7 +172,7 @@ namespace ALFE.TopOpt
 
                 // Run BESO
                 sw.Restart();
-                BESO_Core(currentVolume, Ae);
+                Bisection(currentVolume, Ae);
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -218,7 +215,9 @@ namespace ALFE.TopOpt
             FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
             Console.WriteLine("Done BESO");
         }
-        private void BESO_Core(double curV, List<double> Ae)
+
+        #region BESO methods
+        private void Bisection(double curV, List<double> Ae)
         {
             double lowest = Ae.Min();
             double highest = Ae.Max();
@@ -312,7 +311,9 @@ namespace ALFE.TopOpt
             }
             return Vert_Value;
         }
+        #endregion
 
+        #region Information
         public string PreprocessingInfo()
         {
             string info = "Project Path: " + Path.ToString();
@@ -368,5 +369,6 @@ namespace ALFE.TopOpt
             sw.Close();
             sw.Dispose();
         }
+        #endregion
     }
 }

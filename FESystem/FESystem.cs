@@ -69,20 +69,17 @@ namespace ALFE
         /// </summary>
         private double[] X;
 
-        public bool HardKill;
-
         public bool ParallelComputing = true;
 
         /// <summary>
         /// Initialize the finite element system.
         /// </summary>
         /// <param name="model"> A finite element model</param>
-        public FESystem(Model model, Solver solver = Solver.SimplicialLLT, bool parallel = true, bool hardKill = false)
+        public FESystem(Model model, Solver solver = Solver.SimplicialLLT, bool parallel = true)
         {
             Model = model;
             DOF = model.DOF;
             _Solver = solver;
-            HardKill = hardKill;
             ParallelComputing = parallel;
 
             ApplySupports();
@@ -126,13 +123,11 @@ namespace ALFE
         {
             foreach (var item in Model.Loads)
             {
-                if (!HardKill)
-                {
-                    var id = Model.Nodes[item.NodeID].ActiveID * DOF;
-                    F[id + 0] = item.ForceVector.X;
-                    F[id + 1] = item.ForceVector.Y;
-                    if (DOF == 3) F[id + 2] = item.ForceVector.Z;
-                }
+                var id = Model.Nodes[item.NodeID].ActiveID * DOF;
+                F[id + 0] = item.ForceVector.X;
+                F[id + 1] = item.ForceVector.Y;
+                if (DOF == 3) F[id + 2] = item.ForceVector.Z;
+
             }
         }
 
@@ -143,12 +138,10 @@ namespace ALFE
         {
             KG.Clear();
             foreach (var elem in Model.Elements)
-            {
                 for (int i = 0; i < elem.Nodes.Count; i++)
                 {
                     Node ni = elem.Nodes[i];
                     if (ni.Active)
-                    {
                         for (int j = 0; j < elem.Nodes.Count; j++)
                         {
                             Node nj = elem.Nodes[j];
@@ -157,31 +150,11 @@ namespace ALFE
                             {
                                 int idx1 = ni.PositionKG[nj.ActiveID];
                                 for (int m = 0; m < DOF; m++)
-                                {
                                     for (int n = 0; n < DOF; n++)
-                                    {
-                                        if (HardKill == false)
-                                        {
-                                            if (elem.Xe == 1.0)
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
-                                            else
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * Math.Pow(0.001, P);
-                                        }
-                                        else
-                                        {
-                                            if (elem.Xe == 1.0)
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m];
-                                            else
-                                                KG.Vals[idx1 + ni.row_nnz * n + m] /= KG.Vals[idx1 + ni.row_nnz * n + m];
-                                        }
-
-                                    }
-                                }
+                                        KG.Vals[idx1 + ni.row_nnz * n + m] += elem.Ke[i * DOF + n, j * DOF + m] * Math.Pow(elem.Xe, P);
                             }
                         }
-                    }
                 }
-            }
         }
         /// <summary>
         /// Initialize the system for solving

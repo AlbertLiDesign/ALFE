@@ -4,7 +4,7 @@ DOF: 2
 Element Type: QuadElement
 Node Count: 4131
 Element Count: 4000
-Load Count: 2
+Load Count: 1
 Support Count: 51
 Young's Modulus: 1
 Possion Rate: 0.300000011920929
@@ -8149,7 +8149,6 @@ E,4075,4126,4127,4076
 E,4076,4127,4128,4077
 E,4077,4128,4129,4078
 E,4078,4129,4130,4079
-L,4105,0,-1,0
 L,4105,0,-1,0
 S,0,Fixed
 S,1,Fixed
