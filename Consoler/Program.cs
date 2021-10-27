@@ -10,8 +10,19 @@ namespace ALFE
         static void Main(string[] args)
         {
             RunVerify2D();
-
         }
+
+        //public static void VerifyScoring()
+        //{
+        //    string path = @"E:\ALCoding\ALFE\topoptTest\Example2\Verify";
+        //    BESO beso = FEIO.ReadBESO(path, "beso");
+        //    ScoringSystem scoringSystem = new ScoringSystem(beso.Path, beso.System, 5.0, 4, beso.EvolutionRate,
+        //        beso.PenaltyExponent, beso.VolumeFraction, beso.MaximumIteration, beso.HardKill, Solver.PARDISO);
+        //    List<double> scores = new List<double>(4) {0.9, 0.2, 0.4, 0.1 };
+        //    scoringSystem.Initialize(scores);
+        //    scoringSystem.Optimize();
+        //    //FEIO.WriteIsovalues(path, beso);
+        //}
         public static void RunVerify2D()
         {
             string path = @"E:\ALCoding\ALFE\topoptTest\Example2\Verify";

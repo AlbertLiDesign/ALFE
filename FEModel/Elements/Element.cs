@@ -28,6 +28,11 @@ namespace ALFE
         public double Xe = 1.0;
 
         /// <summary>
+        /// Score weight
+        /// </summary>
+        public double Score = 1.0;
+
+        /// <summary>
         /// Compliance
         /// </summary>
         public double C;

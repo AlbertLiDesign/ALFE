@@ -81,6 +81,16 @@ namespace ALFE
             sw.Close();
             sw.Dispose();
         }
+        public static void WriteXe(string path, List<Element> elems)
+        {
+            string output = path + '\\' + "Xe.txt";
+            StreamWriter sw = new StreamWriter(output);
+            foreach (var elem in elems)
+                sw.WriteLine(elem.Xe.ToString());
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+        }
         public static void WriteCOOMatrix(COOMatrix mat, string path)
         {
             StreamWriter sw = new StreamWriter(path);
@@ -110,7 +120,20 @@ namespace ALFE
             sw.Close();
             sw.Dispose();
         }
-        
+        public static List<double> ReadXe(string path)
+        {
+            List<double> Xe = new List<double>();
+            if (File.Exists(path))
+            {
+                StreamReader SR = new StreamReader(path);
+                while (!SR.EndOfStream)
+                {
+                    string line = SR.ReadLine();
+                    Xe.Add(double.Parse(line));
+                }
+            }
+            return Xe;
+        }
         public static Model ReadTetrahedras(string outputPath)
         {
             List<Node> nodes = new List<Node>();

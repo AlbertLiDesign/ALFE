@@ -69,18 +69,15 @@ namespace ALFE
         /// </summary>
         private double[] X;
 
-        public bool ParallelComputing = true;
-
         /// <summary>
         /// Initialize the finite element system.
         /// </summary>
         /// <param name="model"> A finite element model</param>
-        public FESystem(Model model, Solver solver = Solver.SimplicialLLT, bool parallel = true)
+        public FESystem(Model model, Solver solver = Solver.SimplicialLLT)
         {
             Model = model;
             DOF = model.DOF;
             _Solver = solver;
-            ParallelComputing = parallel;
 
             ApplySupports();
             Dim = (Model.Nodes.Count - FixedID.Count) * DOF;
@@ -261,26 +258,14 @@ namespace ALFE
         /// </summary>
         private void GetAdjacentNodes()
         {
-            if (ParallelComputing)
+            Parallel.ForEach(Model.Nodes, node =>
             {
-                Parallel.ForEach(Model.Nodes, node =>
-                {
-                    foreach (var item in node.ElementID)
-                        foreach (var neighbour in Model.Elements[item].Nodes)
-                            if (neighbour.Active)
-                                lock (node.Neighbours)
-                                    node.Neighbours.Add(neighbour.ActiveID);
-                });
-            }
-            else
-            {
-                foreach (var node in Model.Nodes)
-                    foreach (var item in node.ElementID)
-                        foreach (var neighbour in Model.Elements[item].Nodes)
-                            if (neighbour.Active)
-                                lock (node.Neighbours)
-                                    node.Neighbours.Add(neighbour.ActiveID);
-            }
+                foreach (var item in node.ElementID)
+                    foreach (var neighbour in Model.Elements[item].Nodes)
+                        if (neighbour.Active)
+                            lock (node.Neighbours)
+                                node.Neighbours.Add(neighbour.ActiveID);
+            });
         }
 
         /// <summary>

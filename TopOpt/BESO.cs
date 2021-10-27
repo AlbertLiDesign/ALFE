@@ -208,11 +208,14 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-                solvingInfo += BESOInfo(iter - 1, HistoryC.Last(), HistoryV.Last(), timeCost);
+                solvingInfo += BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), timeCost);
                 WritePerformanceReport();
             }
             FEIO.WriteSensitivities(Path, Sensitivities);
             FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
+
+            FEIO.WriteXe(Path, Model.Elements);
+
             Console.WriteLine("Done BESO");
         }
 
@@ -243,29 +246,14 @@ namespace ALFE.TopOpt
         private List<double> CalSensitivities()
         {
             double[] values = new double[Model.Elements.Count];
-            if (System.ParallelComputing)
+            Parallel.ForEach(Model.Elements, elem =>
             {
-                Parallel.ForEach(Model.Elements, elem =>
-                {
-                    elem.ComputeUe();
-                    var c = 0.5 * elem.Ue.TransposeThisAndMultiply(elem.Ke).Multiply(elem.Ue)[0, 0];
-                    elem.C = Math.Pow(elem.Xe, PenaltyExponent) * c;
+                elem.ComputeUe();
+                var c = 0.5 * elem.Ue.TransposeThisAndMultiply(elem.Ke).Multiply(elem.Ue)[0, 0];
+                elem.C = Math.Pow(elem.Xe, PenaltyExponent) * c;
 
-                    values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
-                });
-            }
-            else
-            {
-                foreach (var elem in Model.Elements)
-                {
-                    elem.ComputeUe();
-                    elem.ComputeUe();
-                    var c = 0.5 * elem.Ue.TransposeThisAndMultiply(elem.Ke).Multiply(elem.Ue)[0, 0];
-                    elem.C = Math.Pow(elem.Xe, PenaltyExponent) * c;
-
-                    values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
-                }
-            }
+                values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
+            });
             return values.ToList();
         }
         private double CalGlobalCompliance()
