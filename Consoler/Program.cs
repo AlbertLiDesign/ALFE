@@ -9,7 +9,8 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            RunVerify2D();
+            //TestProgram.Test();
+            RunChair2D();
         }
 
         //public static void VerifyScoring()
@@ -49,7 +50,7 @@ namespace ALFE
         }
         public static void RunChair2D()
         {
-            string path = @"F:\OneDrive\OneDrive - RMIT University\Work\AResearch\PostprocessingPaper\Numberical Experiments\2D Chair\TopologyOptimisation";
+            string path = @"F:\OneDrive\OneDrive - RMIT University\Work\MyPaper\Extracting smooth design from topology optimisation results using nodal sensitivity\Numberical Experiments\2D Chair\TopologyOptimisation";
             BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();
             Console.WriteLine(beso.Model.Elements[0].Ke);

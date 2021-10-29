@@ -46,7 +46,7 @@ namespace ALFE.TopOpt
         /// </summary>
         public int MaximumIteration;
 
-        private double Xmin = 0.001;
+        private double Xmin;
 
         public List<double> Sensitivities = new List<double>();
 
@@ -89,8 +89,8 @@ namespace ALFE.TopOpt
             Path = path;
             System._Solver = solver;
             HardKill = hardKill;
-            if (HardKill)
-                Xmin = 0.0;
+            Xmin = hardKill ? 0.0 : 1e-3;
+
         }
 
         public void Initialize()
@@ -121,8 +121,7 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             List<double> Ae = new List<double>();
 
-            while (delta > 0.001 && iter < MaximumIteration
-                   || Math.Abs(currentVolume - VolumeFraction) > 0.01)
+            while (delta > 0.001 && iter < MaximumIteration || Math.Abs(currentVolume-VolumeFraction)>0.01)
             {
                 iter += 1;
                 currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));
@@ -233,9 +232,12 @@ namespace ALFE.TopOpt
                 double sum = 0.0;
                 foreach (var elem in Model.Elements)
                 {
-                    var v = Ae[elem.ID] > th ? 1.0 : Xmin;
-                    elem.Xe = v;
-                    sum += v;
+                    if (!elem.NonDesign)
+                    {
+                        var v = Ae[elem.ID] > th ? 1.0 : Xmin;
+                        elem.Xe = v;
+                        sum += v;
+                    }
                 }
 
                 if (sum - volfra > 0.0) lowest = th;
