@@ -10,7 +10,7 @@ namespace ALFE
         static void Main(string[] args)
         {
             //TestProgram.Test();
-            RunChair2D();
+            RunVerify2D();
         }
 
         //public static void VerifyScoring()

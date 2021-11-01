@@ -691,7 +691,7 @@ namespace ALFE
                 SR.Close();
                 SR.Dispose();
             }
-            BESO beso = new BESO(projectPath, new FESystem(model), rmin, ert, p, vf, maxIter, true, (Solver)solver);
+            BESO beso = new BESO(projectPath, new FESystem(model), rmin, ert, p, vf, maxIter, (Solver)solver);
             return beso;
         }
     }

@@ -46,7 +46,7 @@ namespace ALFE.TopOpt
         /// </summary>
         public int MaximumIteration;
 
-        private double Xmin;
+        private double Xmin = 0.001;
 
         public List<double> Sensitivities = new List<double>();
 
@@ -54,8 +54,6 @@ namespace ALFE.TopOpt
         /// Dimension
         /// </summary>
         public int Dim;
-
-        public bool HardKill = false;
 
         private Filter _Filter;
 
@@ -69,9 +67,10 @@ namespace ALFE.TopOpt
         /// </summary>
         private List<double> HistoryV = new List<double>();
 
+        public bool HardKill = false;
 
         public BESO() { }
-        public BESO(string path, FESystem system, double rmin, double ert = 0.02, double p = 3.0, double vf = 0.5, int maxIter = 100, bool hardKill = true, Solver solver = 0)
+        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100,Solver solver = 0)
         {
             if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
@@ -88,9 +87,6 @@ namespace ALFE.TopOpt
             Dim = system.Model.DOF;
             Path = path;
             System._Solver = solver;
-            HardKill = hardKill;
-            Xmin = hardKill ? 0.0 : 1e-3;
-
         }
 
         public void Initialize()
@@ -113,7 +109,7 @@ namespace ALFE.TopOpt
 
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
-        public void Optimize()
+        public void Optimize(bool writeKG = false)
         {
             double delta = 1.0;
             int iter = 0;
@@ -121,7 +117,8 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             List<double> Ae = new List<double>();
 
-            while (delta > 0.001 && iter < MaximumIteration || Math.Abs(currentVolume-VolumeFraction)>0.01)
+            while (delta > 0.001 && iter < MaximumIteration
+                   || Math.Abs(currentVolume - VolumeFraction) > 0.01)
             {
                 iter += 1;
                 currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));
@@ -171,7 +168,7 @@ namespace ALFE.TopOpt
 
                 // Run BESO
                 sw.Restart();
-                Bisection(currentVolume, Ae);
+                BESO_Core(currentVolume, Ae);
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
@@ -212,14 +209,9 @@ namespace ALFE.TopOpt
             }
             FEIO.WriteSensitivities(Path, Sensitivities);
             FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
-
-            FEIO.WriteXe(Path, Model.Elements);
-
             Console.WriteLine("Done BESO");
         }
-
-        #region BESO methods
-        private void Bisection(double curV, List<double> Ae)
+        private void BESO_Core(double curV, List<double> Ae)
         {
             double lowest = Ae.Min();
             double highest = Ae.Max();
@@ -232,12 +224,9 @@ namespace ALFE.TopOpt
                 double sum = 0.0;
                 foreach (var elem in Model.Elements)
                 {
-                    if (!elem.NonDesign)
-                    {
-                        var v = Ae[elem.ID] > th ? 1.0 : Xmin;
-                        elem.Xe = v;
-                        sum += v;
-                    }
+                    var v = Ae[elem.ID] > th ? 1.0 : Xmin;
+                    elem.Xe = v;
+                    sum += v;
                 }
 
                 if (sum - volfra > 0.0) lowest = th;
@@ -301,9 +290,7 @@ namespace ALFE.TopOpt
             }
             return Vert_Value;
         }
-        #endregion
 
-        #region Information
         public string PreprocessingInfo()
         {
             string info = "Project Path: " + Path.ToString();
@@ -359,6 +346,5 @@ namespace ALFE.TopOpt
             sw.Close();
             sw.Dispose();
         }
-        #endregion
     }
 }
