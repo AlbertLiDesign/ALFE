@@ -1,6 +1,7 @@
 ﻿using ALFE.TopOpt;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ALFE
@@ -9,8 +10,7 @@ namespace ALFE
     {
         static void Main(string[] args)
         {
-            //TestProgram.Test();
-            RunVerify2D();
+            TestProgram.Test();
         }
 
         //public static void VerifyScoring()
@@ -34,7 +34,7 @@ namespace ALFE
         }
         public static void RunVerify3D()
         {
-            string path = @"E:\ALCoding\ALFE\topoptTest\Example3\Verify2";
+            string path = @"E:\ALCoding\ALFE\topoptTest\Example3\Verify";
             BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();
             beso.Optimize();

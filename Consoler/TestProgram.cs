@@ -64,19 +64,21 @@ namespace ALFE
         {
             Model model2d = new Cantilever2D(ElementType.PixelElement, 1000, 1000).Model;
 
+            Console.WriteLine("Read Model Successfully!");
             FESystem sys0 = new FESystem(model2d, Solver.PARDISO);
             sys0.Initialize();
+            Console.WriteLine("Start to solve");
             sys0.Solve();
 
-            FEIO.WriteKG(sys0.GetKG(), "E:/test/test.mtx", true);
+            //FEIO.WriteKG(sys0.GetKG(), "E:/test/test.mtx", true);
 
             Console.Write(sys0.Model.ModelInfo());
             Console.Write(sys0.MatrixInfo());
             
 
             Console.Write(sys0.SolvingInfo());
-            Console.WriteLine("Node Displacement 0: "+ sys0.Model.Nodes[0].Displacement);
-            Console.WriteLine("Node Displacement 9999: "+ sys0.Model.Nodes[9999].Displacement);
+            //Console.WriteLine("Node Displacement 0: "+ sys0.Model.Nodes[0].Displacement);
+            //Console.WriteLine("Node Displacement 9999: "+ sys0.Model.Nodes[9999].Displacement);
             //Console.Write(sys0.DisplacementInfo());
             //FEIO.WriteKG(sys0.GetKG(), "E:\\ALCoding\\ALFE\\topoptTest");
             Console.ReadLine();

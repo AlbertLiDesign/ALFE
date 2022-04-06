@@ -11,27 +11,27 @@
 
 #include <unsupported/Eigen/SparseExtra>
 
-#include <amgcl/backend/builtin.hpp>
-#include <amgcl/adapter/crs_tuple.hpp>
-#include <vector>
-#include <iostream>
-
-#include <amgcl/make_solver.hpp>
-#include <amgcl/amg.hpp>
-#include <amgcl/coarsening/smoothed_aggregation.hpp>
-#include <amgcl/relaxation/spai0.hpp>
-
-#include <amgcl/solver/cg.hpp>
-#include <amgcl/value_type/static_matrix.hpp>
-#include <amgcl/adapter/block_matrix.hpp>
-#include <amgcl/adapter/eigen.hpp>
-
-#include <amgcl/io/mm.hpp>
-#include <amgcl/profiler.hpp>
+//#include <amgcl/backend/builtin.hpp>
+//#include <amgcl/adapter/crs_tuple.hpp>
+//#include <vector>
+//#include <iostream>
+//
+//#include <amgcl/make_solver.hpp>
+//#include <amgcl/amg.hpp>
+//#include <amgcl/coarsening/smoothed_aggregation.hpp>
+//#include <amgcl/relaxation/spai0.hpp>
+//
+//#include <amgcl/solver/cg.hpp>
+//#include <amgcl/value_type/static_matrix.hpp>
+//#include <amgcl/adapter/block_matrix.hpp>
+//#include <amgcl/adapter/eigen.hpp>
+//
+//#include <amgcl/io/mm.hpp>
+//#include <amgcl/profiler.hpp>
 
 #include<cholmod.h>
 
-AMGCL_USE_EIGEN_VECTORS_WITH_BUILTIN_BACKEND()
+//AMGCL_USE_EIGEN_VECTORS_WITH_BUILTIN_BACKEND()
 extern "C" __declspec(dllexport) int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
 
 Eigen::VectorXd SetVector(double* matrix, int dim);
@@ -43,4 +43,4 @@ Eigen::VectorXd Solve_Serial_PARDISO(int* rows_offset, int* cols, double* vals, 
 Eigen::VectorXd Solve_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 Eigen::VectorXd Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 Eigen::VectorXd Solve_CholmodSupernodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
-Eigen::VectorXd Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
+//Eigen::VectorXd Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
