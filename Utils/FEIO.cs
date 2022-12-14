@@ -486,7 +486,6 @@ namespace ALFE
             sw.Dispose();
         }
 
-
         /// <summary>
         /// Read a finite element model and the parameters of BESO topology optimization with .al format
         /// </summary>
