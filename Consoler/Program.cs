@@ -11,11 +11,12 @@ namespace ALFE
         static void Main(string[] args)
         {
             //TestProgram.Test()
-            string path = @"C:\Users\alber\OneDrive - RMIT University\Work\AResearch\BuildingBlocksForTopOptMdl\Mdl\BlockDesign\Case01";
+            string path = @"C:\Users\alber\OneDrive - RMIT University\Work\AResearch\iBESO_3D\GH_Test";
+            //SPBESO beso = FEIO.ReadSPBESO(path, "beso");
             BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();
-            beso.Optimize();
-            FEIO.WriteIsovalues(path, beso);
+            beso.Optimize(true);
+            //FEIO.WriteIsovalues(path, beso);
         }
 
         //public static void VerifyScoring()

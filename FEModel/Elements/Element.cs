@@ -8,7 +8,7 @@ namespace ALFE
     {
         TriangleElement,
         QuadElement,
-        PixelElement,
+        SquareElement,
         TetrahedronElement,
         HexahedronElement,
         VoxelElement,

@@ -9,12 +9,17 @@ using System.Threading.Tasks;
 
 namespace ALFE.TopOpt
 {
-    public class BESO
+    public class SPBESO
     {
         public string solvingInfo;
         public FESystem System;
         public Model Model;
         public string Path;
+
+        public double lambda_e = 0;
+        public double lambda_d = 1;
+        public double[] omega_e;
+        public double[] omega_d;
 
         /// <summary>
         /// The isovalue for extracting isosurface.
@@ -69,25 +74,8 @@ namespace ALFE.TopOpt
 
         public bool HardKill = false;
 
-        public BESO() { }
-        public BESO(FESystem system, double rmin, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, Solver solver = 0)
-        {
-            if (rmin <= 0.0)
-                throw new Exception("Rmin must be large than 0.");
-            if (!(vf > 0.0 && vf < 1.0))
-                throw new Exception("Vt must be large than 0 and be less than 1.");
-
-            System = system;
-            Model = system.Model;
-            VolumeFraction = vf;
-            PenaltyExponent = p;
-            EvolutionRate = ert;
-            MaximumIteration = maxIter;
-            FilterRadius = rmin;
-            Dim = system.Model.DOF;
-            System._Solver = solver;
-        }
-        public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100,Solver solver = 0)
+        public SPBESO() { }
+        public SPBESO(string path, FESystem system, double rmin, double[] omega_d, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, Solver solver = 0)
         {
             if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
@@ -104,6 +92,7 @@ namespace ALFE.TopOpt
             Dim = system.Model.DOF;
             Path = path;
             System._Solver = solver;
+            this.omega_d = omega_d;
         }
 
         public void Initialize()
@@ -150,8 +139,7 @@ namespace ALFE.TopOpt
 
                 Console.WriteLine("Prepare to solve the system");
                 sw.Restart();
-                if (writeKG && iter == 1) 
-                    FEIO.WriteKG(System.GetKG(),Path + iter.ToString() + ".mtx", false);
+                //if (writeKG && iter == 1) FEIO.WriteKG(System.GetKG(),Path + iter.ToString() + ".mtx", false);
                 System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
@@ -202,7 +190,7 @@ namespace ALFE.TopOpt
                 HistoryV.Add(sum / Model.Elements.Count);
 
                 sw.Restart();
-                
+                FEIO.WriteInvalidElements(iter, Path, Model.Elements);
 
                 Sensitivities = Ae_old;
                 System.Update();
@@ -225,13 +213,8 @@ namespace ALFE.TopOpt
                 solvingInfo += BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), timeCost);
                 WritePerformanceReport();
             }
-            if (Path !=null)
-            {
-                FEIO.WriteInvalidElements(iter, Path, Model.Elements);
-                FEIO.WriteSensitivities(Path, Sensitivities);
-                FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
-            }
-
+            FEIO.WriteSensitivities(Path, Sensitivities);
+            FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
             Console.WriteLine("Done BESO");
         }
         private void BESO_Core(double curV, List<double> Ae)
@@ -268,6 +251,23 @@ namespace ALFE.TopOpt
 
                 values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
             });
+
+            // 映射到0-1
+            omega_e = new double[Model.Elements.Count];
+            //omega_d = new double[Model.Elements.Count];
+            double max = values.Max();
+            double min = values.Min();
+            for (int i = 0; i < values.Length; i++)
+            {
+                omega_e[i] = (values[i] - min) / (max - min);
+            }
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = lambda_e * omega_e[i] + lambda_d * omega_d[i];
+            }
+
+
             return values.ToList();
         }
         private double CalGlobalCompliance()

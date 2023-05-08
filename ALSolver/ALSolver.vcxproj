@@ -56,8 +56,9 @@
     <UseILP64Interfaces>false</UseILP64Interfaces>
     <UseIntelIPP>false</UseIntelIPP>
     <UseInteloneTBB>false</UseInteloneTBB>
-    <UseInteloneMKL>No</UseInteloneMKL>
+    <UseInteloneMKL>Parallel</UseInteloneMKL>
     <UseIntelTBB>false</UseIntelTBB>
+    <UseIntelIPP1A>false</UseIntelIPP1A>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -96,7 +97,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>E:\ALCoding\ALFE\bin\Debug</OutDir>
+    <OutDir>..\bin\Debug</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -140,18 +141,18 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;ALSOLVER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;ALSOLVER_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>E:\Libraries\eigen-3.4.0;E:\FEM\amgcl-master;E:\Compiling\boost_1_70_0;E:\FEM\solver\SP_ROOT\build\install\include\suitesparse</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Development\Libraries\eigen-3.4.0;C:\Development\Libraries\SuiteSparse\include\suitesparse</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>tbb_dll.lib;libcholmod.lib;libamd.lib;libbtf.lib;libcamd.lib;libccolamd.lib;metis.lib;libcolamd.lib;suitesparseconfig.lib;libamgcl.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\Intel\oneAPI\tbb\2021.1.1\lib\intel64\vc14;E:\FEM\amgcl-master\build\lib\Release;E:\FEM\solver\SP_ROOT\build\install\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>metis.lib;libcholmod.lib;libamd.lib;libbtf.lib;libcamd.lib;libccolamd.lib;libcolamd.lib;suitesparseconfig.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Development\Libraries\SuiteSparse\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,7 +165,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Development\Libraries\eigen-3.4.0;C:\Development\Libraries\SuiteSparse\include\suitesparse</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -173,7 +175,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>C:\Development\Libraries\SuiteSparse\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>metis.lib;libcholmod.lib;libamd.lib;libbtf.lib;libcamd.lib;libccolamd.lib;libcolamd.lib;suitesparseconfig.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

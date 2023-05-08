@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace ALFE
 {
-    public class Pixel : Element
+    public class Square : Element
     {
-        public Pixel(List<Node> nodes, Material material, bool nondesign = false)
+        public Square(List<Node> nodes, Material material, bool nondesign = false)
         {
             foreach (var item in nodes)
             {
@@ -17,7 +17,7 @@ namespace ALFE
 
             Nodes = nodes;
             Material = material;
-            Type = ElementType.PixelElement;
+            Type = ElementType.SquareElement;
             Dim = 2;
             NonDesign = nondesign;
         }

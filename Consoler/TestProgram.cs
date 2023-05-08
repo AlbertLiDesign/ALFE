@@ -62,7 +62,7 @@ namespace ALFE
         //}
         public static void Test()
         {
-            Model model2d = new Cantilever2D(ElementType.PixelElement, 1000, 1000).Model;
+            Model model2d = new Cantilever2D(ElementType.SquareElement, 1000, 1000).Model;
 
             Console.WriteLine("Read Model Successfully!");
             FESystem sys0 = new FESystem(model2d, Solver.PARDISO);
@@ -85,7 +85,7 @@ namespace ALFE
         }
         public static void TestAllSolver()
         {
-            Model model2d = new Cantilever2D(ElementType.PixelElement, 500, 500).Model;
+            Model model2d = new Cantilever2D(ElementType.SquareElement, 500, 500).Model;
 
             //FESystem sys0 = new FESystem(model2d, Solver.PARDISO);
             //sys0.Initialize();

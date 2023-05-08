@@ -98,7 +98,7 @@
     <Compile Include="FEModel\Elements\3D\Hexahedron.cs" />
     <Compile Include="FEModel\Elements\2D\Quadrilateral.cs" />
     <Compile Include="FEModel\Elements\3D\Tetrahedron.cs" />
-    <Compile Include="FEModel\Elements\2D\Pixel.cs" />
+    <Compile Include="FEModel\Elements\2D\Square.cs" />
     <Compile Include="FEModel\Elements\2D\Triangle.cs" />
     <Compile Include="FEModel\Elements\3D\Voxel.cs" />
     <Compile Include="FEModel\Elements\Hierarchy\QuadTree.cs" />
@@ -113,6 +113,7 @@
     <Compile Include="TestData\TestMethods.cs" />
     <Compile Include="TopOpt\BESO.cs" />
     <Compile Include="TopOpt\Filter.cs" />
+    <Compile Include="TopOpt\SPBESO.cs" />
     <Compile Include="Utils\FEIO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestData\Cantilever2D.cs" />

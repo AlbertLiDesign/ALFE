@@ -309,7 +309,7 @@ namespace ALFE
             if (File.Exists(path))
             {
                 int dof = 0;
-                ElementType elementType = ElementType.PixelElement;
+                ElementType elementType = ElementType.SquareElement;
                 List<Node> nodes = new List<Node>();
                 List<Element> elements = new List<Element>();
                 List<Load> loads = new List<Load>();
@@ -335,7 +335,7 @@ namespace ALFE
                         {
                             string type = value[1].Split(' ')[1];
                             if (type == "PixelElement")
-                                elementType = ElementType.PixelElement;
+                                elementType = ElementType.SquareElement;
                             else if (type == "TriangleElement")
                                 elementType = ElementType.TriangleElement;
                             else if (type == "QuadElement")
@@ -398,8 +398,8 @@ namespace ALFE
                             int id = int.Parse(value[i]);
                             elemNodes.Add(nodes[id]);
                         }
-                        if (elementType == ElementType.PixelElement)
-                            elements.Add(new Pixel(elemNodes, material));
+                        if (elementType == ElementType.SquareElement)
+                            elements.Add(new Square(elemNodes, material));
                         else if (elementType == ElementType.TriangleElement)
                             elements.Add(new Triangle(elemNodes, material));
                         else
@@ -499,7 +499,7 @@ namespace ALFE
             Model model = new Model();
 
             int dof = 0;
-            ElementType elementType = ElementType.PixelElement;
+            ElementType elementType = ElementType.SquareElement;
             List<Node> nodes = new List<Node>();
             List<Element> elements = new List<Element>();
             List<Load> loads = new List<Load>();
@@ -537,7 +537,7 @@ namespace ALFE
                             switch (type)
                             {
                                 case "PixelElement":
-                                    elementType = ElementType.PixelElement;
+                                    elementType = ElementType.SquareElement;
                                     break;
                                 case "TriangleElement":
                                     elementType = ElementType.TriangleElement;
@@ -650,8 +650,8 @@ namespace ALFE
 
                         switch (elementType)
                         {
-                            case ElementType.PixelElement:
-                                elements.Add(new Pixel(elemNodes, material, nondesign));
+                            case ElementType.SquareElement:
+                                elements.Add(new Square(elemNodes, material, nondesign));
                                 break;
                             case ElementType.TriangleElement:
                                 elements.Add(new Triangle(elemNodes, material,1.0, nondesign));
@@ -682,7 +682,7 @@ namespace ALFE
                 }
                 #endregion
 
-                if (elementType == ElementType.PixelElement || elementType == ElementType.QuadElement || elementType == ElementType.TriangleElement)
+                if (elementType == ElementType.SquareElement || elementType == ElementType.QuadElement || elementType == ElementType.TriangleElement)
                     model = new Model(2, nodes, elements, loads, supports);
                 else
                     model = new Model(3, nodes, elements, loads, supports);
@@ -692,6 +692,228 @@ namespace ALFE
             }
             BESO beso = new BESO(projectPath, new FESystem(model), rmin, ert, p, vf, maxIter, (Solver)solver);
             return beso;
+        }
+
+
+        /// <summary>
+        /// Read a finite element model and the parameters of BESO topology optimization with .al format
+        /// </summary>
+        /// <param name="path">File path.</param>
+        /// <returns>Return a finite element model.</returns>
+        public static SPBESO ReadSPBESO(string path, string name)
+        {
+            string besoPath = path + "\\" + name + ".txt";
+            string projectPath = path + "\\solution";
+            string omega_d_path = path + "\\omegaD.txt";
+
+            Model model = new Model();
+
+            int dof = 0;
+            ElementType elementType = ElementType.SquareElement;
+            List<Node> nodes = new List<Node>();
+            List<Element> elements = new List<Element>();
+            List<Load> loads = new List<Load>();
+            List<Support> supports = new List<Support>();
+            Material material = new Material();
+            double ert = 0.0;
+            double rmin = 0.0;
+            double vf = 0.0;
+            double p = 0;
+            int maxIter = 0;
+            int solver = 0;
+            bool parallel = false;
+
+            if (File.Exists(besoPath))
+            {
+                StreamReader SR = new StreamReader(besoPath);
+
+                #region Read FE parameters
+                bool readFEpara = false;
+
+                while (readFEpara == false)
+                {
+                    string line = SR.ReadLine();
+
+                    if (line == "FEA Parameters: ")
+                    {
+                        string[] value = SR.ReadLine().Split(':');
+                        if (value[0] == "DOF")
+                            dof = int.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Element Type")
+                        {
+                            string type = value[1].Split(' ')[1];
+                            switch (type)
+                            {
+                                case "PixelElement":
+                                    elementType = ElementType.SquareElement;
+                                    break;
+                                case "TriangleElement":
+                                    elementType = ElementType.TriangleElement;
+                                    break;
+                                case "QuadElement":
+                                    elementType = ElementType.QuadElement;
+                                    break;
+                                case "TetrahedronElement":
+                                    elementType = ElementType.TetrahedronElement;
+                                    break;
+                                case "VoxelElement":
+                                    elementType = ElementType.VoxelElement;
+                                    break;
+                                case "HexahedronElement":
+                                    elementType = ElementType.HexahedronElement;
+                                    break;
+                                default:
+                                    throw new Exception("Unknown element type.");
+                            }
+                        }
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Node Count")
+                            nodes = new List<Node>(int.Parse(value[1].Split(' ')[1]));
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Element Count")
+                            elements = new List<Element>(int.Parse(value[1].Split(' ')[1]));
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Load Count")
+                            loads = new List<Load>(int.Parse(value[1].Split(' ')[1]));
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Support Count")
+                            supports = new List<Support>(int.Parse(value[1].Split(' ')[1]));
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Young's Modulus")
+                            material.E = double.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Possion Rate")
+                            material.nu = double.Parse(value[1].Split(' ')[1]);
+                        if (value[0] == "Parallel Computing")
+                            parallel = bool.Parse(value[1].Split(' ')[1]);
+
+                        readFEpara = true;
+                    }
+                }
+                #endregion
+
+                #region Read BESO parameters
+                bool readBESOpara = false;
+                while (readBESOpara == false)
+                {
+                    string line = SR.ReadLine();
+
+                    if (line == "BESO Parameters: ")
+                    {
+                        string[] value = SR.ReadLine().Split(':');
+                        if (value[0] == "Volume Fraction")
+                            vf = double.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Evolution Rate")
+                            ert = double.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Filter Radius")
+                            rmin = double.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Penalty Exponent")
+                            p = double.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Maximum Iteration")
+                            maxIter = int.Parse(value[1].Split(' ')[1]);
+
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Solver")
+                            solver = int.Parse(value[1].Split(' ')[1]);
+
+                        readBESOpara = true;
+                    }
+                }
+                #endregion
+
+                #region Read the model
+                while (!SR.EndOfStream)
+                {
+                    string[] value = SR.ReadLine().Split(',');
+
+
+                    if (value[0] == "N")
+                        nodes.Add(new Node(dof, double.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3])));
+
+
+                    if (value[0] == "E" || value[0] == "NE")
+                    {
+                        bool nondesign = false;
+                        if (value[0] == "NE") nondesign = true;
+                        List<Node> elemNodes = new List<Node>();
+                        for (int i = 1; i < value.Length; i++)
+                        {
+                            int id = int.Parse(value[i]);
+                            elemNodes.Add(nodes[id]);
+                        }
+
+                        switch (elementType)
+                        {
+                            case ElementType.SquareElement:
+                                elements.Add(new Square(elemNodes, material, nondesign));
+                                break;
+                            case ElementType.TriangleElement:
+                                elements.Add(new Triangle(elemNodes, material, 1.0, nondesign));
+                                break;
+                            case ElementType.QuadElement:
+                                elements.Add(new Quadrilateral(elemNodes, material, 1.0, nondesign));
+                                break;
+                            case ElementType.TetrahedronElement:
+                                elements.Add(new Tetrahedron(elemNodes, material, nondesign));
+                                break;
+                            case ElementType.HexahedronElement:
+                                elements.Add(new Hexahedron(elemNodes, material, nondesign));
+                                break;
+                            case ElementType.VoxelElement:
+                                elements.Add(new Voxel(elemNodes, material, nondesign));
+                                break;
+                            default:
+                                throw new Exception("Unknown element type.");
+                        }
+                    }
+
+                    if (value[0] == "L")
+                        loads.Add(new Load(dof, int.Parse(value[1]), double.Parse(value[2]), double.Parse(value[3]), double.Parse(value[4])));
+
+                    if (value[0] == "S")
+                        if (value[2] == "Fixed")
+                            supports.Add(new Support(int.Parse(value[1]), SupportType.Fixed));
+                }
+                #endregion
+
+                if (elementType == ElementType.SquareElement || elementType == ElementType.QuadElement || elementType == ElementType.TriangleElement)
+                    model = new Model(2, nodes, elements, loads, supports);
+                else
+                    model = new Model(3, nodes, elements, loads, supports);
+
+                SR.Close();
+                SR.Dispose();
+            }
+
+            var omega_d = new double[model.Elements.Count];
+            if (File.Exists(omega_d_path))
+            {
+                StreamReader SR2 = new StreamReader(omega_d_path);
+                for (int i = 0; i < model.Elements.Count; i++)
+                {
+                    omega_d[i] = double.Parse(SR2.ReadLine());
+                }
+                SR2.Close();
+                SR2.Dispose();
+            }
+            SPBESO spbeso = new SPBESO(projectPath, new FESystem(model), rmin, omega_d, ert, p, vf, maxIter, (Solver)solver);
+            return spbeso;
         }
     }
 }

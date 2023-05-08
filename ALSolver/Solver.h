@@ -7,7 +7,7 @@
 #define EIGEN_USE_MKL_ALL
 #include <Eigen/Eigen>
 #include <Eigen/PardisoSupport>
-#include <Eigen/CholmodSupport>
+//#include <Eigen/CholmodSupport>
 
 #include <unsupported/Eigen/SparseExtra>
 
@@ -29,7 +29,7 @@
 //#include <amgcl/io/mm.hpp>
 //#include <amgcl/profiler.hpp>
 
-#include<cholmod.h>
+//#include<cholmod.h>
 
 //AMGCL_USE_EIGEN_VECTORS_WITH_BUILTIN_BACKEND()
 extern "C" __declspec(dllexport) int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz, double* X);
@@ -38,9 +38,9 @@ Eigen::VectorXd SetVector(double* matrix, int dim);
 Eigen::SparseMatrix<double> SetCOOMatrix(int* row, int* col, double* val, int rows, int cols, int nnz);
 
 Eigen::VectorXd Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
-Eigen::VectorXd Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
+//Eigen::VectorXd Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 Eigen::VectorXd Solve_Serial_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 Eigen::VectorXd Solve_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 Eigen::VectorXd Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
-Eigen::VectorXd Solve_CholmodSupernodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
+//Eigen::VectorXd Solve_CholmodSupernodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 //Eigen::VectorXd Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);

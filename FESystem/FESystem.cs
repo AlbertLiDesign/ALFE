@@ -309,7 +309,7 @@ namespace ALFE
         /// </summary>
         private void ComputeAllKe()
         {
-            if (Model.Elements[0].Type == ElementType.PixelElement || Model.Elements[0].Type == ElementType.VoxelElement)
+            if (Model.Elements[0].Type == ElementType.SquareElement || Model.Elements[0].Type == ElementType.VoxelElement)
             {
                 var elem0 = Model.Elements[0];
                 elem0.ComputeKe();

@@ -9,9 +9,9 @@ int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F
     case 0:
         result = Solve_SimplicialLLT(rows_offset, cols, vals, F, dim, nnz);
         break;
-    case 1:
-        result = Solve_CholmodSimplicialLLT(rows_offset, cols, vals, F, dim, nnz);
-        break;
+    //case 1:
+    //    result = Solve_CholmodSimplicialLLT(rows_offset, cols, vals, F, dim, nnz);
+    //    break;
     case 2:
         result = Solve_Serial_PARDISO(rows_offset, cols, vals, F, dim, nnz);
         break;
@@ -21,12 +21,12 @@ int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F
     case 4:
         result = Solve_PARDISO(rows_offset, cols, vals, F, dim, nnz);
         break;
-    case 5:
-        result = Solve_CholmodSupernodalLLT(rows_offset, cols, vals, F, dim, nnz);
-        break;
+    //case 5:
+    //    result = Solve_CholmodSupernodalLLT(rows_offset, cols, vals, F, dim, nnz);
+    //    break;
     //case 6:
     //    result = Solve_AMG_CG(rows_offset, cols, vals, F, dim, nnz);
-            break;
+    //        break;
     default:
         break;
     }
@@ -46,15 +46,15 @@ Eigen::VectorXd Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, d
     llt.factorize(A);
     return llt.solve(B);
 }
-Eigen::VectorXd Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz)
-{
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
-    auto B = SetVector(F, dim);
-    Eigen::CholmodSimplicialLLT<Eigen::SparseMatrix<double>> cholmodLLT(A);
-    cholmodLLT.analyzePattern(A);
-    cholmodLLT.factorize(A);
-    return cholmodLLT.solve(B);
-}
+//Eigen::VectorXd Solve_CholmodSimplicialLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz)
+//{
+//    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
+//    auto B = SetVector(F, dim);
+//    Eigen::CholmodSimplicialLLT<Eigen::SparseMatrix<double>> cholmodLLT(A);
+//    cholmodLLT.analyzePattern(A);
+//    cholmodLLT.factorize(A);
+//    return cholmodLLT.solve(B);
+//}
 
 Eigen::VectorXd Solve_Serial_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz)
 {
@@ -87,15 +87,15 @@ Eigen::VectorXd Solve_PARDISO(int* rows_offset, int* cols, double* vals, double*
     pardiso.factorize(A);
     return pardiso.solve(B);
 }
-Eigen::VectorXd Solve_CholmodSupernodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz)
-{
-    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
-    auto B = SetVector(F, dim);
-    Eigen::CholmodSupernodalLLT<Eigen::SparseMatrix<double>> cholmodSupernodal(A);
-    cholmodSupernodal.analyzePattern(A);
-    cholmodSupernodal.factorize(A);
-    return cholmodSupernodal.solve(B);
-}
+//Eigen::VectorXd Solve_CholmodSupernodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz)
+//{
+//    Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
+//    auto B = SetVector(F, dim);
+//    Eigen::CholmodSupernodalLLT<Eigen::SparseMatrix<double>> cholmodSupernodal(A);
+//    cholmodSupernodal.analyzePattern(A);
+//    cholmodSupernodal.factorize(A);
+//    return cholmodSupernodal.solve(B);
+//}
 //Eigen::VectorXd Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz)
 //{
 //    amgcl::profiler<> prof;

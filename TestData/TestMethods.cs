@@ -24,7 +24,7 @@ namespace ALFE
         }
         public static void TestPixels(int x = 7, int y = 5)
         {
-            Model model2d = new Cantilever2D(ElementType.PixelElement, x+1, y+1).Model;
+            Model model2d = new Cantilever2D(ElementType.SquareElement, x+1, y+1).Model;
             var _Filter = new ALFE.TopOpt.Filter(model2d.Elements, 2.0, 2);
             _Filter.PreFlt();
 
