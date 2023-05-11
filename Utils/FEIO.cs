@@ -62,8 +62,7 @@ namespace ALFE
         }
         public static void WriteSensitivities(string path, List<double> Ae)
         {
-            string output = path + '\\' + "ElemSensitivities.txt";
-            StreamWriter sw = new StreamWriter(output);
+            StreamWriter sw = new StreamWriter(path);
             foreach (var ae in Ae)
                 sw.WriteLine(ae.ToString());
             sw.Flush();
@@ -334,7 +333,7 @@ namespace ALFE
                         if (value[0] == "Element Type")
                         {
                             string type = value[1].Split(' ')[1];
-                            if (type == "PixelElement")
+                            if (type == "SquareElement")
                                 elementType = ElementType.SquareElement;
                             else if (type == "TriangleElement")
                                 elementType = ElementType.TriangleElement;
@@ -431,7 +430,7 @@ namespace ALFE
         /// <param name="BESO">A finite element model for BESO topology optimization.</param>
         public static void WriteBESO(string path, BESO beso, int solver)
         {
-            string output = path + ".txt";
+            string output = path + "/beso.txt";
             StreamWriter sw = new StreamWriter(output);
             sw.WriteLine("%This file is created by ALFE.");
 
@@ -536,7 +535,7 @@ namespace ALFE
                             string type = value[1].Split(' ')[1];
                             switch (type)
                             {
-                                case "PixelElement":
+                                case "SquareElement":
                                     elementType = ElementType.SquareElement;
                                     break;
                                 case "TriangleElement":
@@ -746,7 +745,7 @@ namespace ALFE
                             string type = value[1].Split(' ')[1];
                             switch (type)
                             {
-                                case "PixelElement":
+                                case "SquareElement":
                                     elementType = ElementType.SquareElement;
                                     break;
                                 case "TriangleElement":

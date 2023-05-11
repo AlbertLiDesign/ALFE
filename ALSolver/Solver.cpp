@@ -12,13 +12,13 @@ int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F
     //case 1:
     //    result = Solve_CholmodSimplicialLLT(rows_offset, cols, vals, F, dim, nnz);
     //    break;
-    case 2:
+    case 1:
         result = Solve_Serial_PARDISO(rows_offset, cols, vals, F, dim, nnz);
         break;
-    case 3:
+    case 2:
         result = Solve_CG(rows_offset, cols, vals, F, dim, nnz);
         break;
-    case 4:
+    case 3:
         result = Solve_PARDISO(rows_offset, cols, vals, F, dim, nnz);
         break;
     //case 5:
@@ -41,6 +41,7 @@ Eigen::VectorXd Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, d
 {
     Eigen::Map<Eigen::SparseMatrix<double, Eigen::StorageOptions::RowMajor>> A(dim, dim, nnz, rows_offset, cols, vals);
     auto B = SetVector(F, dim);
+    //std::cout << B << std::endl;
     Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> llt(A);
     llt.analyzePattern(A);
     llt.factorize(A);

@@ -11,7 +11,7 @@ namespace ALFE
         static void Main(string[] args)
         {
             //TestProgram.Test()
-            string path = @"C:\Users\alber\OneDrive - RMIT University\Work\AResearch\iBESO_3D\GH_Test";
+            string path = @"E:\\dev\\SPBESO\\data\\test0";
             //SPBESO beso = FEIO.ReadSPBESO(path, "beso");
             BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();

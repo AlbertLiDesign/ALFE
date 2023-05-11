@@ -213,7 +213,7 @@ namespace ALFE.TopOpt
                 solvingInfo += BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), timeCost);
                 WritePerformanceReport();
             }
-            FEIO.WriteSensitivities(Path, Sensitivities);
+            //FEIO.WriteSensitivities(Path, Sensitivities);
             FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
             Console.WriteLine("Done BESO");
         }

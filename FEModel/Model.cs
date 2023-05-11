@@ -90,7 +90,10 @@ namespace ALFE
                 Loads.Add(item);
             }
 
-            Supports = supports;
+            foreach (var item in supports)
+            {
+                Supports.Add(item);
+            }
 
             int e = 0;
             foreach (var elem in elements)
@@ -112,6 +115,8 @@ namespace ALFE
                 Nodes[item.NodeID].NonDesign = true;
                 Loads.Add(item);
             }
+            // 去重
+            Loads = Loads.GroupBy(x => x).Select(y => y.First()).ToList();
         }
 
         public void SetSupports(List<Support> supports)

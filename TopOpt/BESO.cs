@@ -184,6 +184,8 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
+                FEIO.WriteSensitivities(Path + "\\sen_" + iter.ToString() + ".txt", Ae);
+
                 // Run BESO
                 sw.Restart();
                 BESO_Core(currentVolume, Ae);
@@ -203,7 +205,6 @@ namespace ALFE.TopOpt
 
                 sw.Restart();
                 
-
                 Sensitivities = Ae_old;
                 System.Update();
 
@@ -224,11 +225,12 @@ namespace ALFE.TopOpt
 
                 solvingInfo += BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), timeCost);
                 WritePerformanceReport();
+                FEIO.WriteInvalidElements(iter, Path, Model.Elements);
             }
             if (Path !=null)
             {
                 FEIO.WriteInvalidElements(iter, Path, Model.Elements);
-                FEIO.WriteSensitivities(Path, Sensitivities);
+                //FEIO.WriteSensitivities(Path, Sensitivities);
                 FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
             }
 

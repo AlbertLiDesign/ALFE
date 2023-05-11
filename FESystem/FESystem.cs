@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -9,12 +10,9 @@ namespace ALFE
     public enum Solver
     {
         SimplicialLLT = 0,
-        CholmodSimplicialLLT = 1,
-        PARDISOSingle = 2,
-        CG = 3,
-        PARDISO = 4,
-        CholmodSuperNodalLLT = 5,
-        AMGCL = 6
+        PARDISOSingle = 1,
+        CG = 2,
+        PARDISO = 3
     }
     public class FESystem
     {
@@ -304,6 +302,17 @@ namespace ALFE
             FixedID = ids;
         }
 
+        public double ComputeCompliance()
+        {
+            double c = 0.0;
+            for (int i = 0; i < Model.Elements.Count; i++)
+            {
+                var elem = Model.Elements[i];
+                elem.ComputeUe();
+                c += 0.5 * elem.Ue.TransposeThisAndMultiply(elem.Ke).Multiply(elem.Ue)[0, 0];
+            }
+            return c;
+        }
         /// <summary>
         /// Compute all elementary stiffness matrices.
         /// </summary>
