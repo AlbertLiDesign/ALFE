@@ -442,6 +442,8 @@ namespace ALFE
             sw.WriteLine("Element Count: " + model.Elements.Count.ToString());
             sw.WriteLine("Load Count: " + model.Loads.Count.ToString());
             sw.WriteLine("Support Count: " + model.Supports.Count.ToString());
+            sw.WriteLine("Solid Domain Count: " + beso.SolidDomain.Count.ToString());
+            sw.WriteLine("Void Domain Count: " + beso.VoidDomain.Count.ToString());
             sw.WriteLine("Young's Modulus: " + model.Elements[0].Material.E.ToString());
             sw.WriteLine("Possion Rate: " + model.Elements[0].Material.nu.ToString());
 
@@ -462,8 +464,7 @@ namespace ALFE
                 sw.WriteLine("N," + node.Position.X.ToString() + ',' + node.Position.Y.ToString() + ',' + node.Position.Z.ToString());
             foreach (var elem in model.Elements)
             {
-                if (elem.NonDesign) sw.Write("NE,");
-                else sw.Write("E,");
+                sw.Write("E,");
                 int n = 1;
                 foreach (var node in elem.Nodes)
                 {
@@ -479,6 +480,10 @@ namespace ALFE
                     item.ForceVector.X.ToString() + ',' + item.ForceVector.Y.ToString() + ',' + item.ForceVector.Z.ToString());
             foreach (var item in model.Supports)
                 sw.WriteLine("S," + item.NodeID.ToString() + ',' + item.Type.ToString());
+            foreach (var item in beso.SolidDomain)
+                sw.WriteLine("SD," + item.ToString());
+            foreach (var item in beso.VoidDomain)
+                sw.WriteLine("VD," + item.ToString());
 
             sw.Flush();
             sw.Close();
@@ -503,6 +508,8 @@ namespace ALFE
             List<Element> elements = new List<Element>();
             List<Load> loads = new List<Load>();
             List<Support> supports = new List<Support>();
+            List<int> solidDomain = new List<int>();
+            List<int> voidDomain = new List<int>();
             Material material = new Material();
             double ert = 0.0;
             double rmin = 0.0;
@@ -573,7 +580,10 @@ namespace ALFE
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Support Count")
                             supports = new List<Support>(int.Parse(value[1].Split(' ')[1]));
-
+                        if (value[0] == "Solid Domain Count")
+                            solidDomain = new List<int>(int.Parse(value[1].Split(' ')[1]));
+                        if (value[0] == "Void Domain Count")
+                            voidDomain = new List<int>(int.Parse(value[1].Split(' ')[1]));
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Young's Modulus")
                             material.E = double.Parse(value[1].Split(' ')[1]);
@@ -678,6 +688,11 @@ namespace ALFE
                     if (value[0] == "S")
                         if (value[2] == "Fixed")
                             supports.Add(new Support(int.Parse(value[1]), SupportType.Fixed));
+
+                    if (value[0] == "SD")
+                        solidDomain.Add(int.Parse(value[1]));
+                    if (value[0] == "VD")
+                        voidDomain.Add(int.Parse(value[1]));
                 }
                 #endregion
 
@@ -690,6 +705,8 @@ namespace ALFE
                 SR.Dispose();
             }
             BESO beso = new BESO(projectPath, new FESystem(model), rmin, ert, p, vf, maxIter, (Solver)solver);
+            beso.SetSolidDomain(solidDomain);
+            beso.SetVoidDomain(voidDomain);
             return beso;
         }
 
@@ -713,6 +730,8 @@ namespace ALFE
             List<Element> elements = new List<Element>();
             List<Load> loads = new List<Load>();
             List<Support> supports = new List<Support>();
+            List<int> solidDomain = new List<int>();
+            List<int> voidDomain = new List<int>();
             Material material = new Material();
             double ert = 0.0;
             double rmin = 0.0;
@@ -783,7 +802,10 @@ namespace ALFE
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Support Count")
                             supports = new List<Support>(int.Parse(value[1].Split(' ')[1]));
-
+                        if (value[0] == "Solid Domain Count")
+                            solidDomain = new List<int>(int.Parse(value[1].Split(' ')[1]));
+                        if (value[0] == "Void Domain Count")
+                            voidDomain = new List<int>(int.Parse(value[1].Split(' ')[1]));
                         value = SR.ReadLine().Split(':');
                         if (value[0] == "Young's Modulus")
                             material.E = double.Parse(value[1].Split(' ')[1]);
@@ -888,6 +910,10 @@ namespace ALFE
                     if (value[0] == "S")
                         if (value[2] == "Fixed")
                             supports.Add(new Support(int.Parse(value[1]), SupportType.Fixed));
+                    if (value[0] == "SD")
+                        solidDomain.Add(int.Parse(value[1]));
+                    if (value[0] == "VD")
+                        voidDomain.Add(int.Parse(value[1]));
                 }
                 #endregion
 
@@ -912,6 +938,8 @@ namespace ALFE
                 SR2.Dispose();
             }
             SPBESO spbeso = new SPBESO(projectPath, new FESystem(model), rmin, omega_d, ert, p, vf, maxIter, (Solver)solver);
+            spbeso.SetSolidDomain(solidDomain);
+            spbeso.SetVoidDomain(voidDomain);
             return spbeso;
         }
     }

@@ -25,7 +25,6 @@ namespace ALFE
 
             Material = material;
             Type = ElementType.VoxelElement;
-            NonDesign = nondesign;
             Dim = 3;
 
             J = new DenseMatrix(3, 3);

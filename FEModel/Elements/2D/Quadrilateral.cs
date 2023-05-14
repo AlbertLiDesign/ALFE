@@ -25,7 +25,6 @@ namespace ALFE
             Thickness = thichness;
             Type = ElementType.QuadElement;
             Dim = 2;
-            NonDesign = nondesign;
 
             D = new DenseMatrix(3, 3);
             B = new DenseMatrix(3, 8);

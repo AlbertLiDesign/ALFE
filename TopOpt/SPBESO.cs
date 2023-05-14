@@ -72,7 +72,8 @@ namespace ALFE.TopOpt
         /// </summary>
         private List<double> HistoryV = new List<double>();
 
-        public bool HardKill = false;
+        public List<int> SolidDomain = new List<int>();
+        public List<int> VoidDomain = new List<int>();
 
         public SPBESO() { }
         public SPBESO(string path, FESystem system, double rmin, double[] omega_d, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, Solver solver = 0)
@@ -94,7 +95,14 @@ namespace ALFE.TopOpt
             System._Solver = solver;
             this.omega_d = omega_d;
         }
-
+        public void SetSolidDomain(List<int> sd)
+        {
+            SolidDomain = sd;
+        }
+        public void SetVoidDomain(List<int> vd)
+        {
+            VoidDomain = vd;
+        }
         public void Initialize()
         {
             // Write basic info

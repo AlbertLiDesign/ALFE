@@ -24,7 +24,6 @@ namespace ALFE
             Material = material;
             Thickness = thickness;
             Type = ElementType.TriangleElement;
-            NonDesign = nondesign;
             Dim = 2;
             ComputeArea();
         }

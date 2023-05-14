@@ -20,7 +20,6 @@ namespace ALFE
 
             Material = material;
             Type = ElementType.TetrahedronElement;
-            NonDesign = nondesign;
             Dim = 3;
         }
 

@@ -19,7 +19,6 @@ namespace ALFE
             Material = material;
             Type = ElementType.SquareElement;
             Dim = 2;
-            NonDesign = nondesign;
         }
 
         public override void ComputeD() { }

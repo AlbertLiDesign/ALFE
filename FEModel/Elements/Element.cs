@@ -40,7 +40,7 @@ namespace ALFE
         /// <summary>
         /// Whether the element is located in a non-design domain.
         /// </summary>
-        public bool NonDesign = false;
+        public bool Solid = false;
 
         public ElementType Type;
 

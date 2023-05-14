@@ -26,7 +26,6 @@ namespace ALFE
 
             Material = material;
             Type = ElementType.HexahedronElement;
-            NonDesign = nondesign;
             Dim = 3;
 
             J = new DenseMatrix(3, 3);

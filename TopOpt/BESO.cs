@@ -67,8 +67,8 @@ namespace ALFE.TopOpt
         /// </summary>
         private List<double> HistoryV = new List<double>();
 
-        public bool HardKill = false;
-
+        public List<int> SolidDomain = new List<int>();
+        public List<int> VoidDomain = new List<int>();
         public BESO() { }
         public BESO(FESystem system, double rmin, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, Solver solver = 0)
         {
@@ -125,6 +125,14 @@ namespace ALFE.TopOpt
             solvingInfo += '\n';
 
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
+        }
+        public void SetSolidDomain(List<int> sd)
+        {
+            SolidDomain = sd;
+        }
+        public void SetVoidDomain(List<int> vd)
+        {
+            VoidDomain = vd;
         }
         public void Optimize(bool writeKG = false)
         {
