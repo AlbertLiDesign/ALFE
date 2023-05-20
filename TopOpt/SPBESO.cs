@@ -180,6 +180,9 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
+                var ndlSen = ComputeVertSensitivities(Ae);
+                FEIO.WriteSensitivities(Path + "\\sen_" + iter.ToString() + ".txt", ndlSen);
+
                 // Run BESO
                 sw.Restart();
                 BESO_Core(currentVolume, Ae);
@@ -222,7 +225,7 @@ namespace ALFE.TopOpt
                 WritePerformanceReport();
             }
             //FEIO.WriteSensitivities(Path, Sensitivities);
-            FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
+            //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
             Console.WriteLine("Done BESO");
         }
         private void BESO_Core(double curV, List<double> Ae)
@@ -230,8 +233,9 @@ namespace ALFE.TopOpt
             double lowest = Ae.Min();
             double highest = Ae.Max();
             double th = 0.0;
-            double volfra = curV * Model.Elements.Count;
-
+            // // Solid and void domains will not be calculated in the entire volume
+            double volfra = curV * (Model.Elements.Count - SolidDomain.Count - VoidDomain.Count);
+            Element svelem = null;
             while (((highest - lowest) / highest) > 1.0e-5)
             {
                 th = (highest + lowest) * 0.5;
@@ -241,6 +245,28 @@ namespace ALFE.TopOpt
                     var v = Ae[elem.ID] > th ? 1.0 : Xmin;
                     elem.Xe = v;
                     sum += v;
+                }
+                // Apply solid domain
+                for (int i = 0; i < SolidDomain.Count; i++)
+                {
+                    svelem = Model.Elements[SolidDomain[i]];
+                    if (svelem.Xe != 1.0)
+                    {
+                        svelem.Xe = 1.0;
+                        // Solid domain will not be calculated in the entire volume
+                        sum -= 1.0;
+                    }
+                }
+                // Apply void domain
+                for (int i = 0; i < VoidDomain.Count; i++)
+                {
+                    svelem = Model.Elements[VoidDomain[i]];
+                    if (svelem.Xe != 1.0)
+                    {
+                        svelem.Xe = Xmin;
+                        // Void domain will not be calculated in the entire volume
+                        sum -= 1.0;
+                    }
                 }
 
                 if (sum - volfra > 0.0) lowest = th;
