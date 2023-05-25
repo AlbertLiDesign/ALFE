@@ -1,9 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ALFE
 {
     public class Utils
     {
+        public static List<double> SigmoidTransformation(List<double> data)
+        {
+            return data.Select(x => 1 / (1 + Math.Exp(-x))).ToList();
+        }
+        public static List<double> LogTransformation(List<double> data)
+        {
+            return data.Select(x => Math.Log(x + 1)).ToList();
+        }
+        public static List<double> Z_Score_Normalization(List<double> data)
+        {
+            double mean = data.Average(); // 计算均值
+
+            double sumOfSquaresOfDifferences = data.Select(val => (val - mean) * (val - mean)).Sum();
+            double sd = Math.Sqrt(sumOfSquaresOfDifferences / data.Count); // 计算标准差
+
+            // 使用Z-score进行标准化
+            return data.Select(x => (x - mean) / sd).ToList();
+        }
+        public static List<double> Min_Max_Normalization(List<double> data)
+        {
+            double min = data.Min(); // 计算最小值
+            double max = data.Max(); // 计算最大值
+
+            // 使用最小-最大规范化
+            return data.Select(x => (x - min) / (max - min)).ToList();
+        }
         /// <summary>
         /// Return a scan dictionary <index, difference>
         /// </summary>

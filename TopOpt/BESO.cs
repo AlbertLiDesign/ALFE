@@ -158,8 +158,8 @@ namespace ALFE.TopOpt
 
                 Console.WriteLine("Prepare to solve the system");
                 sw.Restart();
-                //if (writeKG && iter == 1) 
-                //    FEIO.WriteKG(System.GetKG(),Path + iter.ToString() + ".mtx", false);
+                if (writeKG && iter == 1)
+                    FEIO.WriteKG(System.GetKG(), Path + iter.ToString() + ".mtx", false);
                 System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
