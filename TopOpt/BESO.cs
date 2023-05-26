@@ -169,6 +169,7 @@ namespace ALFE.TopOpt
                 // Calculate sensitivities and global compliance
                 sw.Restart();
                 Ae = CalSensitivities();
+                FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
 
                 HistoryC.Add(CalGlobalCompliance());
                 sw.Stop();
@@ -193,7 +194,7 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 var ndlSen = ComputeVertSensitivities(Ae);
-                FEIO.WriteSensitivities(Path + "\\sen_" + iter.ToString() + ".txt", ndlSen);
+                FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
 
                 // Run BESO
                 sw.Restart();

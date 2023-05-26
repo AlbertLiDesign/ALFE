@@ -6,6 +6,10 @@ namespace ALFE
 {
     public class Utils
     {
+        public static List<double> PowerTransformation(List<double> data, double a)
+        {
+            return data.Select(x => Math.Pow(x, a)).ToList();
+        }
         public static List<double> SigmoidTransformation(List<double> data)
         {
             return data.Select(x => 1 / (1 + Math.Exp(-x))).ToList();
