@@ -16,10 +16,9 @@ namespace ALFE.TopOpt
         public Model Model;
         public string Path;
 
-        public double lambda_e = 0;
-        public double lambda_d = 1;
-        public double[] omega_e;
-        public double[] omega_d;
+        public double lambda = 1;
+        public double[] alpha;
+        public double[] omega;
 
         /// <summary>
         /// The isovalue for extracting isosurface.
@@ -76,7 +75,7 @@ namespace ALFE.TopOpt
         public List<int> VoidDomain = new List<int>();
 
         public SPBESO() { }
-        public SPBESO(string path, FESystem system, double rmin, double[] omega_d, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, Solver solver = 0)
+        public SPBESO(string path, FESystem system, double rmin, double[] omega, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, Solver solver = 0)
         {
             if (rmin <= 0.0)
                 throw new Exception("Rmin must be large than 0.");
@@ -93,7 +92,7 @@ namespace ALFE.TopOpt
             Dim = system.Model.DOF;
             Path = path;
             System._Solver = solver;
-            this.omega_d = omega_d;
+            this.omega = omega;
         }
         public void SetSolidDomain(List<int> sd)
         {
@@ -157,6 +156,7 @@ namespace ALFE.TopOpt
                 // Calculate sensitivities and global compliance
                 sw.Restart();
                 Ae = CalSensitivities();
+                FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
 
                 HistoryC.Add(CalGlobalCompliance());
                 sw.Stop();
@@ -181,7 +181,7 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 var ndlSen = ComputeVertSensitivities(Ae);
-                FEIO.WriteSensitivities(Path + "\\sen_" + iter.ToString() + ".txt", ndlSen);
+                FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
 
                 // Run BESO
                 sw.Restart();
@@ -286,21 +286,15 @@ namespace ALFE.TopOpt
                 values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
             });
 
+            lambda = 0.5;
             // 映射到0-1
-            omega_e = new double[Model.Elements.Count];
-            //omega_d = new double[Model.Elements.Count];
-            double max = values.Max();
-            double min = values.Min();
+            alpha = Utils.PowerTransformation(values.ToList(), 0.15).ToArray();
+            //alpha = Utils.Min_Max_Normalization(values.ToList(), 1.0 - lambda, 0).ToArray();
+            omega = Utils.Min_Max_Normalization(omega.ToList(), 1, 0).ToArray();
             for (int i = 0; i < values.Length; i++)
             {
-                omega_e[i] = (values[i] - min) / (max - min);
+                values[i] = (1.0 - lambda) * alpha[i] + lambda * omega[i];
             }
-
-            for (int i = 0; i < values.Length; i++)
-            {
-                values[i] = lambda_e * omega_e[i] + lambda_d * omega_d[i];
-            }
-
 
             return values.ToList();
         }

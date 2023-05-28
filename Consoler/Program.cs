@@ -12,8 +12,8 @@ namespace ALFE
         {
             //TestProgram.Test()
             string path = @"E:\\dev\\SPBESO\\data\\testiBESOVR";
-            //SPBESO beso = FEIO.ReadSPBESO(path, "beso");
-            BESO beso = FEIO.ReadBESO(path, "beso");
+            SPBESO beso = FEIO.ReadSPBESO(path, "beso");
+            //BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();
             beso.Optimize(true);
             //Console.WriteLine(beso.Model.Elements[0].Ke);

@@ -720,7 +720,7 @@ namespace ALFE
         {
             string besoPath = path + "\\" + name + ".txt";
             string projectPath = path + "\\solution";
-            string omega_d_path = path + "\\omegaD.txt";
+            string omega_path = path + "\\sdf.txt";
 
             Model model = new Model();
 
@@ -926,18 +926,18 @@ namespace ALFE
                 SR.Dispose();
             }
 
-            var omega_d = new double[model.Elements.Count];
-            if (File.Exists(omega_d_path))
+            var omega = new double[model.Elements.Count];
+            if (File.Exists(omega_path))
             {
-                StreamReader SR2 = new StreamReader(omega_d_path);
+                StreamReader SR2 = new StreamReader(omega_path);
                 for (int i = 0; i < model.Elements.Count; i++)
                 {
-                    omega_d[i] = double.Parse(SR2.ReadLine());
+                    omega[i] = double.Parse(SR2.ReadLine());
                 }
                 SR2.Close();
                 SR2.Dispose();
             }
-            SPBESO spbeso = new SPBESO(projectPath, new FESystem(model), rmin, omega_d, ert, p, vf, maxIter, (Solver)solver);
+            SPBESO spbeso = new SPBESO(projectPath, new FESystem(model), rmin, omega, ert, p, vf, maxIter, (Solver)solver);
             spbeso.SetSolidDomain(solidDomain);
             spbeso.SetVoidDomain(voidDomain);
             return spbeso;

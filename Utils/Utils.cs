@@ -16,7 +16,7 @@ namespace ALFE
         }
         public static List<double> LogTransformation(List<double> data)
         {
-            return data.Select(x => Math.Log(x + 1)).ToList();
+            return data.Select(x => Math.Log(x + 1, 2)).ToList();
         }
         public static List<double> Z_Score_Normalization(List<double> data)
         {
@@ -35,6 +35,18 @@ namespace ALFE
 
             // 使用最小-最大规范化
             return data.Select(x => (x - min) / (max - min)).ToList();
+        }
+        public static List<double> Min_Max_Normalization(List<double> data, double max, double min)
+        {
+            double a, b = 0;
+            if (max < min) { b = min; a = max; }
+            else { b = max; a = min; }
+
+            double data_min = data.Min(); // 计算最小值
+            double data_max = data.Max(); // 计算最大值
+
+            // 使用最小-最大规范化
+            return data.Select(x => (b - a) * (x - data_min) / (data_max - data_min) + a).ToList();
         }
         /// <summary>
         /// Return a scan dictionary <index, difference>
