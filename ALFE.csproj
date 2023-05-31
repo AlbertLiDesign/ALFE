@@ -112,6 +112,7 @@
     <Compile Include="FEModel\Support.cs" />
     <Compile Include="TestData\TestMethods.cs" />
     <Compile Include="TopOpt\BESO.cs" />
+    <Compile Include="TopOpt\BFS.cs" />
     <Compile Include="TopOpt\Filter.cs" />
     <Compile Include="TopOpt\SPBESO.cs" />
     <Compile Include="Utils\FEIO.cs" />
