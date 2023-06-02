@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ALFE.TopOpt
@@ -324,7 +325,6 @@ namespace ALFE.TopOpt
             }
             return raw.ToList();
         }
-
         public List<double> ComputeVertSensitivities(List<double> elemSensitivities)
         {
             var Vert_Value = new List<double>();

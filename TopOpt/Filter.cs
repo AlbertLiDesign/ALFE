@@ -82,7 +82,7 @@ namespace ALFE.TopOpt
                 }
 
                 // Searching
-                var result = KDTreeMultiSearch(centres, tree, FilterRadius, 1024);
+                var result = Utils.KDTreeMultiSearch(centres, tree, FilterRadius, 1024);
 
                 foreach (var elem in Elements)
                 {
@@ -142,27 +142,6 @@ namespace ALFE.TopOpt
                 }
             }
             return elems;
-        }
-
-        private static List<int>[] KDTreeMultiSearch(List<Vector3D> pts, KDTree<int> tree, double radius, int maxReturned)
-        {
-            List<int>[] indices = new List<int>[pts.Count];
-            Parallel.ForEach(Partitioner.Create(0, pts.Count, (int)Math.Ceiling(pts.Count / (double)Environment.ProcessorCount * 2.0)), delegate (Tuple<int, int> rng, ParallelLoopState loopState)
-            {
-                for (int i = rng.Item1; i < rng.Item2; i++)
-                {
-                    Vector3D point3d = pts[i];
-                    double num = radius;
-                    List<int> list = tree.NearestNeighbors(new double[]
-                    {
-                        point3d.X,
-                        point3d.Y,
-                        point3d.Z
-                    }, maxReturned, num * num).ToList();
-                    indices[i] = list;
-                }
-            });
-            return indices;
         }
     }
 }

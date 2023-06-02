@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ALFE.TopOpt
 {
@@ -14,14 +15,8 @@ namespace ALFE.TopOpt
             _adjacencyList = adjacencyList;
         }
 
-        public List<int> RunBFS(int startNode)
+        public List<int> RunBFS(int startNode, bool[] visited)
         {
-            bool[] visited = new bool[_numOfNodes];
-            for (int i = 0; i < _numOfNodes; i++)
-            {
-                visited[i] = false;
-            }
-
             List<int> traversedNodes = new List<int>();
             Queue<int> queue = new Queue<int>();
 
@@ -44,6 +39,33 @@ namespace ALFE.TopOpt
             }
 
             return traversedNodes;
+        }
+
+        public int[] MarkLargestComponent()
+        {
+            bool[] visited = new bool[_numOfNodes];
+            List<List<int>> components = new List<List<int>>();
+
+            for (int i = 0; i < _numOfNodes; i++)
+            {
+                if (!visited[i])
+                {
+                    components.Add(RunBFS(i, visited));
+                }
+            }
+
+            List<int> largestComponent = components.OrderByDescending(x => x.Count).First();
+            int[] componentLabels = new int[_numOfNodes];
+            for (int i = 0; i < _numOfNodes; i++)
+            {
+                componentLabels[i] = 0;
+            }
+            foreach (int node in largestComponent)
+            {
+                componentLabels[node] = 1;
+            }
+
+            return componentLabels;
         }
     }
 }

@@ -152,7 +152,7 @@ namespace ALFE
         /// <summary>
         /// Get the neighbours of each node.
         /// </summary>
-        private void GetAdjacentNodes()
+        public void GetAdjacentNodes()
         {
             Parallel.ForEach(Nodes, node =>
             {
@@ -167,7 +167,7 @@ namespace ALFE
         /// <summary>
         /// Get the connected elements of each node.
         /// </summary>
-        private void GetConnectedElements()
+        public void GetConnectedElements()
         {
             // in each node make a list of elements to which it belongs
             foreach (var elem in Elements)

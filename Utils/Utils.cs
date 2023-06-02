@@ -1,6 +1,9 @@
-﻿using System;
+﻿using KDTree;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ALFE
 {
@@ -16,7 +19,11 @@ namespace ALFE
         }
         public static List<double> LogTransformation(List<double> data)
         {
-            return data.Select(x => Math.Log(x + 1, 2)).ToList();
+            return data.Select(x => Math.Log(x)).ToList();
+        }
+        public static List<double> LogTransformation(List<double> data, double a)
+        {
+            return data.Select(x => Math.Log(x, a)).ToList();
         }
         public static List<double> Z_Score_Normalization(List<double> data)
         {
@@ -47,6 +54,27 @@ namespace ALFE
 
             // 使用最小-最大规范化
             return data.Select(x => (b - a) * (x - data_min) / (data_max - data_min) + a).ToList();
+        }
+
+        public static List<int>[] KDTreeMultiSearch(List<Vector3D> pts, KDTree<int> tree, double radius, int maxReturned)
+        {
+            List<int>[] indices = new List<int>[pts.Count];
+            Parallel.ForEach(Partitioner.Create(0, pts.Count, (int)Math.Ceiling(pts.Count / (double)Environment.ProcessorCount * 2.0)), delegate (Tuple<int, int> rng, ParallelLoopState loopState)
+            {
+                for (int i = rng.Item1; i < rng.Item2; i++)
+                {
+                    Vector3D point3d = pts[i];
+                    double num = radius;
+                    List<int> list = tree.NearestNeighbors(new double[]
+                    {
+                        point3d.X,
+                        point3d.Y,
+                        point3d.Z
+                    }, maxReturned, num * num).ToList();
+                    indices[i] = list;
+                }
+            });
+            return indices;
         }
         /// <summary>
         /// Return a scan dictionary <index, difference>

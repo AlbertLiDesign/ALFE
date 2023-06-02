@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using KDTree;
+using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ALFE.TopOpt
 {
@@ -183,6 +185,21 @@ namespace ALFE.TopOpt
                 var ndlSen = ComputeVertSensitivities(Ae);
                 FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
 
+                var addtionalValues = RemoveIsolateElements();
+                if (iter == 83)
+                {
+                    Console.WriteLine("A)");
+                }
+                int id = 0;
+                foreach (var item in Model.Elements)
+                {
+                    if (item.Xe == 1.0)
+                    {
+                        Ae[item.ID] *= addtionalValues[id];
+                        id++;
+                    }
+                }
+
                 // Run BESO
                 sw.Restart();
                 BESO_Core(currentVolume, Ae);
@@ -227,6 +244,33 @@ namespace ALFE.TopOpt
             //FEIO.WriteSensitivities(Path, Sensitivities);
             //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
             Console.WriteLine("Done BESO");
+        }
+        private int[] RemoveIsolateElements()
+        {
+            List<Vector3D> elementCentroids = new List<Vector3D>();
+            var tree = new KDTree<int>(3);
+
+            // Get centres
+            int id = 0;
+            foreach (var item in Model.Elements)
+            {
+                if (item.Xe == 1.0)
+                {
+                    Vector3D Centroid = new Vector3D(0,0,0);
+                    for (int i = 0; i < item.Nodes.Count; i++)
+                    {
+                        Centroid += item.Nodes[i].Position;
+                    }
+                    Centroid/=item.Nodes.Count;
+                    elementCentroids.Add(Centroid);
+                    tree.AddPoint(new double[3] { Centroid.X, Centroid.Y, Centroid.Z }, id);
+                    id++;
+                }
+            }
+
+            var adjacencyList = Utils.KDTreeMultiSearch(elementCentroids, tree, 1.74, 32);
+            var bfs = new BFS(elementCentroids.Count, adjacencyList);
+            return bfs.MarkLargestComponent();
         }
         private void BESO_Core(double curV, List<double> Ae)
         {
@@ -287,10 +331,11 @@ namespace ALFE.TopOpt
             });
 
             lambda = 0.5;
-            // 映射到0-1
-            alpha = Utils.PowerTransformation(values.ToList(), 0.15).ToArray();
-            //alpha = Utils.Min_Max_Normalization(values.ToList(), 1.0 - lambda, 0).ToArray();
-            omega = Utils.Min_Max_Normalization(omega.ToList(), 1, 0).ToArray();
+            // 把敏度映射到0-1
+            alpha = Utils.Min_Max_Normalization(Utils.LogTransformation(values.ToList(), 10)).ToArray();
+            // 把主观参数映射到-0.5到0.5
+            omega = Utils.Min_Max_Normalization(omega.ToList()).ToArray();
+
             for (int i = 0; i < values.Length; i++)
             {
                 values[i] = (1.0 - lambda) * alpha[i] + lambda * omega[i];
