@@ -9,41 +9,41 @@ namespace ALFE
 {
     public class Utils
     {
-        public static List<double> PowerTransformation(List<double> data, double a)
+        public static double[] PowerTransformation(double[] data, double a)
         {
-            return data.Select(x => Math.Pow(x, a)).ToList();
+            return data.Select(x => Math.Pow(x, a)).ToArray();
         }
-        public static List<double> SigmoidTransformation(List<double> data)
+        public static double[] SigmoidTransformation(double[] data)
         {
-            return data.Select(x => 1 / (1 + Math.Exp(-x))).ToList();
+            return data.Select(x => 1 / (1 + Math.Exp(-x))).ToArray();
         }
-        public static List<double> LogTransformation(List<double> data)
+        public static double[] LogTransformation(double[] data)
         {
-            return data.Select(x => Math.Log(x)).ToList();
+            return data.Select(x => Math.Log(x)).ToArray();
         }
-        public static List<double> LogTransformation(List<double> data, double a)
+        public static double[] LogTransformation(double[] data, double a)
         {
-            return data.Select(x => Math.Log(x, a)).ToList();
+            return data.Select(x => Math.Log(x, a)).ToArray();
         }
-        public static List<double> Z_Score_Normalization(List<double> data)
+        public static double[] Z_Score_Normalization(double[] data)
         {
             double mean = data.Average(); // 计算均值
 
             double sumOfSquaresOfDifferences = data.Select(val => (val - mean) * (val - mean)).Sum();
-            double sd = Math.Sqrt(sumOfSquaresOfDifferences / data.Count); // 计算标准差
+            double sd = Math.Sqrt(sumOfSquaresOfDifferences / data.Length); // 计算标准差
 
             // 使用Z-score进行标准化
-            return data.Select(x => (x - mean) / sd).ToList();
+            return data.Select(x => (x - mean) / sd).ToArray();
         }
-        public static List<double> Min_Max_Normalization(List<double> data)
+        public static double[] Min_Max_Normalization(double[] data)
         {
             double min = data.Min(); // 计算最小值
             double max = data.Max(); // 计算最大值
 
             // 使用最小-最大规范化
-            return data.Select(x => (x - min) / (max - min)).ToList();
+            return data.Select(x => (x - min) / (max - min)).ToArray();
         }
-        public static List<double> Min_Max_Normalization(List<double> data, double max, double min)
+        public static double[] Min_Max_Normalization(double[] data, double max, double min)
         {
             double a, b = 0;
             if (max < min) { b = min; a = max; }
@@ -53,7 +53,7 @@ namespace ALFE
             double data_max = data.Max(); // 计算最大值
 
             // 使用最小-最大规范化
-            return data.Select(x => (b - a) * (x - data_min) / (data_max - data_min) + a).ToList();
+            return data.Select(x => (b - a) * (x - data_min) / (data_max - data_min) + a).ToArray();
         }
 
         public static List<int>[] KDTreeMultiSearch(List<Vector3D> pts, KDTree<int> tree, double radius, int maxReturned)

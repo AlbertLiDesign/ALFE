@@ -124,7 +124,7 @@ namespace ALFE.TopOpt
 
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
-        public void Optimize(bool writeKG = false)
+        public void Optimize(bool removeIsolate = false)
         {
             double delta = 1.0;
             int iter = 0;
@@ -157,7 +157,7 @@ namespace ALFE.TopOpt
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
-                Ae = CalSensitivities();
+                Ae = CalSensitivities(iter);
                 FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
 
                 HistoryC.Add(CalGlobalCompliance());
@@ -185,20 +185,20 @@ namespace ALFE.TopOpt
                 var ndlSen = ComputeVertSensitivities(Ae);
                 FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
 
-                var addtionalValues = RemoveIsolateElements();
-                if (iter == 83)
+                if (removeIsolate)
                 {
-                    Console.WriteLine("A)");
-                }
-                int id = 0;
-                foreach (var item in Model.Elements)
-                {
-                    if (item.Xe == 1.0)
+                    var addtionalValues = RemoveIsolateElements();
+                    int id = 0;
+                    foreach (var item in Model.Elements)
                     {
-                        Ae[item.ID] *= addtionalValues[id];
-                        id++;
+                        if (item.Xe == 1.0)
+                        {
+                            Ae[item.ID] *= addtionalValues[id];
+                            id++;
+                        }
                     }
                 }
+
 
                 // Run BESO
                 sw.Restart();
@@ -318,7 +318,7 @@ namespace ALFE.TopOpt
             }
             isovalues.Add(th);
         }
-        private List<double> CalSensitivities()
+        private List<double> CalSensitivities(int iter)
         {
             double[] values = new double[Model.Elements.Count];
             Parallel.ForEach(Model.Elements, elem =>
@@ -330,15 +330,19 @@ namespace ALFE.TopOpt
                 values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
             });
 
-            lambda = 0.5;
-            // 把敏度映射到0-1
-            alpha = Utils.Min_Max_Normalization(Utils.LogTransformation(values.ToList(), 10)).ToArray();
-            // 把主观参数映射到-0.5到0.5
-            omega = Utils.Min_Max_Normalization(omega.ToList()).ToArray();
-
-            for (int i = 0; i < values.Length; i++)
+            if (iter > 1)
             {
-                values[i] = (1.0 - lambda) * alpha[i] + lambda * omega[i];
+                lambda = 0.5;
+                // 把敏度映射到0-1
+                alpha = Utils.Min_Max_Normalization(values);
+                // 把主观参数映射到边界附近
+                omega = Utils.Min_Max_Normalization(omega);
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = (1.0 - lambda) * alpha[i] + isovalues.Last() * lambda * omega[i];
+                }
+
             }
 
             return values.ToList();
