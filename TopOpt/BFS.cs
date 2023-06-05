@@ -41,7 +41,7 @@ namespace ALFE.TopOpt
             return traversedNodes;
         }
 
-        public int[] MarkLargestComponent()
+        public double[] MarkLargestComponent()
         {
             bool[] visited = new bool[_numOfNodes];
             List<List<int>> components = new List<List<int>>();
@@ -55,10 +55,10 @@ namespace ALFE.TopOpt
             }
 
             List<int> largestComponent = components.OrderByDescending(x => x.Count).First();
-            int[] componentLabels = new int[_numOfNodes];
+            double[] componentLabels = new double[_numOfNodes];
             for (int i = 0; i < _numOfNodes; i++)
             {
-                componentLabels[i] = 0;
+                componentLabels[i] = 1e-3;
             }
             foreach (int node in largestComponent)
             {

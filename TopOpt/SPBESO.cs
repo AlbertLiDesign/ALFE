@@ -124,7 +124,7 @@ namespace ALFE.TopOpt
 
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
-        public void Optimize(bool removeIsolate = false)
+        public void Optimize(bool removeIsolate = true)
         {
             double delta = 1.0;
             int iter = 0;
@@ -157,7 +157,7 @@ namespace ALFE.TopOpt
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
-                Ae = CalSensitivities(iter);
+                Ae = CalSensitivities(currentVolume);
                 FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
 
                 HistoryC.Add(CalGlobalCompliance());
@@ -185,26 +185,25 @@ namespace ALFE.TopOpt
                 var ndlSen = ComputeVertSensitivities(Ae);
                 FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
 
-                if (removeIsolate)
-                {
-                    var addtionalValues = RemoveIsolateElements();
-                    int id = 0;
-                    foreach (var item in Model.Elements)
-                    {
-                        if (item.Xe == 1.0)
-                        {
-                            Ae[item.ID] *= addtionalValues[id];
-                            id++;
-                        }
-                    }
-                }
-
-
                 // Run BESO
                 sw.Restart();
                 BESO_Core(currentVolume, Ae);
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
+
+                if (removeIsolate)
+                {
+                    var isolatePenalisation = RemoveIsolateElements();
+                    int id = 0;
+                    foreach (var item in Model.Elements)
+                    {
+                        if (item.Xe == 1.0)
+                        {
+                            item.Xe = isolatePenalisation[id];
+                            id++;
+                        }
+                    }
+                }
 
                 double sum = 0.0;
                 double removeNum = 0;
@@ -245,7 +244,7 @@ namespace ALFE.TopOpt
             //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
             Console.WriteLine("Done BESO");
         }
-        private int[] RemoveIsolateElements()
+        private double[] RemoveIsolateElements()
         {
             List<Vector3D> elementCentroids = new List<Vector3D>();
             var tree = new KDTree<int>(3);
@@ -318,7 +317,7 @@ namespace ALFE.TopOpt
             }
             isovalues.Add(th);
         }
-        private List<double> CalSensitivities(int iter)
+        private List<double> CalSensitivities(double currentVolume)
         {
             double[] values = new double[Model.Elements.Count];
             Parallel.ForEach(Model.Elements, elem =>
@@ -330,20 +329,26 @@ namespace ALFE.TopOpt
                 values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
             });
 
-            if (iter > 1)
-            {
-                lambda = 0.5;
-                // 把敏度映射到0-1
-                alpha = Utils.Min_Max_Normalization(values);
-                // 把主观参数映射到边界附近
-                omega = Utils.Min_Max_Normalization(omega);
+            int rank = (int)Math.Round(values.Length * currentVolume);
 
-                for (int i = 0; i < values.Length; i++)
-                {
-                    values[i] = (1.0 - lambda) * alpha[i] + isovalues.Last() * lambda * omega[i];
-                }
+            lambda = 0.9;
+             // 把敏度映射到0-1
+            alpha = Utils.Min_Max_Normalization(values);
+            //var rankedAlpha = (double[])alpha.Clone();
+            //double value = 0.0;
+            //if (rank > 0 && rank <= alpha.Length)
+            //{
+            //    Array.Sort(rankedAlpha); // 对数组进行排序
+            //    value = rankedAlpha[rank - 1]; // 获取排名第n的值
+            //}
 
-            }
+            // 把主观参数映射到边界附近
+            omega = Utils.Min_Max_Normalization(omega, -1, 1);
+
+             for (int i = 0; i < values.Length; i++)
+             {
+                 values[i] = (1.0 - Math.Pow(lambda, 2)) * alpha[i] + Math.Pow(lambda, 2) * omega[i];
+             }
 
             return values.ToList();
         }
