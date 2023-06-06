@@ -157,7 +157,7 @@ namespace ALFE.TopOpt
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
-                Ae = CalSensitivities(currentVolume);
+                Ae = CalSensitivities();
                 FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
 
                 HistoryC.Add(CalGlobalCompliance());
@@ -182,15 +182,11 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-                var ndlSen = ComputeVertSensitivities(Ae);
-                FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
-
                 // Run BESO
                 sw.Restart();
                 BESO_Core(currentVolume, Ae);
-                sw.Stop();
-                timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
+                // 检查是否有独立构件, 如果有再做一次BESO删减
                 if (removeIsolate)
                 {
                     var isolatePenalisation = RemoveIsolateElements();
@@ -199,11 +195,17 @@ namespace ALFE.TopOpt
                     {
                         if (item.Xe == 1.0)
                         {
-                            item.Xe = isolatePenalisation[id];
+                            Ae[item.ID] *= isolatePenalisation[id];
                             id++;
                         }
                     }
+                    Ae.CopyTo(raw);
+                    Ae_old = raw.ToList();
+                    BESO_Core(currentVolume, Ae);
                 }
+
+                sw.Stop();
+                timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 double sum = 0.0;
                 double removeNum = 0;
@@ -267,7 +269,7 @@ namespace ALFE.TopOpt
                 }
             }
 
-            var adjacencyList = Utils.KDTreeMultiSearch(elementCentroids, tree, 1.74, 32);
+            var adjacencyList = Utils.KDTreeMultiSearch(elementCentroids, tree, 1.1, 32);
             var bfs = new BFS(elementCentroids.Count, adjacencyList);
             return bfs.MarkLargestComponent();
         }
@@ -317,7 +319,7 @@ namespace ALFE.TopOpt
             }
             isovalues.Add(th);
         }
-        private List<double> CalSensitivities(double currentVolume)
+        private List<double> CalSensitivities()
         {
             double[] values = new double[Model.Elements.Count];
             Parallel.ForEach(Model.Elements, elem =>
@@ -329,25 +331,17 @@ namespace ALFE.TopOpt
                 values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
             });
 
-            int rank = (int)Math.Round(values.Length * currentVolume);
-
-            lambda = 0.9;
+            lambda = 0.3;
+            var powerL = Math.Pow(lambda, 2);
              // 把敏度映射到0-1
             alpha = Utils.Min_Max_Normalization(values);
-            //var rankedAlpha = (double[])alpha.Clone();
-            //double value = 0.0;
-            //if (rank > 0 && rank <= alpha.Length)
-            //{
-            //    Array.Sort(rankedAlpha); // 对数组进行排序
-            //    value = rankedAlpha[rank - 1]; // 获取排名第n的值
-            //}
 
             // 把主观参数映射到边界附近
             omega = Utils.Min_Max_Normalization(omega, -1, 1);
 
              for (int i = 0; i < values.Length; i++)
              {
-                 values[i] = (1.0 - Math.Pow(lambda, 2)) * alpha[i] + Math.Pow(lambda, 2) * omega[i];
+                 values[i] = (1.0 - powerL) * alpha[i] + powerL * omega[i];
              }
 
             return values.ToList();
