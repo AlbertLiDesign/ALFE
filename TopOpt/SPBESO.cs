@@ -331,13 +331,13 @@ namespace ALFE.TopOpt
                 values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
             });
 
-            lambda = 0.3;
+            lambda = 0.9;
             var powerL = Math.Pow(lambda, 2);
              // 把敏度映射到0-1
             alpha = Utils.Min_Max_Normalization(values);
 
             // 把主观参数映射到边界附近
-            omega = Utils.Min_Max_Normalization(omega, -1, 1);
+            omega = Utils.Min_Max_Normalization(omega);
 
              for (int i = 0; i < values.Length; i++)
              {
