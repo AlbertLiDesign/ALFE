@@ -143,7 +143,7 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             List<double> Ae = new List<double>();
 
-            while (delta > 0.001 && iter < MaximumIteration
+            while (delta > 1e-4 && iter < MaximumIteration
                    || Math.Abs(currentVolume - VolumeFraction) > 0.01)
             {
                 iter += 1;
@@ -234,7 +234,7 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-                solvingInfo += BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), timeCost);
+                solvingInfo += BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), delta, timeCost);
                 WritePerformanceReport();
                 FEIO.WriteInvalidElements(iter, Path, Model.Elements);
             }
@@ -253,7 +253,7 @@ namespace ALFE.TopOpt
             double highest = Ae.Max();
             double th = 0.0;
             // // Solid and void domains will not be calculated in the entire volume
-            double volfra = curV * (Model.Elements.Count - SolidDomain.Count - VoidDomain.Count);
+            double volfra = curV * Model.Elements.Count;
             Element svelem = null;
             while (((highest - lowest) / highest) > 1.0e-5)
             {
@@ -366,7 +366,7 @@ namespace ALFE.TopOpt
             return info;
         }
 
-        public string BESOInfo(int iter, double gse, double vf, List<double> timeCost)
+        public string BESOInfo(int iter, double gse, double vf, double change, List<double> timeCost)
         {
             string info = "\n";
             info += "################### Step: " + iter.ToString() + " #####################";
@@ -375,6 +375,8 @@ namespace ALFE.TopOpt
             info += '\n';
             info += "Volume: " + vf.ToString();
             info += '\n';
+            info += "Change: " + change.ToString();
+            info += "\n";
 
             info += "------------------- Time Cost -------------------";
             info += '\n';
