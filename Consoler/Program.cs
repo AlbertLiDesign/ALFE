@@ -12,7 +12,7 @@ namespace ALFE
         {
             //TestProgram.Test()
             //string path = @"E:\\dev\\SPBESO\\data\\testiBESOVR";
-            string path = @"E:/dev/SPBESO/data/testiBESOVR/Numerical examples/Shell";
+            string path = @"E:/dev/SPBESO/data/testiBESOVR/Numerical examples/Chair";
             //SPBESO beso = FEIO.ReadSPBESO(path, "beso");
             BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();

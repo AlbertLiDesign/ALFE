@@ -132,8 +132,7 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             List<double> Ae = new List<double>();
 
-            while (delta > 1e-4 && iter < MaximumIteration
-                  || Math.Abs(currentVolume - VolumeFraction) > 0.01)
+            while (delta > 1e-5 && iter < MaximumIteration)
             {
                 iter += 1;
                 currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));
@@ -299,18 +298,18 @@ namespace ALFE.TopOpt
                     {
                         svelem.Xe = 1.0;
                         // Solid domain will not be calculated in the entire volume
-                        sum -= 1.0;
+                        sum += 1.0 - Xmin;
                     }
                 }
                 // Apply void domain
                 for (int i = 0; i < VoidDomain.Count; i++)
                 {
                     svelem = Model.Elements[VoidDomain[i]];
-                    if (svelem.Xe != 1.0)
+                    if (svelem.Xe != Xmin)
                     {
                         svelem.Xe = Xmin;
                         // Void domain will not be calculated in the entire volume
-                        sum -= 1.0;
+                        sum += Xmin - 1;
                     }
                 }
 
