@@ -124,7 +124,7 @@ namespace ALFE.TopOpt
 
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
-        public void Optimize(bool removeIsolate = true)
+        public void Optimize(bool removeIsolate = false)
         {
             double delta = 1.0;
             int iter = 0;
@@ -132,7 +132,7 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             List<double> Ae = new List<double>();
 
-            while (delta > 1e-5 && iter < MaximumIteration)
+            while (delta > 1e-3 && iter < MaximumIteration)
             {
                 iter += 1;
                 currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));
@@ -166,6 +166,9 @@ namespace ALFE.TopOpt
                 sw.Restart();
                 // Process sensitivities
                 Ae = FltAe(_Filter, Ae);
+
+                var ndlSen = ComputeVertSensitivities(Ae);
+                FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
 
                 if (iter > 1)
                 {
@@ -224,7 +227,7 @@ namespace ALFE.TopOpt
                 System.Update();
 
                 // Check convergence 
-                if (iter > 10)
+                if (iter>10)
                 {
                     var newV = 0.0;
                     var lastV = 0.0;
@@ -268,7 +271,7 @@ namespace ALFE.TopOpt
                 }
             }
 
-            var adjacencyList = Utils.KDTreeMultiSearch(elementCentroids, tree, 1.1, 32);
+            var adjacencyList = Utils.KDTreeMultiSearch(elementCentroids, tree, 40, 32);
             var bfs = new BFS(elementCentroids.Count, adjacencyList);
             return bfs.MarkLargestComponent();
         }
@@ -280,7 +283,7 @@ namespace ALFE.TopOpt
             // // Solid and void domains will not be calculated in the entire volume
             double volfra = curV * Model.Elements.Count;
             Element svelem = null;
-            while (((highest - lowest) / highest) > 1.0e-5)
+            while (((highest - lowest) / highest) > 1e-5)
             {
                 th = (highest + lowest) * 0.5;
                 double sum = 0.0;
