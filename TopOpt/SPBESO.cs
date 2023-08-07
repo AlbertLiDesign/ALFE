@@ -333,7 +333,7 @@ namespace ALFE.TopOpt
                 values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
             });
 
-            lambda = 0.9;
+            lambda = 0.1;
             var powerL = Math.Pow(lambda, 2);
              // 把敏度映射到0-1
             alpha = Utils.Min_Max_Normalization(values);
