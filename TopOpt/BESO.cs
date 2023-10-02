@@ -243,7 +243,7 @@ namespace ALFE.TopOpt
                 //FEIO.WriteSensitivities(Path, Sensitivities);
                 //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
             }
-
+            WriteHistory();
             Console.WriteLine("Done BESO");
         }
         private void BESO_Core(double curV, List<double> Ae)
@@ -395,6 +395,30 @@ namespace ALFE.TopOpt
             return info;
         }
 
+        public void WriteHistory()
+        {
+            string output1 = Path + "\\History_C.txt";
+            StreamWriter sw1 = new StreamWriter(output1);
+
+            for (int i = 0; i < HistoryC.Count; i++)
+            {
+                sw1.WriteLine(HistoryC[i]);
+            }
+            sw1.Flush();
+            sw1.Close();
+            sw1.Dispose();
+            string output2 = Path + "\\History_V.txt";
+            StreamWriter sw2 = new StreamWriter(output2);
+
+            for (int i = 0; i < HistoryV.Count; i++)
+            {
+                sw2.WriteLine(HistoryV[i]);
+            }
+            
+            sw2.Flush();
+            sw2.Close();
+            sw2.Dispose();
+        }
         public void WritePerformanceReport()
         {
             string output = Path + "\\report.txt";

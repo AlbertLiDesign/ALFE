@@ -12,7 +12,7 @@ namespace ALFE
         {
             //TestProgram.Test()
             //string path = @"E:\\dev\\SPBESO\\data\\testiBESOVR";
-            string path = @"E:\dev\SPBESO\data\testPavilion";
+            string path = @"E:\OneDrive - RMIT University\Work\AResearch\SPBESO_VR\Numerical examples\VoxelChair";
             SPBESO beso = FEIO.ReadSPBESO(path, "beso");
             //BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();

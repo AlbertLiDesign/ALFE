@@ -132,7 +132,8 @@ namespace ALFE.TopOpt
             List<double> Ae_old = new List<double>();
             List<double> Ae = new List<double>();
 
-            while (delta > 1e-3 && iter < MaximumIteration)
+            while (delta > 1e-3 && iter < MaximumIteration
+                || Math.Abs(currentVolume - VolumeFraction) > 0.01)
             {
                 iter += 1;
                 currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));
@@ -244,6 +245,7 @@ namespace ALFE.TopOpt
                 solvingInfo += BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), delta, timeCost);
                 WritePerformanceReport();
             }
+            WriteHistory();
             //FEIO.WriteSensitivities(Path, Sensitivities);
             //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
             Console.WriteLine("Done BESO");
@@ -281,7 +283,54 @@ namespace ALFE.TopOpt
             double highest = Ae.Max();
             double th = 0.0;
             // // Solid and void domains will not be calculated in the entire volume
-            double volfra = curV * Model.Elements.Count;
+            double volfra = curV * (Model.Elements.Count - SolidDomain.Count - VoidDomain.Count);
+            Element svelem = null;
+            while (((highest - lowest) / highest) > 1.0e-5)
+            {
+                th = (highest + lowest) * 0.5;
+                double sum = 0.0;
+                foreach (var elem in Model.Elements)
+                {
+                    var v = Ae[elem.ID] > th ? 1.0 : Xmin;
+                    elem.Xe = v;
+                    sum += v;
+                }
+                // Apply solid domain
+                for (int i = 0; i < SolidDomain.Count; i++)
+                {
+                    svelem = Model.Elements[SolidDomain[i]];
+                    if (svelem.Xe != 1.0)
+                    {
+                        svelem.Xe = 1.0;
+                        // Solid domain will not be calculated in the entire volume
+                        sum += 1.0 - Xmin;
+                    }
+                }
+                // Apply void domain
+                for (int i = 0; i < VoidDomain.Count; i++)
+                {
+                    svelem = Model.Elements[VoidDomain[i]];
+                    if (svelem.Xe != Xmin)
+                    {
+                        svelem.Xe = Xmin;
+                        // Void domain will not be calculated in the entire volume
+                        sum += Xmin - 1.0;
+                    }
+                }
+
+                if (sum - volfra > 0.0) lowest = th;
+                else highest = th;
+            }
+            isovalues.Add(th);
+        }
+        private void BESO_Core2(double curV, List<double> Ae)
+        {
+            double lowest = Ae.Min();
+            double highest = Ae.Max();
+            double th = 0.0;
+            // // Solid and void domains will not be calculated in the entire volume
+            double volfra = curV * (Model.Elements.Count - SolidDomain.Count - VoidDomain.Count);
+            //double volfra = curV * Model.Elements.Count;
             Element svelem = null;
             while (((highest - lowest) / highest) > 1e-5)
             {
@@ -333,7 +382,7 @@ namespace ALFE.TopOpt
                 values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
             });
 
-            lambda = 0.1;
+            lambda = 0.3;
             var powerL = Math.Pow(lambda, 2);
              // 把敏度映射到0-1
             alpha = Utils.Min_Max_Normalization(values);
@@ -438,7 +487,30 @@ namespace ALFE.TopOpt
 
             return info;
         }
+        public void WriteHistory()
+        {
+            string output1 = Path + "\\History_C.txt";
+            StreamWriter sw1 = new StreamWriter(output1);
 
+            for (int i = 0; i < HistoryC.Count; i++)
+            {
+                sw1.WriteLine(HistoryC[i]);
+            }
+            sw1.Flush();
+            sw1.Close();
+            sw1.Dispose();
+            string output2 = Path + "\\History_V.txt";
+            StreamWriter sw2 = new StreamWriter(output2);
+
+            for (int i = 0; i < HistoryV.Count; i++)
+            {
+                sw2.WriteLine(HistoryV[i]);
+            }
+
+            sw2.Flush();
+            sw2.Close();
+            sw2.Dispose();
+        }
         public void WritePerformanceReport()
         {
             string output = Path + "\\report.txt";
