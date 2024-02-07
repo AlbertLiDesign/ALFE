@@ -124,7 +124,7 @@ namespace ALFE.TopOpt
 
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
         }
-        public void Optimize(bool removeIsolate = false)
+        public void Optimize(double lambda, bool removeIsolate = false)
         {
             double delta = 1.0;
             int iter = 0;
@@ -146,18 +146,16 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-                Console.WriteLine("Prepare to solve the system");
                 sw.Restart();
                 //if (writeKG && iter == 1) FEIO.WriteKG(System.GetKG(),Path + iter.ToString() + ".mtx", false);
                 System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
-                Console.WriteLine("Done");
                 #endregion
 
                 // Calculate sensitivities and global compliance
                 sw.Restart();
-                Ae = CalSensitivities();
+                Ae = CalSensitivities(lambda);
                 FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
 
                 HistoryC.Add(CalGlobalCompliance());
@@ -243,12 +241,12 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 solvingInfo += BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), delta, timeCost);
+                Console.WriteLine(BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), delta, timeCost));
                 WritePerformanceReport();
             }
             WriteHistory();
             //FEIO.WriteSensitivities(Path, Sensitivities);
             //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
-            Console.WriteLine("Done BESO");
         }
         private double[] RemoveIsolateElements()
         {
@@ -323,54 +321,7 @@ namespace ALFE.TopOpt
             }
             isovalues.Add(th);
         }
-        private void BESO_Core2(double curV, List<double> Ae)
-        {
-            double lowest = Ae.Min();
-            double highest = Ae.Max();
-            double th = 0.0;
-            // // Solid and void domains will not be calculated in the entire volume
-            double volfra = curV * (Model.Elements.Count - SolidDomain.Count - VoidDomain.Count);
-            //double volfra = curV * Model.Elements.Count;
-            Element svelem = null;
-            while (((highest - lowest) / highest) > 1e-5)
-            {
-                th = (highest + lowest) * 0.5;
-                double sum = 0.0;
-                foreach (var elem in Model.Elements)
-                {
-                    var v = Ae[elem.ID] > th ? 1.0 : Xmin;
-                    elem.Xe = v;
-                    sum += v;
-                }
-                // Apply solid domain
-                for (int i = 0; i < SolidDomain.Count; i++)
-                {
-                    svelem = Model.Elements[SolidDomain[i]];
-                    if (svelem.Xe != 1.0)
-                    {
-                        svelem.Xe = 1.0;
-                        // Solid domain will not be calculated in the entire volume
-                        sum += 1.0 - Xmin;
-                    }
-                }
-                // Apply void domain
-                for (int i = 0; i < VoidDomain.Count; i++)
-                {
-                    svelem = Model.Elements[VoidDomain[i]];
-                    if (svelem.Xe != Xmin)
-                    {
-                        svelem.Xe = Xmin;
-                        // Void domain will not be calculated in the entire volume
-                        sum += Xmin - 1;
-                    }
-                }
-
-                if (sum - volfra > 0.0) lowest = th;
-                else highest = th;
-            }
-            isovalues.Add(th);
-        }
-        private List<double> CalSensitivities()
+        private List<double> CalSensitivities(double lambda)
         {
             double[] values = new double[Model.Elements.Count];
             Parallel.ForEach(Model.Elements, elem =>
@@ -382,7 +333,6 @@ namespace ALFE.TopOpt
                 values[elem.ID] = Math.Pow(elem.Xe, PenaltyExponent - 1) * c;
             });
 
-            lambda = 0.3;
             var powerL = Math.Pow(lambda, 2);
              // 把敏度映射到0-1
             alpha = Utils.Min_Max_Normalization(values);

@@ -11,12 +11,12 @@ namespace ALFE
         static void Main(string[] args)
         {
             //TestProgram.Test()
-            //string path = @"E:\\dev\\SPBESO\\data\\testiBESOVR";
-            string path = @"E:\OneDrive - RMIT University\Work\AResearch\SPBESO_VR\Numerical examples\VoxelChair";
+            //string path = @"F:\\Teaching\\TO_animation";
+            string path = @"F:\OneDrive - RMIT University\Pavilion";
             SPBESO beso = FEIO.ReadSPBESO(path, "beso");
             //BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();
-            beso.Optimize();
+            beso.Optimize(0);
             //Console.WriteLine(beso.Model.Elements[0].Ke);
             Console.ReadKey();
             //FEIO.WriteIsovalues(path, beso);
