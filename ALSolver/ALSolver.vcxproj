@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="amgx.cpp" />
     <ClCompile Include="Solver.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -145,15 +146,14 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\dev\AMGX\external\rapidjson\include;E:\dev\AMGX\examples\..\include;E:\dev\AMGX\examples\..\core\include;E:\dev\AMGX\src\..\include;E:\dev\AMGX\thrust\thrust\cmake\..\..;E:\dev\AMGX\thrust\dependencies\libcudacxx\include;E:\dev\AMGX\thrust\dependencies\cub\cub\cmake\..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Development\Libraries\SuiteSparse\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cudart_static.lib;cublas.lib;cusolver.lib;cusparse.lib;cublasLt.lib;amgxsh.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1\lib\x64;C:\Development\Libraries\SuiteSparse\lib;E:\dev\AMGX\build\Release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -166,8 +166,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\dev\AMGX\external\rapidjson\include;E:\dev\AMGX\examples\..\include;E:\dev\AMGX\examples\..\core\include;E:\dev\AMGX\src\..\include;E:\dev\AMGX\thrust\thrust\cmake\..\..;E:\dev\AMGX\thrust\dependencies\libcudacxx\include;E:\dev\AMGX\thrust\dependencies\cub\cub\cmake\..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -175,8 +174,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>C:\Development\Libraries\SuiteSparse\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1\lib\x64;C:\Development\Libraries\SuiteSparse\lib;E:\dev\AMGX\build\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cudart_static.lib;cublas.lib;cusolver.lib;cusparse.lib;cublasLt.lib;amgxsh.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

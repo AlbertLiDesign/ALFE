@@ -156,14 +156,12 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-                Console.WriteLine("Prepare to solve the system");
                 sw.Restart();
                 if (writeKG && iter == 1)
                     FEIO.WriteKG(System.GetKG(), Path + iter.ToString() + ".mtx", false);
                 System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
-                Console.WriteLine("Done");
                 #endregion
 
                 // Calculate sensitivities and global compliance
@@ -234,6 +232,7 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 solvingInfo += BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), delta, timeCost);
+                Console.WriteLine(BESOInfo(iter, HistoryC.Last(), HistoryV.Last(), delta, timeCost));
                 WritePerformanceReport();
                 FEIO.WriteInvalidElements(iter, Path, Model.Elements);
             }
@@ -291,6 +290,7 @@ namespace ALFE.TopOpt
                 else highest = th;
             }
             isovalues.Add(th);
+            WriteHistory();
         }
         private List<double> CalSensitivities()
         {
@@ -347,7 +347,30 @@ namespace ALFE.TopOpt
             }
             return Vert_Value;
         }
+        public void WriteHistory()
+        {
+            string output1 = Path + "\\History_C.txt";
+            StreamWriter sw1 = new StreamWriter(output1);
 
+            for (int i = 0; i < HistoryC.Count; i++)
+            {
+                sw1.WriteLine(HistoryC[i]);
+            }
+            sw1.Flush();
+            sw1.Close();
+            sw1.Dispose();
+            string output2 = Path + "\\History_V.txt";
+            StreamWriter sw2 = new StreamWriter(output2);
+
+            for (int i = 0; i < HistoryV.Count; i++)
+            {
+                sw2.WriteLine(HistoryV[i]);
+            }
+
+            sw2.Flush();
+            sw2.Close();
+            sw2.Dispose();
+        }
         public string PreprocessingInfo()
         {
             string info = "Project Path: " + Path.ToString();
@@ -395,30 +418,6 @@ namespace ALFE.TopOpt
             return info;
         }
 
-        public void WriteHistory()
-        {
-            string output1 = Path + "\\History_C.txt";
-            StreamWriter sw1 = new StreamWriter(output1);
-
-            for (int i = 0; i < HistoryC.Count; i++)
-            {
-                sw1.WriteLine(HistoryC[i]);
-            }
-            sw1.Flush();
-            sw1.Close();
-            sw1.Dispose();
-            string output2 = Path + "\\History_V.txt";
-            StreamWriter sw2 = new StreamWriter(output2);
-
-            for (int i = 0; i < HistoryV.Count; i++)
-            {
-                sw2.WriteLine(HistoryV[i]);
-            }
-            
-            sw2.Flush();
-            sw2.Close();
-            sw2.Dispose();
-        }
         public void WritePerformanceReport()
         {
             string output = Path + "\\report.txt";

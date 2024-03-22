@@ -21,6 +21,9 @@ int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F
     case 3:
         result = Solve_PARDISO(rows_offset, cols, vals, F, dim, nnz);
         break;
+    case 4:
+        result = Solve_AMGX(rows_offset, cols, vals, F, dim, nnz);
+        break;
     //case 5:
     //    result = Solve_CholmodSupernodalLLT(rows_offset, cols, vals, F, dim, nnz);
     //    break;

@@ -12,7 +12,8 @@ namespace ALFE
         SimplicialLLT = 0,
         PARDISOSingle = 1,
         CG = 2,
-        PARDISO = 3
+        PARDISO = 3,
+        AMGX=4
     }
     public class FESystem
     {

@@ -12,11 +12,12 @@ namespace ALFE
         {
             //TestProgram.Test()
             //string path = @"F:\\Teaching\\TO_animation";
-            string path = @"F:\OneDrive - RMIT University\Pavilion";
-            SPBESO beso = FEIO.ReadSPBESO(path, "beso");
+            string path = @"E:\dev\ALCoding\ALFE\topoptTest\cantilever_gpu";
+            //string path = @"F:\OneDrive - RMIT University\Work\AResearch\SPBESO_VR\figs\fig4\DrawnPattern";
+            BESO beso = FEIO.ReadBESO(path, "beso");
             //BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();
-            beso.Optimize(0);
+            beso.Optimize(true);
             //Console.WriteLine(beso.Model.Elements[0].Ke);
             Console.ReadKey();
             //FEIO.WriteIsovalues(path, beso);
