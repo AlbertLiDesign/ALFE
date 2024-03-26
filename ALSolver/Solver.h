@@ -42,6 +42,6 @@ Eigen::VectorXd Solve_SimplicialLLT(int* rows_offset, int* cols, double* vals, d
 Eigen::VectorXd Solve_Serial_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 Eigen::VectorXd Solve_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 Eigen::VectorXd Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
-Eigen::VectorXd Solve_AMGX(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
+double* Solve_AMGX(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 //Eigen::VectorXd Solve_CholmodSupernodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 //Eigen::VectorXd Solve_AMG_CG(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);

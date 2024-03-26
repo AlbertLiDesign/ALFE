@@ -20,7 +20,7 @@ std::string ReadConfigFile(const std::string& filepath) {
     }
 }
 
-Eigen::VectorXd Solve_AMGX(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz)
+double* Solve_AMGX(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz)
 {
     std::string configFilePath = "./config.json";
     std::string configStr = ReadConfigFile(configFilePath);
@@ -64,7 +64,7 @@ Eigen::VectorXd Solve_AMGX(int* rows_offset, int* cols, double* vals, double* F,
     double* result = new double[dim];
     AMGX_vector_download(X, result);
 
-    delete[] result;
+    //delete[] result;
 
     // «Â¿Ì
     AMGX_solver_destroy(solver);
@@ -76,4 +76,5 @@ Eigen::VectorXd Solve_AMGX(int* rows_offset, int* cols, double* vals, double* F,
 
     // πÿ±’ AMGX ø‚
     AMGX_finalize();
+    return result;
 }

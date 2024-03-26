@@ -8,21 +8,29 @@ int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F
     {
     case 0:
         result = Solve_SimplicialLLT(rows_offset, cols, vals, F, dim, nnz);
+        for (int i = 0; i < dim; i++)
+            X[i] = result(i);
         break;
     //case 1:
     //    result = Solve_CholmodSimplicialLLT(rows_offset, cols, vals, F, dim, nnz);
     //    break;
     case 1:
         result = Solve_Serial_PARDISO(rows_offset, cols, vals, F, dim, nnz);
+        for (int i = 0; i < dim; i++)
+            X[i] = result(i);
         break;
     case 2:
         result = Solve_CG(rows_offset, cols, vals, F, dim, nnz);
+        for (int i = 0; i < dim; i++)
+            X[i] = result(i);
         break;
     case 3:
         result = Solve_PARDISO(rows_offset, cols, vals, F, dim, nnz);
+        for (int i = 0; i < dim; i++)
+            X[i] = result(i);
         break;
     case 4:
-        result = Solve_AMGX(rows_offset, cols, vals, F, dim, nnz);
+        memcpy(X, Solve_AMGX(rows_offset, cols, vals, F, dim, nnz), dim * sizeof(double));
         break;
     //case 5:
     //    result = Solve_CholmodSupernodalLLT(rows_offset, cols, vals, F, dim, nnz);
@@ -33,9 +41,6 @@ int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F
     default:
         break;
     }
-
-    for (int i = 0; i < dim; i++)
-        X[i] = result(i);
 
     return 1;
 }
