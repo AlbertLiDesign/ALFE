@@ -17,7 +17,7 @@ namespace ALFE
             BESO beso = FEIO.ReadBESO(path, "beso");
             //BESO beso = FEIO.ReadBESO(path, "beso");
             beso.Initialize();
-            beso.Optimize();
+            beso.RunTopOpt();
             //Console.WriteLine(beso.Model.Elements[0].Ke);
             Console.ReadKey();
             //FEIO.WriteIsovalues(path, beso);

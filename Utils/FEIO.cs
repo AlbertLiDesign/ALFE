@@ -490,6 +490,85 @@ namespace ALFE
             sw.Dispose();
         }
 
+
+        /// <summary>
+        /// Write a finite element model and the parameters of BESO topology optimization into a .al file.
+        /// </summary>
+        /// <param name="path">File path.</param>
+        /// <param name="BESO">A finite element model for BESO topology optimization.</param>
+        public static void WriteSPBESO(string path, SPBESO spbeso, int solver)
+        {
+            string output = path + "/beso.txt";
+            StreamWriter sw = new StreamWriter(output);
+            sw.WriteLine("%This file is created by ALFE.");
+
+            Model model = spbeso.Model;
+            sw.WriteLine("FEA Parameters: ");
+            sw.WriteLine("DOF: " + model.DOF.ToString());
+            sw.WriteLine("Element Type: " + model.Elements[0].Type.ToString());
+            sw.WriteLine("Node Count: " + model.Nodes.Count.ToString());
+            sw.WriteLine("Element Count: " + model.Elements.Count.ToString());
+            sw.WriteLine("Load Count: " + model.Loads.Count.ToString());
+            sw.WriteLine("Support Count: " + model.Supports.Count.ToString());
+            sw.WriteLine("Solid Domain Count: " + spbeso.SolidDomain.Count.ToString());
+            sw.WriteLine("Void Domain Count: " + spbeso.VoidDomain.Count.ToString());
+            sw.WriteLine("Young's Modulus: " + model.Elements[0].Material.E.ToString());
+            sw.WriteLine("Possion Rate: " + model.Elements[0].Material.nu.ToString());
+
+            sw.WriteLine();
+
+            sw.WriteLine("BESO Parameters: ");
+            sw.WriteLine("Volume Fraction: " + spbeso.VolumeFraction.ToString());
+            sw.WriteLine("Evolution Rate: " + spbeso.EvolutionRate.ToString());
+            sw.WriteLine("Filter Radius: " + spbeso.FilterRadius.ToString());
+            sw.WriteLine("Penalty Exponent: " + spbeso.PenaltyExponent.ToString());
+            sw.WriteLine("Maximum Iteration: " + spbeso.MaximumIteration.ToString());
+            sw.WriteLine("Solver: " + solver.ToString());
+            sw.WriteLine("Subjective Weight: " + spbeso.lambda.ToString());
+
+            sw.WriteLine();
+
+            sw.WriteLine("Model Info: ");
+            foreach (var node in model.Nodes)
+                sw.WriteLine("N," + node.Position.X.ToString() + ',' + node.Position.Y.ToString() + ',' + node.Position.Z.ToString());
+            foreach (var elem in model.Elements)
+            {
+                sw.Write("E,");
+                int n = 1;
+                foreach (var node in elem.Nodes)
+                {
+                    sw.Write(node.ID.ToString());
+                    if (n != elem.Nodes.Count)
+                        sw.Write(',');
+                    n++;
+                }
+                sw.Write("\n");
+            }
+            foreach (var item in model.Loads)
+                sw.WriteLine("L," + item.NodeID.ToString() + ',' +
+                    item.ForceVector.X.ToString() + ',' + item.ForceVector.Y.ToString() + ',' + item.ForceVector.Z.ToString());
+            foreach (var item in model.Supports)
+                sw.WriteLine("S," + item.NodeID.ToString() + ',' + item.Type.ToString());
+            foreach (var item in spbeso.SolidDomain)
+                sw.WriteLine("SD," + item.ToString());
+            foreach (var item in spbeso.VoidDomain)
+                sw.WriteLine("VD," + item.ToString());
+
+            sw.Flush();
+            sw.Close();
+            sw.Dispose();
+
+
+            #region Write sdf file
+            string output2= path + "/sdf.txt";
+            StreamWriter sw2 = new StreamWriter(output2);
+            foreach (var item in spbeso.omega)
+                sw2.WriteLine(item);
+            sw2.Flush();
+            sw2.Close();
+            sw2.Dispose();
+            #endregion
+        }
         /// <summary>
         /// Read a finite element model and the parameters of BESO topology optimization with .al format
         /// </summary>
@@ -739,6 +818,7 @@ namespace ALFE
             double p = 0;
             int maxIter = 0;
             int solver = 0;
+            double lambda = 0.0;
             bool parallel = false;
 
             if (File.Exists(besoPath))
@@ -853,6 +933,10 @@ namespace ALFE
                         if (value[0] == "Solver")
                             solver = int.Parse(value[1].Split(' ')[1]);
 
+                        value = SR.ReadLine().Split(':');
+                        if (value[0] == "Subjective Weight")
+                            lambda = double.Parse(value[1].Split(' ')[1]);
+
                         readBESOpara = true;
                     }
                 }
@@ -937,7 +1021,7 @@ namespace ALFE
                 SR2.Close();
                 SR2.Dispose();
             }
-            SPBESO spbeso = new SPBESO(projectPath, new FESystem(model), rmin, omega, ert, p, vf, maxIter, (Solver)solver);
+            SPBESO spbeso = new SPBESO(projectPath, new FESystem(model), rmin, omega, lambda, ert, p, vf, maxIter, (Solver)solver);
             spbeso.SetSolidDomain(solidDomain);
             spbeso.SetVoidDomain(voidDomain);
             return spbeso;

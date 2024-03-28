@@ -16,7 +16,10 @@ namespace ALFE.TopOpt
         public FESystem System;
         public Model Model;
         public string Path;
+        public List<int> SolidDomain = new List<int>();
+        public List<int> VoidDomain = new List<int>();
 
+        #region Optimization parameters
         /// <summary>
         /// The isovalue for extracting isosurface.
         /// </summary>
@@ -47,6 +50,7 @@ namespace ALFE.TopOpt
         /// </summary>
         public int MaximumIteration;
 
+        public int iter = 0;
         private double Xmin = 0.001;
 
         public List<double> Sensitivities = new List<double>();
@@ -55,7 +59,7 @@ namespace ALFE.TopOpt
         /// Dimension
         /// </summary>
         public int Dim;
-
+        public bool converged = false;
         private Filter _Filter;
 
         /// <summary>
@@ -68,8 +72,12 @@ namespace ALFE.TopOpt
         /// </summary>
         private List<double> HistoryV = new List<double>();
 
-        public List<int> SolidDomain = new List<int>();
-        public List<int> VoidDomain = new List<int>();
+        private double delta = 1.0;
+        private double currentVolume = 1.0;
+        private List<double> Ae_old = new List<double>();
+        public List<double> Ae = new List<double>();
+        #endregion
+
         public BESO() { }
         public BESO(FESystem system, double rmin, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, Solver solver = 0)
         {
@@ -87,6 +95,7 @@ namespace ALFE.TopOpt
             FilterRadius = rmin;
             Dim = system.Model.DOF;
             System._Solver = solver;
+            converged = false;
         }
         public BESO(string path, FESystem system, double rmin, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100,Solver solver = 0)
         {
@@ -105,13 +114,14 @@ namespace ALFE.TopOpt
             Dim = system.Model.DOF;
             Path = path;
             System._Solver = solver;
+            converged = false;
         }
 
         public void Initialize()
         {
             // Write basic info
             solvingInfo = PreprocessingInfo();
-
+            converged = false;
             foreach (var elem in Model.Elements)
                 elem.Xe = 1.0;
 
@@ -124,8 +134,13 @@ namespace ALFE.TopOpt
 
             solvingInfo += "Prefiltering: " + sw.Elapsed.TotalMilliseconds.ToString() + " ms";
             solvingInfo += '\n';
-
+            iter = 0;
             FEIO.WriteInvalidElements(0, Path, Model.Elements);
+
+            delta = 1.0;
+            currentVolume = 1.0;
+            Ae_old = new List<double>();
+            Ae = new List<double>();
         }
         public void SetSolidDomain(List<int> sd)
         {
@@ -135,15 +150,26 @@ namespace ALFE.TopOpt
         {
             VoidDomain = vd;
         }
+        public void RunTopOpt()
+        {
+            while (!converged)
+            {
+                Optimize();
+            }
+            if (Path != null)
+            {
+                FEIO.WriteInvalidElements(iter, Path, Model.Elements);
+                //FEIO.WriteSensitivities(Path, Sensitivities);
+                //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
+            }
+            WriteHistory();
+            Console.WriteLine("Done BESO");
+            converged = true;
+        }
         public void Optimize(bool writeKG = false)
         {
-            double delta = 1.0;
-            int iter = 0;
-            double currentVolume = 1.0;
-            List<double> Ae_old = new List<double>();
-            List<double> Ae = new List<double>();
-
-            while (delta > 1e-3 && iter < MaximumIteration)
+            if (delta > 1e-3 && iter < MaximumIteration
+                || Math.Abs(currentVolume - VolumeFraction) > 0.01)
             {
                 iter += 1;
                 currentVolume = Math.Max(VolumeFraction, currentVolume * (1.0 - EvolutionRate));
@@ -157,8 +183,7 @@ namespace ALFE.TopOpt
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
                 sw.Restart();
-                if (writeKG && iter == 1)
-                    FEIO.WriteKG(System.GetKG(), Path + iter.ToString() + ".mtx", false);
+                //FEIO.WriteKG(System.GetKG(), Path + iter.ToString() + ".mtx", false);
                 System.Solve();
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
@@ -167,7 +192,7 @@ namespace ALFE.TopOpt
                 // Calculate sensitivities and global compliance
                 sw.Restart();
                 Ae = CalSensitivities();
-                FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
+                //FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
 
                 HistoryC.Add(CalGlobalCompliance());
                 sw.Stop();
@@ -191,8 +216,8 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-                var ndlSen = ComputeVertSensitivities(Ae);
-                FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
+                //var ndlSen = ComputeVertSensitivities(Ae);
+                //FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
 
                 // Run BESO
                 sw.Restart();
@@ -212,12 +237,12 @@ namespace ALFE.TopOpt
                 HistoryV.Add(sum / Model.Elements.Count);
 
                 sw.Restart();
-                
+
                 Sensitivities = Ae_old;
                 System.Update();
 
                 // Check convergence 
-                if (iter>10)
+                if (iter > 10)
                 {
                     var newV = 0.0;
                     var lastV = 0.0;
@@ -236,14 +261,10 @@ namespace ALFE.TopOpt
                 WritePerformanceReport();
                 FEIO.WriteInvalidElements(iter, Path, Model.Elements);
             }
-            if (Path !=null)
+            else
             {
-                FEIO.WriteInvalidElements(iter, Path, Model.Elements);
-                //FEIO.WriteSensitivities(Path, Sensitivities);
-                //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
+                converged = true;
             }
-            WriteHistory();
-            Console.WriteLine("Done BESO");
         }
         private void BESO_Core(double curV, List<double> Ae)
         {
