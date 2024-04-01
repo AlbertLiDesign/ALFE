@@ -455,7 +455,7 @@ namespace ALFE
             sw.WriteLine("Filter Radius: " + beso.FilterRadius.ToString());
             sw.WriteLine("Penalty Exponent: " + beso.PenaltyExponent.ToString());
             sw.WriteLine("Maximum Iteration: " + beso.MaximumIteration.ToString());
-            sw.WriteLine("Solver: " + beso.System._Solver.ToString());
+            sw.WriteLine("Solver: " + ((int)beso.System._Solver).ToString());
 
             sw.WriteLine();
 
@@ -523,7 +523,7 @@ namespace ALFE
             sw.WriteLine("Filter Radius: " + spbeso.FilterRadius.ToString());
             sw.WriteLine("Penalty Exponent: " + spbeso.PenaltyExponent.ToString());
             sw.WriteLine("Maximum Iteration: " + spbeso.MaximumIteration.ToString());
-            sw.WriteLine("Solver: " + spbeso.System._Solver.ToString());
+            sw.WriteLine("Solver: " + ((int)spbeso.System._Solver).ToString());
             sw.WriteLine("Subjective Weight: " + spbeso.lambda.ToString());
 
             sw.WriteLine();

@@ -156,17 +156,11 @@ namespace ALFE.TopOpt
             {
                 Optimize();
             }
-            if (Path != null)
-            {
-                FEIO.WriteInvalidElements(iter, Path, Model.Elements);
-                //FEIO.WriteSensitivities(Path, Sensitivities);
-                //FEIO.WriteVertSensitivities(Path, ComputeVertSensitivities(Sensitivities), Model);
-            }
             WriteHistory();
             Console.WriteLine("Done BESO");
             converged = true;
         }
-        public void Optimize(bool writeKG = false)
+        public void Optimize(bool writeFiles = false)
         {
             if (delta > 1e-3 && iter < MaximumIteration
                 || Math.Abs(currentVolume - VolumeFraction) > 0.01)
@@ -192,7 +186,9 @@ namespace ALFE.TopOpt
                 // Calculate sensitivities and global compliance
                 sw.Restart();
                 Ae = CalSensitivities();
-                //FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
+                if (writeFiles)
+                    FEIO.WriteSensitivities(Path + "\\elem_sen_" + iter.ToString() + ".txt", Ae);
+
 
                 HistoryC.Add(CalGlobalCompliance());
                 sw.Stop();
@@ -216,8 +212,11 @@ namespace ALFE.TopOpt
                 sw.Stop();
                 timeCost.Add(sw.Elapsed.TotalMilliseconds);
 
-                //var ndlSen = ComputeVertSensitivities(Ae);
-                //FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
+                if (writeFiles)
+                { 
+                    var ndlSen = ComputeVertSensitivities(Ae);
+                    FEIO.WriteSensitivities(Path + "\\ndl_sen_" + iter.ToString() + ".txt", ndlSen);
+                }
 
                 // Run BESO
                 sw.Restart();

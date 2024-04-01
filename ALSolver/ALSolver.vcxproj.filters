@@ -15,13 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Solver.cpp">
+    <ClCompile Include="pardiso.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="amgx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="amgcl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="eigen.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cholmod_supernodal.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

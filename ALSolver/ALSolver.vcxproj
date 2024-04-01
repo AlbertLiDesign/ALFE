@@ -19,8 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="amgcl.cpp" />
     <ClCompile Include="amgx.cpp" />
-    <ClCompile Include="Solver.cpp" />
+    <ClCompile Include="cholmod_supernodal.cpp" />
+    <ClCompile Include="eigen.cpp" />
+    <ClCompile Include="pardiso.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
