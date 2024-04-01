@@ -84,6 +84,27 @@ namespace ALFE.TopOpt
         public List<int> VoidDomain = new List<int>();
 
         public SPBESO() { }
+        public SPBESO(FESystem system, double rmin, double[] omega, double lambda, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, Solver solver = 0)
+        {
+            if (rmin <= 0.0)
+                throw new Exception("Rmin must be large than 0.");
+            if (!(vf > 0.0 && vf < 1.0))
+                throw new Exception("Vt must be large than 0 and be less than 1.");
+
+            System = system;
+            Model = system.Model;
+            VolumeFraction = vf;
+            PenaltyExponent = p;
+            EvolutionRate = ert;
+            MaximumIteration = maxIter;
+            FilterRadius = rmin;
+            Dim = system.Model.DOF;
+            System._Solver = solver;
+            this.omega = omega;
+            this.lambda = lambda;
+            converged = false;
+        }
+
         public SPBESO(string path, FESystem system, double rmin, double[] omega, double lambda, double ert = 0.02f, double p = 3.0, double vf = 0.5, int maxIter = 100, Solver solver = 0)
         {
             if (rmin <= 0.0)

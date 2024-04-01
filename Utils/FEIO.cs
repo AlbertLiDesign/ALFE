@@ -428,7 +428,7 @@ namespace ALFE
         /// </summary>
         /// <param name="path">File path.</param>
         /// <param name="BESO">A finite element model for BESO topology optimization.</param>
-        public static void WriteBESO(string path, BESO beso, int solver)
+        public static void WriteBESO(string path, BESO beso)
         {
             string output = path + "/beso.txt";
             StreamWriter sw = new StreamWriter(output);
@@ -455,7 +455,7 @@ namespace ALFE
             sw.WriteLine("Filter Radius: " + beso.FilterRadius.ToString());
             sw.WriteLine("Penalty Exponent: " + beso.PenaltyExponent.ToString());
             sw.WriteLine("Maximum Iteration: " + beso.MaximumIteration.ToString());
-            sw.WriteLine("Solver: " + solver.ToString());
+            sw.WriteLine("Solver: " + beso.System._Solver.ToString());
 
             sw.WriteLine();
 
@@ -496,7 +496,7 @@ namespace ALFE
         /// </summary>
         /// <param name="path">File path.</param>
         /// <param name="BESO">A finite element model for BESO topology optimization.</param>
-        public static void WriteSPBESO(string path, SPBESO spbeso, int solver)
+        public static void WriteSPBESO(string path, SPBESO spbeso)
         {
             string output = path + "/beso.txt";
             StreamWriter sw = new StreamWriter(output);
@@ -523,7 +523,7 @@ namespace ALFE
             sw.WriteLine("Filter Radius: " + spbeso.FilterRadius.ToString());
             sw.WriteLine("Penalty Exponent: " + spbeso.PenaltyExponent.ToString());
             sw.WriteLine("Maximum Iteration: " + spbeso.MaximumIteration.ToString());
-            sw.WriteLine("Solver: " + solver.ToString());
+            sw.WriteLine("Solver: " + spbeso.System._Solver.ToString());
             sw.WriteLine("Subjective Weight: " + spbeso.lambda.ToString());
 
             sw.WriteLine();
