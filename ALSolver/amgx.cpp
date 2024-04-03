@@ -64,8 +64,6 @@ double* Solve_AMGX(int* rows_offset, int* cols, double* vals, double* F, int dim
     double* result = new double[dim];
     AMGX_vector_download(X, result);
 
-    //delete[] result;
-
     // «Â¿Ì
     AMGX_solver_destroy(solver);
     AMGX_vector_destroy(B);

@@ -25,4 +25,4 @@ Eigen::VectorXd Solve_CG(int* rows_offset, int* cols, double* vals, double* F, i
 Eigen::VectorXd Solve_PARDISO(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 double* Solve_AMGX(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
 //double* Solve_CholmodSupernodalLLT(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
-//double* Solve_AMGCL(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);
+Eigen::VectorXd Solve_AMGCL(int* rows_offset, int* cols, double* vals, double* F, int dim, int nnz);

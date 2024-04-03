@@ -21,9 +21,9 @@ int SolveSystem(int solver, int* rows_offset, int* cols, double* vals, double* F
     //case 4:
     //    memcpy(X, Solve_CholmodSupernodalLLT(rows_offset, cols, vals, F, dim, nnz), dim * sizeof(double));
     //    break;
-    //case 5:
-    //    memcpy(X, Solve_AMGCL(rows_offset, cols, vals, F, dim, nnz), dim * sizeof(double));
-    //    break;
+    case 5:
+        memcpy(X, Solve_AMGCL(rows_offset, cols, vals, F, dim, nnz).data(), dim * sizeof(double));
+        break;
     case 6:
         memcpy(X, Solve_AMGX(rows_offset, cols, vals, F, dim, nnz), dim * sizeof(double));
         break;
